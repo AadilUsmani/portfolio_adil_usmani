@@ -24,7 +24,7 @@ const projects = [
       "Built an NLP model using transformer architecture to automatically generate concise summaries of long-form articles with 85% accuracy using T5 small.",
     tags: ["NLP", "Transformers", "Python", "T5"],
     github: "https://github.com/AadilUsmani/news_article_summarizer",
-    demo: "https://kzmgnz3dbnj9nliqkea4.lite.vusercontent.net/",
+    demo: "https://v0-news-article-summarizer-gamma.vercel.app/",
     icon: <Brain className="w-6 h-6" />,
   },
   {
