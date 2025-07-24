@@ -42,7 +42,7 @@ const projects = [
       "Implemented LSTM neural networks to predict stock prices using historical data and technical indicators with time series analysis.",
     tags: ["Deep Learning", "LSTM", "Time Series", "TensorFlow"],
     github: "https://github.com/AadilUsmani/stock-prediction",
-    demo: "https://stock-prediction-aadil.vercel.app",
+    demo: "https://preview-nvidia-stock-dashboard-kzmniwobdgt6749tzoem.vusercontent.net/",
     icon: <Database className="w-6 h-6" />,
   },
 ]
