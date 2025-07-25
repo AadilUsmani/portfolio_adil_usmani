@@ -32,7 +32,7 @@ const projects = [
     description:
       "Developed a machine learning model to predict customer churn with 92% accuracy using ensemble methods and feature engineering.",
     tags: ["Supervised Learning", "Random Forest", "Feature Engineering", "Python"],
-    github: "https://github.com/AadilUsmani/churn-predictor",
+    github: "https://github.com/AadilUsmani/churn_predictor_",
     demo: "https://kzml2mfup87xwyui0vgq.lite.vusercontent.net/churn-predictor",
     icon: <BarChart3 className="w-6 h-6" />,
   },
@@ -41,7 +41,7 @@ const projects = [
     description:
       "Implemented LSTM neural networks to predict stock prices using historical data and technical indicators with time series analysis.",
     tags: ["Deep Learning", "LSTM", "Time Series", "TensorFlow"],
-    github: "https://github.com/AadilUsmani/stock-prediction",
+    github: "https://github.com/AadilUsmani/nvdia_stock_predictor",
     demo: "https://preview-nvidia-stock-dashboard-kzmqjnlxx9b97rmuji28.vusercontent.net/",
     icon: <Database className="w-6 h-6" />,
   },
