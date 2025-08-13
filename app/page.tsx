@@ -167,7 +167,7 @@ const otherProjects = [
     ],
     github: "https://github.com/AadilUsmani/churn_predictor_",
     demo: "https://kzml2mfup87xwyui0vgq.lite.vusercontent.net/churn-predictor",
-    image: "/placeholder.svg?height=200&width=350&text=Churn+Prediction+Dashboard",
+    image: "/images/churn-predictor.png", // Updated image path
     metrics: { accuracy: "92%", predictions: "Predictions" },
   },
   {
@@ -180,7 +180,7 @@ const otherProjects = [
     ],
     github: "https://github.com/AadilUsmani/nvdia_stock_predictor",
     demo: "https://preview-nvidia-stock-dashboard-kzmqjnlxx9b97rmuji28.vusercontent.net/",
-    image: "/placeholder.svg?height=200&width=350&text=Stock+Prediction+Charts",
+    image: "/images/stock-predictor.png", // Updated image path
     metrics: { accuracy: "78%", predictions: "Predictions" },
   },
 ]
