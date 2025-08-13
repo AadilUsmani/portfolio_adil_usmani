@@ -23,9 +23,18 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
 const skills = {
-  "Programming Languages": ["Python", "C++", "SQL"],
-  "ML/AI Tools": ["scikit-learn", "TensorFlow", "Pandas", "NumPy", "sklearn"],
-  "Data Visualization": ["Matplotlib", "Plotly"],
+  "Programming Languages": ["Python (Primary)", "C++", "SQL"],
+  "Machine Learning & AI": [
+    "PyTorch",
+    "Scikit-learn",
+    "Pandas",
+    "NumPy",
+    "Deep Learning",
+    "Neural Networks",
+    "Natural Language Processing (NLP)",
+    "LangChain",
+  ],
+  "APIs & Frameworks": ["FastAPI", "REST APIs", "Google Gemini AI", "T5 Transformers"],
 }
 
 const projects = [
@@ -67,6 +76,16 @@ const projects = [
   },
 ]
 
+const style = `
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+`
+
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("about")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -75,6 +94,13 @@ export default function Portfolio() {
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 300], [0, 50])
   const y2 = useTransform(scrollY, [0, 300], [0, -50])
+
+  useEffect(() => {
+    const styleElement = document.createElement("style")
+    styleElement.textContent = style
+    document.head.appendChild(styleElement)
+    return () => document.head.removeChild(styleElement)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -331,7 +357,7 @@ export default function Portfolio() {
 
       {/* Projects Section */}
       <section id="projects" className="py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -345,63 +371,108 @@ export default function Portfolio() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -10 }}
-                className="h-full"
-              >
-                <Card className="bg-gray-900/50 border-gray-800 hover:border-white transition-all duration-300 h-full">
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="p-2 bg-white/20 rounded-lg w-fit">{project.icon}</div>
-                      <div className="flex space-x-2">
-                        <Button variant="ghost" size="sm" asChild>
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center text-white hover:text-gray-300"
-                          >
-                            <Github className="w-4 h-4 mr-1" />
-                            Code
-                          </a>
-                        </Button>
-                        <Button variant="ghost" size="sm" asChild>
-                          <a
-                            href={project.demo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center text-white hover:text-gray-300"
-                          >
-                            <ExternalLink className="w-4 h-4 mr-1" />
-                            Demo
-                          </a>
-                        </Button>
+          {/* Horizontal Scrolling Projects */}
+          <div className="relative">
+            {/* Left Arrow */}
+            <button
+              onClick={() => {
+                const container = document.getElementById("projects-container")
+                if (container) {
+                  container.scrollBy({ left: -370, behavior: "smooth" })
+                }
+              }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/80 hover:bg-black text-white p-3 rounded-full border border-gray-600 hover:border-white transition-all duration-300 backdrop-blur-sm"
+              aria-label="Scroll left"
+            >
+              <ChevronDown className="w-5 h-5 rotate-90" />
+            </button>
+
+            {/* Right Arrow */}
+            <button
+              onClick={() => {
+                const container = document.getElementById("projects-container")
+                if (container) {
+                  container.scrollBy({ left: 370, behavior: "smooth" })
+                }
+              }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/80 hover:bg-black text-white p-3 rounded-full border border-gray-600 hover:border-white transition-all duration-300 backdrop-blur-sm"
+              aria-label="Scroll right"
+            >
+              <ChevronDown className="w-5 h-5 -rotate-90" />
+            </button>
+
+            {/* Fade Effects */}
+            <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-black via-black/50 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-black via-black/50 to-transparent z-10 pointer-events-none" />
+
+            {/* Projects Container */}
+            <div
+              id="projects-container"
+              className="flex gap-6 overflow-x-auto scrollbar-hide px-12 py-4"
+              style={{
+                scrollSnapType: "x mandatory",
+                scrollBehavior: "smooth",
+                WebkitOverflowScrolling: "touch",
+              }}
+            >
+              {projects.map((project, index) => (
+                <motion.div
+                  key={project.title}
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -10, scale: 1.02 }}
+                  className="flex-shrink-0 w-[350px] h-[400px]"
+                  style={{ scrollSnapAlign: "start" }}
+                >
+                  <Card className="bg-gray-900/50 border-gray-800 hover:border-white transition-all duration-300 h-full flex flex-col">
+                    <CardHeader className="flex-shrink-0">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="p-2 bg-white/20 rounded-lg w-fit">{project.icon}</div>
+                        <div className="flex space-x-2">
+                          <Button variant="ghost" size="sm" asChild>
+                            <a
+                              href={project.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center text-white hover:text-gray-300"
+                            >
+                              <Github className="w-4 h-4 mr-1" />
+                              Code
+                            </a>
+                          </Button>
+                          <Button variant="ghost" size="sm" asChild>
+                            <a
+                              href={project.demo}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center text-white hover:text-gray-300"
+                            >
+                              <ExternalLink className="w-4 h-4 mr-1" />
+                              Demo
+                            </a>
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                    <CardTitle className="text-white mb-2">{project.title}</CardTitle>
-                    <CardDescription className="text-white text-sm leading-relaxed">
-                      {project.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="border-gray-600 text-white text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                      <CardTitle className="text-white mb-2 text-lg">{project.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-1 flex flex-col justify-between">
+                      <CardDescription className="text-white text-sm leading-relaxed mb-4 flex-1 overflow-hidden">
+                        {project.description}
+                      </CardDescription>
+                      <div className="flex flex-wrap gap-2">
+                        {project.tags.map((tag) => (
+                          <Badge key={tag} variant="outline" className="border-gray-600 text-white text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
