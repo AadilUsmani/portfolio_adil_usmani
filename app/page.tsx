@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { motion, useScroll, useTransform, useInView } from "framer-motion"
+import { motion, useScroll, useTransform } from "framer-motion"
 import {
   Github,
   Linkedin,
@@ -13,48 +13,31 @@ import {
   Database,
   Brain,
   BarChart3,
-  MapPin,
+  MessageSquare,
   Download,
-  Menu,
-  X,
-  GraduationCap,
-  Award,
-  Calendar,
-  Code,
-  Zap,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { useRef } from "react"
 
 const skills = {
-  "Programming Languages": [
-    { name: "Python", level: 90 },
-    { name: "C++", level: 75 },
-    { name: "SQL", level: 80 },
-  ],
-  "ML/AI Frameworks": [
-    { name: "scikit-learn", level: 85 },
-    { name: "TensorFlow", level: 85 },
-    { name: "Pandas", level: 90 },
-    { name: "NumPy", level: 88 },
-  ],
-  "Data & Visualization": [
-    { name: "Matplotlib", level: 80 },
-    { name: "Plotly", level: 75 },
-    { name: "Seaborn", level: 70 },
-  ],
-  "Tools & Platforms": [
-    { name: "Git", level: 85 },
-    { name: "Jupyter", level: 90 },
-    { name: "Flask", level: 75 },
-  ],
+  "Programming Languages": ["Python", "C++", "SQL"],
+  "ML/AI Tools": ["scikit-learn", "TensorFlow", "Pandas", "NumPy", "sklearn"],
+  "Data Visualization": ["Matplotlib", "Plotly"],
 }
 
 const projects = [
+  {
+    title: "CricTalk",
+    description:
+      "Developed and deployed a production-ready cricket knowledge chatbot API with 6 specialized expertise domains (rules, players, history, statistics, techniques). Implemented enterprise-grade security features including API key authentication, rate limiting (30 req/min), and advanced prompt injection prevention. Currently live on Render with Redis-backed caching, serving cricket enthusiasts globally with expert-level responses and comprehensive monitoring dashboard.",
+    tags: ["FastAPI", "Google Gemini AI", "Redis", "LangChain", "Security", "Vercel"],
+    github: "https://github.com/AadilUsmani/Cricket_chatbot",
+    demo: "https://v0-image-analysis-amber-sigma-22.vercel.app/",
+    icon: <MessageSquare className="w-6 h-6" />,
+  },
   {
     title: "Article Summarization",
     description:
@@ -63,7 +46,6 @@ const projects = [
     github: "https://github.com/AadilUsmani/news_article_summarizer",
     demo: "https://v0-news-article-summarizer-gamma.vercel.app/",
     icon: <Brain className="w-6 h-6" />,
-    accuracy: "85%",
   },
   {
     title: "Customer Churn Predictor",
@@ -73,7 +55,6 @@ const projects = [
     github: "https://github.com/AadilUsmani/churn_predictor_",
     demo: "https://kzml2mfup87xwyui0vgq.lite.vusercontent.net/churn-predictor",
     icon: <BarChart3 className="w-6 h-6" />,
-    accuracy: "92%",
   },
   {
     title: "Stock Price Prediction",
@@ -83,74 +64,21 @@ const projects = [
     github: "https://github.com/AadilUsmani/nvdia_stock_predictor",
     demo: "https://preview-nvidia-stock-dashboard-kzmqjnlxx9b97rmuji28.vusercontent.net/",
     icon: <Database className="w-6 h-6" />,
-    accuracy: "78%",
   },
 ]
-
-const timeline = [
-  {
-    year: "2024-Present",
-    title: "Advanced ML Projects",
-    description: "Developing sophisticated machine learning models with focus on NLP and predictive analytics",
-  },
-  {
-    year: "2024",
-    title: "Stanford ML Certification",
-    description: "Completed Stanford's Machine Learning course with distinction, mastering core ML algorithms",
-  },
-  {
-    year: "2022-2026",
-    title: "BSCS Studies",
-    description: "Pursuing Bachelor's in Computer Science at University of Central Punjab with focus on AI/ML",
-  },
-]
-
-function SkillBar({ skill, delay }: { skill: { name: string; level: number }; delay: number }) {
-  const [progress, setProgress] = useState(0)
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
-
-  useEffect(() => {
-    if (isInView) {
-      const timer = setTimeout(() => {
-        setProgress(skill.level)
-      }, delay * 100)
-      return () => clearTimeout(timer)
-    }
-  }, [isInView, skill.level, delay])
-
-  return (
-    <div ref={ref} className="space-y-2">
-      <div className="flex justify-between text-sm">
-        <span className="text-white">{skill.name}</span>
-        <span className="text-gray-400">{skill.level}%</span>
-      </div>
-      <div className="w-full bg-gray-700 rounded-full h-2">
-        <motion.div
-          className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 1, ease: "easeOut" }}
-        />
-      </div>
-    </div>
-  )
-}
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("about")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const [submitMessage, setSubmitMessage] = useState("")
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 300], [0, 50])
   const y2 = useTransform(scrollY, [0, 300], [0, -50])
 
-  const sections = ["about", "education", "skills", "projects", "timeline", "contact"]
-
   useEffect(() => {
     const handleScroll = () => {
+      const sections = ["about", "skills", "projects", "contact"]
       const scrollPosition = window.scrollY + 100
 
       for (const section of sections) {
@@ -174,7 +102,6 @@ export default function Portfolio() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
     }
-    setMobileMenuOpen(false)
   }
 
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -234,15 +161,7 @@ export default function Portfolio() {
     }
   }
 
-  const downloadResume = () => {
-    // Create a temporary link to download resume
-    const link = document.createElement("a")
-    link.href = "/resume.pdf" // You'll need to add your resume PDF to the public folder
-    link.download = "Muhammad_Adil_Usmani_Resume.pdf"
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+  const cvUrl = "https://github.com/AadilUsmani/portfolio_adil_usmani/raw/main/Adil_Usmani_resume.pdf"
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -257,10 +176,8 @@ export default function Portfolio() {
             >
               Muhammad Adil Usmani
             </motion.div>
-
-            {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8">
-              {sections.map((section) => (
+              {["about", "skills", "projects", "contact"].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -272,21 +189,7 @@ export default function Portfolio() {
                 </button>
               ))}
             </div>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-white"
-              >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </Button>
-            </div>
-
-            {/* Social Links */}
-            <div className="hidden md:flex space-x-4">
+            <div className="flex space-x-4">
               <Button variant="ghost" size="icon" asChild>
                 <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer">
                   <Github className="w-5 h-5 text-white" />
@@ -304,49 +207,6 @@ export default function Portfolio() {
             </div>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        <motion.div
-          initial={{ opacity: 0, x: "100%" }}
-          animate={{
-            opacity: mobileMenuOpen ? 1 : 0,
-            x: mobileMenuOpen ? "0%" : "100%",
-          }}
-          transition={{ duration: 0.3 }}
-          className={`md:hidden fixed top-16 right-0 w-64 h-screen bg-black/95 backdrop-blur-md border-l border-gray-800 ${
-            mobileMenuOpen ? "pointer-events-auto" : "pointer-events-none"
-          }`}
-        >
-          <div className="flex flex-col space-y-4 p-6">
-            {sections.map((section) => (
-              <button
-                key={section}
-                onClick={() => scrollToSection(section)}
-                className={`capitalize text-left py-2 transition-colors ${
-                  activeSection === section ? "text-white" : "text-gray-300 hover:text-white"
-                }`}
-              >
-                {section}
-              </button>
-            ))}
-            <div className="flex space-x-4 pt-4 border-t border-gray-800">
-              <Button variant="ghost" size="icon" asChild>
-                <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer">
-                  <Github className="w-5 h-5 text-white" />
-                </a>
-              </Button>
-              <Button variant="ghost" size="icon" asChild>
-                <a
-                  href="https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Linkedin className="w-5 h-5 text-white" />
-                </a>
-              </Button>
-            </div>
-          </div>
-        </motion.div>
       </nav>
 
       {/* Hero/About Section */}
@@ -363,66 +223,52 @@ export default function Portfolio() {
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8">
-              {/* Left side - Profile Picture and Info */}
-              <div className="flex flex-col items-center lg:items-start">
-                <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-white p-1 mb-6">
-                  <img
-                    src="/profile.jpg"
-                    alt="Muhammad Adil Usmani"
-                    className="w-full h-full object-cover rounded-full"
-                  />
-                </div>
-                <div className="text-center lg:text-left">
-                  <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Muhammad Adil Usmani</h1>
-                  <span className="text-2xl md:text-3xl text-white font-semibold">AI/ML Developer</span>
-                  <div className="flex items-center justify-center lg:justify-start mt-2 text-gray-300">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    <span>Lahore, Pakistan</span>
-                  </div>
-                </div>
-              </div>
+            <div className="text-center">
+              <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">Muhammad Adil Usmani</h1>
+              <span className="text-2xl md:text-3xl text-white font-semibold mb-8 block">AI/ML Developer</span>
 
-              {/* Right side - Description and Buttons */}
-              <div className="flex-1 text-center lg:text-left lg:ml-8">
-                <p className="text-xl text-white mb-6 max-w-3xl leading-relaxed">
-                  Computer Science student with practical experience in machine learning and data analysis, building
-                  intelligent systems that solve real-world problems through data-driven insights.
-                </p>
-
-                {/* Achievement Badges */}
-                <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-8">
-                  <Badge variant="outline" className="border-green-500 text-green-400 px-3 py-1">
-                    <Zap className="w-4 h-4 mr-1" />
-                    85%+ Model Accuracy
-                  </Badge>
-                  <Badge variant="outline" className="border-blue-500 text-blue-400 px-3 py-1">
-                    <Code className="w-4 h-4 mr-1" />
-                    3+ ML Projects
-                  </Badge>
-                  <Badge variant="outline" className="border-purple-500 text-purple-400 px-3 py-1">
-                    <GraduationCap className="w-4 h-4 mr-1" />
-                    BSCS 2026
-                  </Badge>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                  <Button
-                    size="lg"
-                    onClick={() => scrollToSection("projects")}
-                    className="bg-black text-white border border-white hover:bg-gray-800"
+              {/* Download Resume Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+                className="mb-8"
+              >
+                <Button asChild size="lg" className="bg-white text-black hover:bg-gray-200 font-semibold">
+                  <a
+                    href={cvUrl}
+                    download="Muhammad-Adil-Usmani-CV.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2"
                   >
-                    View My Work
-                  </Button>
-                  <Button
-                    size="lg"
-                    onClick={downloadResume}
-                    className="bg-black text-white border border-white hover:bg-gray-800"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
+                    <Download className="w-5 h-5" />
                     Download Resume
-                  </Button>
-                </div>
+                  </a>
+                </Button>
+              </motion.div>
+
+              <p className="text-xl text-white mb-8 max-w-4xl mx-auto leading-relaxed">
+                Building intelligent systems that solve real-world problems through data-driven insights and innovative
+                algorithms. Specializing in machine learning, natural language processing, and production-ready AI
+                applications.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  size="lg"
+                  onClick={() => scrollToSection("projects")}
+                  className="bg-black text-white border border-white hover:bg-gray-800"
+                >
+                  View My Work
+                </Button>
+                <Button
+                  size="lg"
+                  onClick={() => scrollToSection("contact")}
+                  className="bg-black text-white border border-white hover:bg-gray-800"
+                >
+                  Get In Touch
+                </Button>
               </div>
             </div>
           </motion.div>
@@ -438,99 +284,8 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Education Section */}
-      <section id="education" className="py-20 bg-gray-900/30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">Education</h2>
-            <p className="text-xl text-white max-w-2xl mx-auto">
-              Academic foundation and continuous learning in computer science and AI
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* University */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <Card className="bg-gray-900/50 border-gray-800 hover:border-white transition-colors h-full">
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-2">
-                    <GraduationCap className="w-6 h-6 text-blue-400" />
-                    <CardTitle className="text-white">Bachelor of Science in Computer Science</CardTitle>
-                  </div>
-                  <CardDescription className="text-gray-300">University of Central Punjab, Lahore</CardDescription>
-                  <div className="flex items-center gap-2 text-sm text-gray-400">
-                    <Calendar className="w-4 h-4" />
-                    <span>2022 - 2026</span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white mb-4">
-                    Pursuing comprehensive education in computer science with specialization in artificial intelligence
-                    and machine learning.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="bg-gray-700 text-white">
-                      Data Structures
-                    </Badge>
-                    <Badge variant="secondary" className="bg-gray-700 text-white">
-                      Algorithms
-                    </Badge>
-                    <Badge variant="secondary" className="bg-gray-700 text-white">
-                      Machine Learning
-                    </Badge>
-                    <Badge variant="secondary" className="bg-gray-700 text-white">
-                      Database Systems
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Certifications */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <Card className="bg-gray-900/50 border-gray-800 hover:border-white transition-colors h-full">
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-2">
-                    <Award className="w-6 h-6 text-yellow-400" />
-                    <CardTitle className="text-white">Certifications</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="border-l-2 border-yellow-400 pl-4">
-                    <h4 className="font-semibold text-white">Stanford Machine Learning Course</h4>
-                    <p className="text-gray-300 text-sm">Completed with distinction</p>
-                    <p className="text-gray-400 text-xs">2024</p>
-                  </div>
-                  <div className="border-l-2 border-blue-400 pl-4">
-                    <h4 className="font-semibold text-white">Deep Learning Specialization</h4>
-                    <p className="text-gray-300 text-sm">Neural Networks and Deep Learning</p>
-                    <p className="text-gray-400 text-xs">2024</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* Skills Section */}
-      <section id="skills" className="py-20">
+      <section id="skills" className="py-20 bg-gray-900/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -545,23 +300,27 @@ export default function Portfolio() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {Object.entries(skills).map(([category, skillList], categoryIndex) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Object.entries(skills).map(([category, skillList], index) => (
               <motion.div
                 key={category}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: categoryIndex * 0.1 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
                 <Card className="bg-gray-900/50 border-gray-800 hover:border-white transition-colors h-full">
                   <CardHeader>
                     <CardTitle className="text-white">{category}</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    {skillList.map((skill, skillIndex) => (
-                      <SkillBar key={skill.name} skill={skill} delay={categoryIndex * skillList.length + skillIndex} />
-                    ))}
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2">
+                      {skillList.map((skill) => (
+                        <Badge key={skill} variant="secondary" className="bg-gray-700 text-white">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -571,7 +330,7 @@ export default function Portfolio() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 bg-gray-900/30">
+      <section id="projects" className="py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -586,18 +345,18 @@ export default function Portfolio() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -10 }}
                 className="h-full"
               >
-                <Card className="bg-gray-900/50 border-gray-800 hover:border-white transition-all duration-300 h-full flex flex-col">
+                <Card className="bg-gray-900/50 border-gray-800 hover:border-white transition-all duration-300 h-full">
                   <CardHeader>
                     <div className="flex items-center justify-between mb-4">
                       <div className="p-2 bg-white/20 rounded-lg w-fit">{project.icon}</div>
@@ -626,76 +385,23 @@ export default function Portfolio() {
                         </Button>
                       </div>
                     </div>
-                    <CardTitle className="text-white">{project.title}</CardTitle>
-                    <CardDescription className="text-white">{project.description}</CardDescription>
+                    <CardTitle className="text-white mb-2">{project.title}</CardTitle>
+                    <CardDescription className="text-white text-sm leading-relaxed">
+                      {project.description}
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent className="flex-1 flex flex-col justify-between">
-                    <div className="flex flex-wrap gap-2 mb-4">
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2">
                       {project.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="border-gray-600 text-white">
+                        <Badge key={tag} variant="outline" className="border-gray-600 text-white text-xs">
                           {tag}
                         </Badge>
                       ))}
-                    </div>
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-700">
-                      <span className="text-gray-400 text-sm">Model Accuracy</span>
-                      <span className="text-green-400 font-semibold">{project.accuracy}</span>
                     </div>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Timeline Section */}
-      <section id="timeline" className="py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">Journey Timeline</h2>
-            <p className="text-xl text-white max-w-2xl mx-auto">Key milestones in my AI/ML learning journey</p>
-          </motion.div>
-
-          <div className="relative">
-            {/* Timeline Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-blue-500 to-purple-500"></div>
-
-            <div className="space-y-12">
-              {timeline.map((item, index) => (
-                <motion.div
-                  key={item.year}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                  className={`flex items-center ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}
-                >
-                  <div className={`w-5/12 ${index % 2 === 0 ? "text-right pr-8" : "text-left pl-8"}`}>
-                    <Card className="bg-gray-900/50 border-gray-800 hover:border-white transition-colors">
-                      <CardContent className="p-6">
-                        <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
-                        <p className="text-gray-300 mb-2">{item.description}</p>
-                        <span className="text-blue-400 font-semibold">{item.year}</span>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  {/* Timeline Dot */}
-                  <div className="w-2/12 flex justify-center">
-                    <div className="w-4 h-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full border-4 border-black"></div>
-                  </div>
-
-                  <div className="w-5/12"></div>
-                </motion.div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -730,7 +436,7 @@ export default function Portfolio() {
                       <label className="block text-sm font-medium mb-2 text-white">Name</label>
                       <Input
                         name="name"
-                        className="bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500"
+                        className="bg-gray-700 border-gray-600 text-white"
                         placeholder="Your name"
                         required
                         disabled={isSubmitting}
@@ -741,7 +447,7 @@ export default function Portfolio() {
                       <Input
                         name="email"
                         type="email"
-                        className="bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500"
+                        className="bg-gray-700 border-gray-600 text-white"
                         placeholder="your.email@example.com"
                         required
                         disabled={isSubmitting}
@@ -752,7 +458,7 @@ export default function Portfolio() {
                     <label className="block text-sm font-medium mb-2 text-white">Subject</label>
                     <Input
                       name="subject"
-                      className="bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500"
+                      className="bg-gray-700 border-gray-600 text-white"
                       placeholder="What's this about?"
                       required
                       disabled={isSubmitting}
@@ -762,14 +468,13 @@ export default function Portfolio() {
                     <label className="block text-sm font-medium mb-2 text-white">Message</label>
                     <Textarea
                       name="message"
-                      className="bg-gray-700 border-gray-600 text-white min-h-32 focus:border-blue-500 focus:ring-blue-500"
+                      className="bg-gray-700 border-gray-600 text-white min-h-32"
                       placeholder="Tell me about your project or opportunity..."
                       required
                       disabled={isSubmitting}
                     />
                   </div>
 
-                  {/* Status Messages */}
                   {submitStatus === "success" && (
                     <div className="p-4 bg-green-900/50 border border-green-500 rounded-md">
                       <p className="text-green-400">✅ {submitMessage}</p>
@@ -843,7 +548,6 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="py-8 border-t border-gray-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gray-400">© 2025 Muhammad Adil Usmani. All rights reserved.</p>
