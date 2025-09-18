@@ -680,14 +680,22 @@ export default function Portfolio() {
                 className="mb-8"
               >
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <a
-                    href="/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
-                    download="Adil_Usmani_Resume.pdf"
-                    className="inline-flex items-center gap-3 px-8 py-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-2xl font-bold text-lg transition-all duration-300 cursor-custom"
+                  <button
+                    onClick={() => {
+                      // Create a temporary link element
+                      const link = document.createElement("a")
+                      link.href = "/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
+                      link.download = "Adil_Usmani_Resume.pdf"
+                      link.target = "_blank"
+                      document.body.appendChild(link)
+                      link.click()
+                      document.body.removeChild(link)
+                    }}
+                    className="inline-flex items-center gap-3 px-8 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl font-bold text-lg transition-all duration-300 cursor-custom transform hover:scale-105"
                   >
                     <Download className="w-6 h-6" />
                     Download Resume
-                  </a>
+                  </button>
                 </motion.div>
               </motion.div>
 
