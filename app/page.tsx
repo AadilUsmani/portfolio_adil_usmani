@@ -245,9 +245,6 @@ const style = `
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
   .glass-morphism {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(16px);
@@ -472,9 +469,6 @@ export default function Portfolio() {
     }
   }
 
-  // Updated CV URL to the new GitHub link
-  const cvUrl = "https://github.com/AadilUsmani/portfolio_adil_usmani/blob/main/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
-
   return (
     <div
       className={`min-h-screen transition-colors duration-500 ${isDarkMode ? "bg-black text-white" : "bg-white text-black"}`}
@@ -686,22 +680,14 @@ export default function Portfolio() {
                 className="mb-8"
               >
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button
-                    asChild
-                    size="lg"
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold px-8 py-4 text-lg shadow-2xl border-0 cursor-custom"
+                  <a
+                    href="/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
+                    download="Adil_Usmani_Resume.pdf"
+                    className="inline-flex items-center gap-3 px-8 py-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-2xl font-bold text-lg transition-all duration-300 cursor-custom"
                   >
-                    <a
-                      href={cvUrl}
-                      download="Muhammad-Adil-Usmani-CV.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3"
-                    >
-                      <Download className="w-6 h-6" />
-                      Download Resume
-                    </a>
-                  </Button>
+                    <Download className="w-6 h-6" />
+                    Download Resume
+                  </a>
                 </motion.div>
               </motion.div>
 
