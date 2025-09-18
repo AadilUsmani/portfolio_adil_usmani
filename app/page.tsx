@@ -682,9 +682,9 @@ export default function Portfolio() {
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <button
                     onClick={() => {
-                      // Create a temporary link element
+                      // Create a temporary link element with the correct file path
                       const link = document.createElement("a")
-                      link.href = "/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
+                      link.href = "/Muhammad Adil Usmani - CV.pdf" // Use the actual filename without URL encoding
                       link.download = "Adil_Usmani_Resume.pdf"
                       link.target = "_blank"
                       document.body.appendChild(link)
