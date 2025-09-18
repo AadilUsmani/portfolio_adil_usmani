@@ -52,13 +52,6 @@ const skillsData = {
   ],
   "Machine Learning & AI": [
     {
-      name: "PyTorch",
-      level: 90,
-      icon: "🔥",
-      color: "from-orange-500 to-red-600",
-      description: "Deep learning framework",
-    },
-    {
       name: "Scikit-learn",
       level: 88,
       icon: "🧠",
@@ -81,6 +74,20 @@ const skillsData = {
       description: "LLM application framework",
     },
     {
+      name: "LangGraph",
+      level: 82,
+      icon: "🕸️",
+      color: "from-teal-500 to-blue-500",
+      description: "Graph-based LLM workflows",
+    },
+    {
+      name: "LangSmith",
+      level: 80,
+      icon: "🔍",
+      color: "from-yellow-500 to-orange-500",
+      description: "LLM observability and debugging",
+    },
+    {
       name: "NLP",
       level: 87,
       icon: "💬",
@@ -88,7 +95,7 @@ const skillsData = {
       description: "Natural language processing",
     },
   ],
-  "APIs & Frameworks": [
+  "Cloud & Development Tools": [
     {
       name: "FastAPI",
       level: 88,
@@ -97,11 +104,39 @@ const skillsData = {
       description: "High-performance web APIs",
     },
     {
-      name: "REST APIs",
+      name: "Cursor",
       level: 85,
-      icon: "🌐",
-      color: "from-blue-500 to-indigo-500",
-      description: "RESTful web services",
+      icon: "🎯",
+      color: "from-purple-500 to-blue-500",
+      description: "AI-powered code editor",
+    },
+    {
+      name: "Kilo",
+      level: 80,
+      icon: "⚙️",
+      color: "from-orange-500 to-red-500",
+      description: "Development workflow tool",
+    },
+    {
+      name: "Render",
+      level: 83,
+      icon: "🚀",
+      color: "from-blue-500 to-purple-500",
+      description: "Cloud deployment platform",
+    },
+    {
+      name: "Vercel",
+      level: 87,
+      icon: "▲",
+      color: "from-black to-gray-600",
+      description: "Frontend deployment platform",
+    },
+    {
+      name: "Azure AI",
+      level: 78,
+      icon: "☁️",
+      color: "from-blue-600 to-cyan-500",
+      description: "Microsoft cloud AI services",
     },
     {
       name: "Google Gemini AI",
@@ -109,6 +144,20 @@ const skillsData = {
       icon: "✨",
       color: "from-yellow-500 to-orange-500",
       description: "AI model integration",
+    },
+    {
+      name: "GCP",
+      level: 75,
+      icon: "🌐",
+      color: "from-red-500 to-yellow-500",
+      description: "Google Cloud Platform",
+    },
+    {
+      name: "Git/GitHub",
+      level: 90,
+      icon: "🐙",
+      color: "from-gray-700 to-black",
+      description: "Version control and collaboration",
     },
     {
       name: "T5 Transformers",
@@ -167,7 +216,7 @@ const otherProjects = [
     ],
     github: "https://github.com/AadilUsmani/churn_predictor_",
     demo: "https://kzml2mfup87xwyui0vgq.lite.vusercontent.net/churn-predictor",
-    image: "/images/churn-predictor.png", // Updated image path
+    image: "/images/churn-predictor.png",
     metrics: { accuracy: "92%", predictions: "Predictions" },
   },
   {
@@ -180,7 +229,7 @@ const otherProjects = [
     ],
     github: "https://github.com/AadilUsmani/nvdia_stock_predictor",
     demo: "https://preview-nvidia-stock-dashboard-kzmqjnlxx9b97rmuji28.vusercontent.net/",
-    image: "/images/stock-predictor.png", // Updated image path
+    image: "/images/stock-predictor.png",
     metrics: { accuracy: "78%", predictions: "Predictions" },
   },
 ]
@@ -423,7 +472,8 @@ export default function Portfolio() {
     }
   }
 
-  const cvUrl = "https://github.com/AadilUsmani/portfolio_adil_usmani/raw/main/Adil_Usmani_resume.pdf"
+  // Updated CV URL to the new GitHub link
+  const cvUrl = "https://github.com/AadilUsmani/portfolio_adil_usmani/blob/main/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
 
   return (
     <div

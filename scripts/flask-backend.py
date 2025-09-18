@@ -81,7 +81,7 @@ def get_projects():
             "description": "Built an NLP model using transformer architecture to automatically generate concise summaries of long-form articles with 85% accuracy using T5 small.",
             "tags": ["NLP", "Transformers", "Python", "T5"],
             "github": "https://github.com/AadilUsmani/article-summarization",
-            "demo": "https://v0-news-article-summarizer-gamma.vercel.app/",
+            "demo": "https://kzmgnz3dbnj9nliqkea4.lite.vusercontent.net/",
             "technologies": ["Python", "Transformers", "Flask", "React"]
         },
         {
@@ -99,7 +99,7 @@ def get_projects():
             "description": "Implemented LSTM neural networks to predict stock prices using historical data and technical indicators with time series analysis.",
             "tags": ["Deep Learning", "LSTM", "Time Series", "TensorFlow"],
             "github": "https://github.com/AadilUsmani/stock-prediction",
-            "demo": "https://v0-nvidia-stock-dashboard.vercel.app/",
+            "demo": "https://stock-prediction-aadil.vercel.app",
             "technologies": ["Python", "TensorFlow", "LSTM", "Flask"]
         }
     ]
