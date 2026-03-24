@@ -169,6 +169,20 @@ const otherProjects = [
     demo: "https://deepwiki.com/AadilUsmani/V.G.RAG",
     metrics: { benchmark: "53 Q&As", accuracy: "Outperforms" },
   },
+  {
+    title: "AeroSphere — Air Quality Forecasting System",
+    description: "Built LSTM model forecasting 72-hour PM2.5 across 45 cities achieving 85%+ accuracy, 30% above baseline. Designed Airflow pipeline processing 1.2M+ records with GPT-based natural language summaries for public air quality reports. Contributed to model training, batch scheduling, and end-to-end Azure cloud deployment.",
+    tags: [
+      { name: "NASA TEMPO", color: "bg-blue-500" },
+      { name: "LSTM", color: "bg-red-500" },
+      { name: "Airflow", color: "bg-orange-500" },
+      { name: "Azure", color: "bg-cyan-500" },
+      { name: "GPT", color: "bg-green-500" },
+    ],
+    github: "https://github.com/AadilUsmani/AeroSphere",
+    demo: "https://www.aerosphere.earth",
+    metrics: { accuracy: "85%+", cities: "45" },
+  },
 ]
 
 const style = `
@@ -622,26 +636,24 @@ export default function Portfolio() {
                 </motion.div>
               </motion.div>
 
-              {/* Download Resume Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2, duration: 0.8 }}
-                className="mb-8"
-              >
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <a
-                    href="https://raw.githubusercontent.com/AadilUsmani/portfolio_adil_usmani/main/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    download="Adil_Usmani_Resume.pdf"
-                    className="inline-flex items-center gap-3 px-8 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl font-bold text-lg transition-all duration-300 cursor-custom transform hover:scale-105"
-                  >
-                    <Download className="w-6 h-6" />
-                    Download Resume
-                  </a>
-                </motion.div>
-              </motion.div>
+  {/* Download Resume Button */}
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 1.2, duration: 0.8 }}
+    className="mb-8"
+  >
+    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+      <a
+        href="https://raw.githubusercontent.com/AadilUsmani/portfolio_adil_usmani/main/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
+        download="Adil_Usmani_Resume.pdf"
+        className="inline-flex items-center gap-3 px-8 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl font-bold text-lg transition-all duration-300 cursor-custom transform hover:scale-105"
+      >
+        Download Resume
+        <ExternalLink className="w-5 h-5" />
+      </a>
+    </motion.div>
+  </motion.div>
 
               <motion.p
                 className="text-xl md:text-2xl text-gray-300 mb-12 max-w-5xl mx-auto leading-relaxed font-light"
