@@ -630,22 +630,16 @@ export default function Portfolio() {
                 className="mb-8"
               >
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <button
-                    onClick={() => {
-                      // Create a temporary link element with the correct file path
-                      const link = document.createElement("a")
-                      link.href = "/Muhammad Adil Usmani - CV.pdf" // Use the actual filename without URL encoding
-                      link.download = "Adil_Usmani_Resume.pdf"
-                      link.target = "_blank"
-                      document.body.appendChild(link)
-                      link.click()
-                      document.body.removeChild(link)
-                    }}
+                  <a
+                    href="https://raw.githubusercontent.com/AadilUsmani/portfolio_adil_usmani/main/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download="Adil_Usmani_Resume.pdf"
                     className="inline-flex items-center gap-3 px-8 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl font-bold text-lg transition-all duration-300 cursor-custom transform hover:scale-105"
                   >
                     <Download className="w-6 h-6" />
                     Download Resume
-                  </button>
+                  </a>
                 </motion.div>
               </motion.div>
 
@@ -832,23 +826,14 @@ export default function Portfolio() {
                   className="group cursor-custom"
                 >
                   <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-500/20 border-0">
-                    <div className="relative">
-                      <img
-                        src={project.image || "/placeholder.svg"}
-                        alt={project.title}
-                        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      <div className="absolute top-4 right-4">
-                        <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-400/30 font-semibold">
-                          Featured
-                        </Badge>
-                      </div>
-                    </div>
-
                     <CardHeader>
                       <div className="flex items-center justify-between mb-4">
-                        <CardTitle className="text-white text-xl font-bold">{project.title}</CardTitle>
+                        <div className="flex items-center gap-4">
+                          <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-400/30 font-semibold">
+                            Featured
+                          </Badge>
+                          <CardTitle className="text-white text-xl font-bold">{project.title}</CardTitle>
+                        </div>
                         <div className="flex space-x-2">
                           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                             <Button variant="ghost" size="sm" asChild className="glass-morphism cursor-custom">
@@ -941,15 +926,6 @@ export default function Portfolio() {
                     style={{ scrollSnapAlign: "start" }}
                   >
                     <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-purple-500/20 border-0">
-                      <div className="relative">
-                        <img
-                          src={project.image || "/placeholder.svg"}
-                          alt={project.title}
-                          className="w-full h-40 object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      </div>
-
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between mb-2">
                           <CardTitle className="text-white text-lg font-bold">{project.title}</CardTitle>
