@@ -27,145 +27,54 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
 const skillsData = {
-  "Programming Languages": [
-    {
-      name: "Python",
-      level: 95,
-      icon: "🐍",
-      color: "from-blue-500 to-yellow-500",
-      description: "Primary language for ML/AI development",
-    },
-    {
-      name: "C++",
-      level: 80,
-      icon: "⚡",
-      color: "from-blue-600 to-purple-600",
-      description: "System programming and algorithms",
-    },
-    {
-      name: "SQL",
-      level: 85,
-      icon: "🗄️",
-      color: "from-orange-500 to-red-500",
-      description: "Database queries and data analysis",
-    },
+  "Languages": [
+    { name: "Python", level: 95, icon: "🐍", color: "from-blue-500 to-yellow-500", description: "Primary language for ML/AI development" },
+    { name: "SQL", level: 85, icon: "🗄️", color: "from-orange-500 to-red-500", description: "Database queries and data analysis" },
   ],
-  "Machine Learning & AI": [
-    {
-      name: "Scikit-learn",
-      level: 88,
-      icon: "🧠",
-      color: "from-blue-500 to-cyan-500",
-      description: "Machine learning algorithms",
-    },
-    {
-      name: "Pandas",
-      level: 92,
-      icon: "🐼",
-      color: "from-purple-500 to-pink-500",
-      description: "Data manipulation and analysis",
-    },
+  "Backend & APIs": [
+    { name: "FastAPI", level: 88, icon: "⚡", color: "from-green-500 to-teal-500", description: "High-performance web APIs" },
+    { name: "LangChain", level: 85, icon: "🔗", color: "from-indigo-500 to-purple-500", description: "LLM application framework" },
+    { name: "LangGraph", level: 82, icon: "🕸️", color: "from-teal-500 to-blue-500", description: "Graph-based LLM workflows" },
+    { name: "LangSmith", level: 80, icon: "🔍", color: "from-yellow-500 to-orange-500", description: "LLM observability and debugging" },
+    { name: "REST APIs", level: 87, icon: "🌐", color: "from-cyan-500 to-blue-500", description: "RESTful API design and development" },
+    { name: "Async Programming", level: 83, icon: "⚙️", color: "from-purple-500 to-pink-500", description: "Asynchronous programming patterns" },
+  ],
+  "AI/ML & Advanced Techniques": [
+    { name: "RAG Pipelines", level: 88, icon: "🔄", color: "from-red-500 to-pink-500", description: "Retrieval-Augmented Generation systems" },
+    { name: "LLM Applications", level: 87, icon: "🤖", color: "from-yellow-500 to-orange-500", description: "Building with large language models" },
+    { name: "Embeddings", level: 85, icon: "📊", color: "from-blue-500 to-cyan-500", description: "Vector embeddings and representations" },
+    { name: "Retrieval Systems", level: 86, icon: "🔍", color: "from-purple-500 to-blue-500", description: "Information retrieval and search" },
+    { name: "Prompt Engineering", level: 85, icon: "💡", color: "from-orange-500 to-yellow-500", description: "Effective prompt design strategies" },
+    { name: "Deep Learning", level: 82, icon: "🧠", color: "from-indigo-500 to-purple-500", description: "Neural networks and deep architectures" },
+    { name: "Time-Series Forecasting", level: 80, icon: "📈", color: "from-green-500 to-teal-500", description: "Temporal data prediction" },
+    { name: "Hybrid Retrieval", level: 84, icon: "🔀", color: "from-pink-500 to-red-500", description: "Combined vector and graph retrieval" },
+    { name: "Evaluation Benchmarks", level: 83, icon: "📊", color: "from-cyan-500 to-blue-500", description: "LLM evaluation and benchmarking" },
+  ],
+  "Databases": [
+    { name: "SQLite", level: 85, icon: "💾", color: "from-blue-500 to-teal-500", description: "Lightweight SQL database" },
+    { name: "ChromaDB", level: 84, icon: "🔍", color: "from-purple-500 to-pink-500", description: "Vector database for embeddings" },
+    { name: "Neo4j", level: 82, icon: "📊", color: "from-orange-500 to-red-500", description: "Graph database for relationships" },
+  ],
+  "Libraries & Frameworks": [
+    { name: "Pandas", level: 92, icon: "🐼", color: "from-purple-500 to-pink-500", description: "Data manipulation and analysis" },
     { name: "NumPy", level: 90, icon: "🔢", color: "from-green-500 to-blue-500", description: "Numerical computing" },
-    {
-      name: "LangChain",
-      level: 85,
-      icon: "🔗",
-      color: "from-indigo-500 to-purple-500",
-      description: "LLM application framework",
-    },
-    {
-      name: "LangGraph",
-      level: 82,
-      icon: "🕸️",
-      color: "from-teal-500 to-blue-500",
-      description: "Graph-based LLM workflows",
-    },
-    {
-      name: "LangSmith",
-      level: 80,
-      icon: "🔍",
-      color: "from-yellow-500 to-orange-500",
-      description: "LLM observability and debugging",
-    },
-    {
-      name: "NLP",
-      level: 87,
-      icon: "💬",
-      color: "from-teal-500 to-green-500",
-      description: "Natural language processing",
-    },
+    { name: "Matplotlib", level: 86, icon: "📈", color: "from-cyan-500 to-blue-500", description: "Data visualization" },
+    { name: "PyTorch", level: 85, icon: "🔥", color: "from-red-500 to-orange-500", description: "Deep learning framework" },
+    { name: "TensorFlow", level: 83, icon: "⚡", color: "from-orange-500 to-yellow-500", description: "ML and deep learning platform" },
+    { name: "Scikit-Learn", level: 88, icon: "🧠", color: "from-blue-500 to-cyan-500", description: "Machine learning algorithms" },
   ],
-  "Cloud & Development Tools": [
-    {
-      name: "FastAPI",
-      level: 88,
-      icon: "⚡",
-      color: "from-green-500 to-teal-500",
-      description: "High-performance web APIs",
-    },
-    {
-      name: "Cursor",
-      level: 85,
-      icon: "🎯",
-      color: "from-purple-500 to-blue-500",
-      description: "AI-powered code editor",
-    },
-    {
-      name: "Kilo",
-      level: 80,
-      icon: "⚙️",
-      color: "from-orange-500 to-red-500",
-      description: "Development workflow tool",
-    },
-    {
-      name: "Render",
-      level: 83,
-      icon: "🚀",
-      color: "from-blue-500 to-purple-500",
-      description: "Cloud deployment platform",
-    },
-    {
-      name: "Vercel",
-      level: 87,
-      icon: "▲",
-      color: "from-black to-gray-600",
-      description: "Frontend deployment platform",
-    },
-    {
-      name: "Azure AI",
-      level: 78,
-      icon: "☁️",
-      color: "from-blue-600 to-cyan-500",
-      description: "Microsoft cloud AI services",
-    },
-    {
-      name: "Google Gemini AI",
-      level: 82,
-      icon: "✨",
-      color: "from-yellow-500 to-orange-500",
-      description: "AI model integration",
-    },
-    {
-      name: "GCP",
-      level: 75,
-      icon: "🌐",
-      color: "from-red-500 to-yellow-500",
-      description: "Google Cloud Platform",
-    },
-    {
-      name: "Git/GitHub",
-      level: 90,
-      icon: "🐙",
-      color: "from-gray-700 to-black",
-      description: "Version control and collaboration",
-    },
-    {
-      name: "T5 Transformers",
-      level: 80,
-      icon: "🤖",
-      color: "from-purple-500 to-blue-500",
-      description: "Text-to-text transformers",
-    },
+  "Tools & Infrastructure": [
+    { name: "GitHub", level: 90, icon: "🐙", color: "from-gray-700 to-black", description: "Version control and collaboration" },
+    { name: "Docker", level: 85, icon: "🐳", color: "from-blue-500 to-cyan-500", description: "Container orchestration" },
+    { name: "GitHub Actions", level: 84, icon: "⚙️", color: "from-purple-500 to-blue-500", description: "CI/CD automation" },
+    { name: "Render", level: 83, icon: "🚀", color: "from-blue-500 to-purple-500", description: "Cloud deployment platform" },
+    { name: "Vercel", level: 87, icon: "▲", color: "from-black to-gray-600", description: "Frontend deployment platform" },
+    { name: "Azure", level: 78, icon: "☁️", color: "from-blue-600 to-cyan-500", description: "Microsoft cloud services" },
+    { name: "GCP", level: 75, icon: "🌐", color: "from-red-500 to-yellow-500", description: "Google Cloud Platform" },
+    { name: "GitHub Copilot", level: 82, icon: "✨", color: "from-yellow-500 to-orange-500", description: "AI code assistant" },
+    { name: "Gemini CLI", level: 80, icon: "🎯", color: "from-purple-500 to-blue-500", description: "AI command line tools" },
+    { name: "Deepwiki", level: 80, icon: "📚", color: "from-green-500 to-teal-500", description: "Project documentation platform" },
+    { name: "Airflow", level: 78, icon: "🔄", color: "from-orange-500 to-red-500", description: "Workflow orchestration" },
   ],
 }
 
@@ -231,6 +140,34 @@ const otherProjects = [
     demo: "https://preview-nvidia-stock-dashboard-kzmqjnlxx9b97rmuji28.vusercontent.net/",
     image: "/images/stock-predictor.png",
     metrics: { accuracy: "78%", predictions: "Predictions" },
+  },
+  {
+    title: "Corrective RAG (CRAG)",
+    description: "Adaptive self-correcting RAG pipeline with threshold-based routing. Routes CORRECT answers (≥0.7) directly, triggers Tavily web search for INCORRECT (<0.3), and runs parallel operations for AMBIGUOUS responses. Optimized for 3-6s latency on direct retrievals and 5-8s with web-augmented answers over geopolitical documents.",
+    tags: [
+      { name: "LangGraph", color: "bg-teal-500" },
+      { name: "FAISS", color: "bg-blue-500" },
+      { name: "Tavily Search", color: "bg-cyan-500" },
+      { name: "GPT-4o-mini", color: "bg-green-500" },
+      { name: "RAG", color: "bg-purple-500" },
+    ],
+    github: "https://github.com/AadilUsmani/Corrective_rag_CRAG",
+    demo: "https://deepwiki.com/AadilUsmani/Corrective_rag_CRAG",
+    metrics: { latency: "3-8s", accuracy: "95%+" },
+  },
+  {
+    title: "Hybrid Graph RAG vs Vector RAG",
+    description: "Comparative analysis of hybrid retrieval from ChromaDB and Neo4j over SEC 10-K filings. Applied late fusion to merge vector and graph contexts for improved structured financial reasoning. Built 53-question benchmark evaluating accuracy, comprehensiveness, diversity, empowerment, and directness metrics.",
+    tags: [
+      { name: "ChromaDB", color: "bg-purple-500" },
+      { name: "Neo4j", color: "bg-orange-500" },
+      { name: "Azure OpenAI", color: "bg-blue-600" },
+      { name: "LLM-as-Judge", color: "bg-pink-500" },
+      { name: "Hybrid RAG", color: "bg-green-500" },
+    ],
+    github: "https://github.com/AadilUsmani/V.G.RAG",
+    demo: "https://deepwiki.com/AadilUsmani/V.G.RAG",
+    metrics: { benchmark: "53 Q&As", accuracy: "Outperforms" },
   },
 ]
 
@@ -476,28 +413,37 @@ export default function Portfolio() {
       {/* Glass-morphism Navigation */}
       <nav className="fixed top-0 w-full glass-morphism z-50 transition-all duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="text-xl font-bold">
-              Muhammad Adil Usmani
-            </motion.div>
-            <div className="hidden md:flex space-x-8">
-              {["about", "skills", "projects", "contact"].map((section) => (
-                <motion.button
-                  key={section}
-                  onClick={() => scrollToSection(section)}
-                  className={`capitalize transition-all duration-300 px-4 py-2 rounded-lg font-medium cursor-custom ${
-                    activeSection === section
-                      ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
-                      : "hover:bg-white/10"
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {section}
-                </motion.button>
-              ))}
-            </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Technical Expertise</h2>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+              Comprehensive skill set in AI/ML, data engineering, and cloud infrastructure
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+            {Object.entries(skillsData).map(([category, skills], index) => (
+              <SkillCard key={category} category={category} skills={skills} index={index} />
+            ))}
+          </div>
+        </div>
             <div className="flex items-center space-x-4">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <a
+                  href="https://drive.google.com/file/d/1I9aTIMw6qpmF6vawi4CzFVzEMBhm4MGn/view?usp=drive_link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-morphism px-4 py-2 rounded-lg font-medium cursor-custom hover:bg-white/20 transition-all duration-300 flex items-center gap-2 text-sm"
+                >
+                  <Download className="w-4 h-4" />
+                  Resume
+                </a>
+              </motion.div>
               <motion.button
                 onClick={() => setIsDarkMode(!isDarkMode)}
                 className="glass-morphism p-2 rounded-lg cursor-custom"
