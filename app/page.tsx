@@ -412,65 +412,69 @@ export default function Portfolio() {
     >
       {/* Glass-morphism Navigation */}
       <nav className="fixed top-0 w-full glass-morphism z-50 transition-all duration-300">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="text-xl font-bold"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Technical Expertise</h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Comprehensive skill set in AI/ML, data engineering, and cloud infrastructure
-            </p>
+            Muhammad Adil Usmani
           </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {Object.entries(skillsData).map(([category, skills], index) => (
-              <SkillCard key={category} category={category} skills={skills} index={index} />
+          <div className="hidden md:flex space-x-8">
+            {["about", "skills", "projects", "contact"].map((section) => (
+              <motion.button
+                key={section}
+                onClick={() => scrollToSection(section)}
+                className={`capitalize transition-all duration-300 px-4 py-2 rounded-lg font-medium cursor-custom ${
+                  activeSection === section
+                    ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
+                    : "hover:bg-white/10"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {section}
+              </motion.button>
             ))}
           </div>
-        </div>
-            <div className="flex items-center space-x-4">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <div className="flex items-center space-x-4">
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <a
+                href="https://drive.google.com/file/d/1I9aTIMw6qpmF6vawi4CzFVzEMBhm4MGn/view?usp=drive_link"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass-morphism px-4 py-2 rounded-lg font-medium cursor-custom hover:bg-white/20 transition-all duration-300 flex items-center gap-2 text-sm"
+              >
+                <Download className="w-4 h-4" />
+                Resume
+              </a>
+            </motion.div>
+            <motion.button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="glass-morphism p-2 rounded-lg cursor-custom"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </motion.button>
+            <motion.div whileHover={{ scale: 1.1 }}>
+              <Button variant="ghost" size="icon" asChild className="glass-morphism cursor-custom">
+                <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer">
+                  <Github className="w-5 h-5" />
+                </a>
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.1 }}>
+              <Button variant="ghost" size="icon" asChild className="glass-morphism cursor-custom">
                 <a
-                  href="https://drive.google.com/file/d/1I9aTIMw6qpmF6vawi4CzFVzEMBhm4MGn/view?usp=drive_link"
+                  href="https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="glass-morphism px-4 py-2 rounded-lg font-medium cursor-custom hover:bg-white/20 transition-all duration-300 flex items-center gap-2 text-sm"
                 >
-                  <Download className="w-4 h-4" />
-                  Resume
+                  <Linkedin className="w-5 h-5" />
                 </a>
-              </motion.div>
-              <motion.button
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                className="glass-morphism p-2 rounded-lg cursor-custom"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </motion.button>
-              <motion.div whileHover={{ scale: 1.1 }}>
-                <Button variant="ghost" size="icon" asChild className="glass-morphism cursor-custom">
-                  <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer">
-                    <Github className="w-5 h-5" />
-                  </a>
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.1 }}>
-                <Button variant="ghost" size="icon" asChild className="glass-morphism cursor-custom">
-                  <a
-                    href="https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Linkedin className="w-5 h-5" />
-                  </a>
-                </Button>
-              </motion.div>
-            </div>
+              </Button>
+            </motion.div>
           </div>
         </div>
       </nav>
