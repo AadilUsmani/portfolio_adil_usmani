@@ -80,6 +80,57 @@ const skillsData = {
 
 const featuredProjects = [
   {
+    title: "AeroSphere — Air Quality Forecasting System",
+    description: "Built LSTM model forecasting 72-hour PM2.5 across 45 cities achieving 85%+ accuracy, 30% above baseline. Designed Airflow pipeline processing 1.2M+ records with GPT-based natural language summaries for public air quality reports. Contributed to model training, batch scheduling, and end-to-end Azure cloud deployment.",
+    tags: [
+      { name: "NASA TEMPO", color: "bg-blue-500" },
+      { name: "LSTM", color: "bg-red-500" },
+      { name: "Airflow", color: "bg-orange-500" },
+      { name: "Azure", color: "bg-cyan-500" },
+      { name: "GPT", color: "bg-green-500" },
+    ],
+    github: "https://github.com/AadilUsmani/AeroSphere",
+    demo: "https://www.aerosphere.earth",
+    image: "/images/aerosphere.png",
+    metrics: { accuracy: "85%+", cities: "45" },
+    featured: true,
+  },
+  {
+    title: "Hybrid Graph RAG vs Vector RAG",
+    description: "Comparative analysis of hybrid retrieval from ChromaDB and Neo4j over SEC 10-K filings. Applied late fusion to merge vector and graph contexts for improved structured financial reasoning. Built 53-question benchmark evaluating accuracy, comprehensiveness, diversity, empowerment, and directness metrics.",
+    tags: [
+      { name: "ChromaDB", color: "bg-purple-500" },
+      { name: "Neo4j", color: "bg-orange-500" },
+      { name: "Azure OpenAI", color: "bg-blue-600" },
+      { name: "LLM-as-Judge", color: "bg-pink-500" },
+      { name: "Hybrid RAG", color: "bg-green-500" },
+    ],
+    github: "https://github.com/AadilUsmani/V.G.RAG",
+    demo: "https://deepwiki.com/AadilUsmani/V.G.RAG",
+    image: "/images/hybrid-rag.png",
+    metrics: { benchmark: "53 Q&As", accuracy: "Outperforms" },
+    featured: true,
+  },
+  {
+    title: "Corrective RAG (CRAG)",
+    description: "Adaptive self-correcting RAG pipeline with threshold-based routing. Routes CORRECT answers (≥0.7) directly, triggers Tavily web search for INCORRECT (<0.3), and runs parallel operations for AMBIGUOUS responses. Optimized for 3-6s latency on direct retrievals and 5-8s with web-augmented answers over geopolitical documents.",
+    tags: [
+      { name: "LangGraph", color: "bg-teal-500" },
+      { name: "FAISS", color: "bg-blue-500" },
+      { name: "Tavily Search", color: "bg-cyan-500" },
+      { name: "GPT-4o-mini", color: "bg-green-500" },
+      { name: "RAG", color: "bg-purple-500" },
+    ],
+    github: "https://github.com/AadilUsmani/Corrective_rag_CRAG",
+    demo: "https://deepwiki.com/AadilUsmani/Corrective_rag_CRAG",
+    image: "/images/crag.png",
+    metrics: { latency: "3-8s", accuracy: "95%+" },
+    featured: true,
+  },
+]
+
+const otherProjects = [
+  {
     title: "CricTalk",
     description:
       "Production-ready cricket knowledge chatbot API with 6 specialized expertise domains. Features enterprise-grade security, API key authentication, rate limiting, and Redis-backed caching.",
@@ -94,7 +145,6 @@ const featuredProjects = [
     demo: "https://v0-image-analysis-amber-sigma-22.vercel.app/",
     image: "/images/crictalk.png",
     metrics: { accuracy: "95%", uptime: "99.9%" },
-    featured: true,
   },
   {
     title: "Article Summarization",
@@ -110,11 +160,7 @@ const featuredProjects = [
     demo: "https://v0-news-article-summarizer-gamma.vercel.app/",
     image: "/images/article-summarizer.png",
     metrics: { accuracy: "85%", articles: "10K+" },
-    featured: true,
   },
-]
-
-const otherProjects = [
   {
     title: "Customer Churn Predictor",
     description: "ML model predicting customer churn with 92% accuracy using ensemble methods and feature engineering.",
@@ -140,48 +186,6 @@ const otherProjects = [
     demo: "https://preview-nvidia-stock-dashboard-kzmqjnlxx9b97rmuji28.vusercontent.net/",
     image: "/images/stock-predictor.png",
     metrics: { accuracy: "78%", predictions: "Predictions" },
-  },
-  {
-    title: "Corrective RAG (CRAG)",
-    description: "Adaptive self-correcting RAG pipeline with threshold-based routing. Routes CORRECT answers (≥0.7) directly, triggers Tavily web search for INCORRECT (<0.3), and runs parallel operations for AMBIGUOUS responses. Optimized for 3-6s latency on direct retrievals and 5-8s with web-augmented answers over geopolitical documents.",
-    tags: [
-      { name: "LangGraph", color: "bg-teal-500" },
-      { name: "FAISS", color: "bg-blue-500" },
-      { name: "Tavily Search", color: "bg-cyan-500" },
-      { name: "GPT-4o-mini", color: "bg-green-500" },
-      { name: "RAG", color: "bg-purple-500" },
-    ],
-    github: "https://github.com/AadilUsmani/Corrective_rag_CRAG",
-    demo: "https://deepwiki.com/AadilUsmani/Corrective_rag_CRAG",
-    metrics: { latency: "3-8s", accuracy: "95%+" },
-  },
-  {
-    title: "Hybrid Graph RAG vs Vector RAG",
-    description: "Comparative analysis of hybrid retrieval from ChromaDB and Neo4j over SEC 10-K filings. Applied late fusion to merge vector and graph contexts for improved structured financial reasoning. Built 53-question benchmark evaluating accuracy, comprehensiveness, diversity, empowerment, and directness metrics.",
-    tags: [
-      { name: "ChromaDB", color: "bg-purple-500" },
-      { name: "Neo4j", color: "bg-orange-500" },
-      { name: "Azure OpenAI", color: "bg-blue-600" },
-      { name: "LLM-as-Judge", color: "bg-pink-500" },
-      { name: "Hybrid RAG", color: "bg-green-500" },
-    ],
-    github: "https://github.com/AadilUsmani/V.G.RAG",
-    demo: "https://deepwiki.com/AadilUsmani/V.G.RAG",
-    metrics: { benchmark: "53 Q&As", accuracy: "Outperforms" },
-  },
-  {
-    title: "AeroSphere — Air Quality Forecasting System",
-    description: "Built LSTM model forecasting 72-hour PM2.5 across 45 cities achieving 85%+ accuracy, 30% above baseline. Designed Airflow pipeline processing 1.2M+ records with GPT-based natural language summaries for public air quality reports. Contributed to model training, batch scheduling, and end-to-end Azure cloud deployment.",
-    tags: [
-      { name: "NASA TEMPO", color: "bg-blue-500" },
-      { name: "LSTM", color: "bg-red-500" },
-      { name: "Airflow", color: "bg-orange-500" },
-      { name: "Azure", color: "bg-cyan-500" },
-      { name: "GPT", color: "bg-green-500" },
-    ],
-    github: "https://github.com/AadilUsmani/AeroSphere",
-    demo: "https://www.aerosphere.earth",
-    metrics: { accuracy: "85%+", cities: "45" },
   },
 ]
 
@@ -644,8 +648,8 @@ export default function Portfolio() {
     className="mb-8"
   >
     <a
-      href="https://raw.githubusercontent.com/AadilUsmani/portfolio_adil_usmani/main/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
-      download="Muhammad_Adil_Usmani_CV.pdf"
+      href="https://raw.githubusercontent.com/AadilUsmani/portfolio_adil_usmani/main/Muhammad%20Adil%20Usmani%20%E2%80%94%20Resume.pdf"
+      download="Muhammad_Adil_Usmani_Resume.pdf"
       target="_blank"
       className="project-link inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl font-bold text-lg transition-all duration-300 hover:scale-105"
     >
