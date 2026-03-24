@@ -643,16 +643,14 @@ export default function Portfolio() {
     transition={{ delay: 1.2, duration: 0.8 }}
     className="mb-8"
   >
-    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-      <a
-        href="https://raw.githubusercontent.com/AadilUsmani/portfolio_adil_usmani/main/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
-        download="Adil_Usmani_Resume.pdf"
-        className="inline-flex items-center gap-3 px-8 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl font-bold text-lg transition-all duration-300 cursor-custom transform hover:scale-105"
-      >
-        Download Resume
-        <ExternalLink className="w-5 h-5" />
-      </a>
-    </motion.div>
+    <a
+      href="https://raw.githubusercontent.com/AadilUsmani/portfolio_adil_usmani/main/Muhammad%20Adil%20Usmani%20-%20CV.pdf"
+      download="Muhammad_Adil_Usmani_CV.pdf"
+      target="_blank"
+      className="project-link inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl font-bold text-lg transition-all duration-300 hover:scale-105"
+    >
+      Download Resume ↗
+    </a>
   </motion.div>
 
               <motion.p
