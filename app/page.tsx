@@ -458,13 +458,12 @@ export default function Portfolio() {
           <div className="flex items-center space-x-4">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <a
-                href="https://drive.google.com/file/d/1I9aTIMw6qpmF6vawi4CzFVzEMBhm4MGn/view?usp=drive_link"
+                href="https://raw.githubusercontent.com/AadilUsmani/portfolio_adil_usmani/main/Muhammad%20Adil%20Usmani%20%E2%80%94%20Resume.pdf"
+                download="Muhammad_Adil_Usmani_Resume.pdf"
                 target="_blank"
-                rel="noopener noreferrer"
                 className="glass-morphism px-4 py-2 rounded-lg font-medium cursor-custom hover:bg-white/20 transition-all duration-300 flex items-center gap-2 text-sm"
               >
-                <Download className="w-4 h-4" />
-                Resume
+                Resume ↗
               </a>
             </motion.div>
             <motion.button
