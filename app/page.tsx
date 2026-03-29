@@ -474,7 +474,7 @@ export default function Portfolio() {
 
   return (
     <div
-      className={`min-h-screen transition-colors duration-500 ${isDarkMode ? "bg-black text-white" : "bg-white text-black"}`}
+      className="min-h-screen transition-colors duration-500 bg-white text-gray-900 dark:bg-black dark:text-white"
     >
       {/* Glass-morphism Navigation */}
       <nav className="fixed top-0 w-full glass-morphism z-50 transition-all duration-300">
