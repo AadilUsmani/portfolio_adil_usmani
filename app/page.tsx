@@ -559,6 +559,7 @@ export default function Portfolio() {
   const [showBackToTop, setShowBackToTop] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [particles, setParticles] = useState<Array<{ x: number; y: number; tx: number; ty: number; duration: number }> | null>(null)
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 300], [0, 50])
   const y2 = useTransform(scrollY, [0, 300], [0, -50])
@@ -591,6 +592,25 @@ export default function Portfolio() {
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const generateParticles = () => {
+      const w = window.innerWidth
+      const h = window.innerHeight
+      setParticles(
+        Array.from({ length: 20 }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          tx: Math.random() * w,
+          ty: Math.random() * h,
+          duration: Math.random() * 20 + 10,
+        }))
+      )
+    }
+    generateParticles()
+    window.addEventListener("resize", generateParticles)
+    return () => window.removeEventListener("resize", generateParticles)
   }, [])
 
   const scrollToSection = (sectionId: string) => {
@@ -867,20 +887,14 @@ export default function Portfolio() {
 
         {/* Animated Particles */}
         <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
+          {particles?.map((p, i) => (
             <motion.div
               key={i}
               className="absolute w-1 h-1 bg-white/20 rounded-full"
-              initial={{
-                x: Math.random() * (typeof window !== "undefined" ? window.innerWidth : 1000),
-                y: Math.random() * (typeof window !== "undefined" ? window.innerHeight : 1000),
-              }}
-              animate={{
-                x: Math.random() * (typeof window !== "undefined" ? window.innerWidth : 1000),
-                y: Math.random() * (typeof window !== "undefined" ? window.innerHeight : 1000),
-              }}
+              initial={{ x: p.x, y: p.y }}
+              animate={{ x: p.tx, y: p.ty }}
               transition={{
-                duration: Math.random() * 20 + 10,
+                duration: p.duration,
                 repeat: Number.POSITIVE_INFINITY,
                 ease: "linear",
               }}
