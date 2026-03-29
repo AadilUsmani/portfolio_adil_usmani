@@ -262,6 +262,201 @@ function useSpotlight(ref: React.RefObject<HTMLDivElement>) {
   }
 }
 
+function getTagBoxShadow(color: string, alpha = 0.4): string {
+  if (color.includes('blue')) return `rgba(59, 130, 246, ${alpha})`
+  if (color.includes('green')) return `rgba(34, 197, 94, ${alpha})`
+  if (color.includes('purple')) return `rgba(168, 85, 247, ${alpha})`
+  if (color.includes('orange')) return `rgba(234, 88, 12, ${alpha})`
+  return `rgba(236, 72, 153, ${alpha})`
+}
+
+function FeaturedProjectCard({ project, index }: { project: typeof featuredProjects[number]; index: number }) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const spotlight = useSpotlight(cardRef)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: index * 0.2 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -5 }}
+      className="group cursor-custom"
+    >
+      <div
+        ref={cardRef}
+        onMouseMove={spotlight.onMouseMove}
+        onMouseLeave={spotlight.onMouseLeave}
+        className="relative h-full"
+      >
+        {/* Spotlight effect layer */}
+        <motion.div
+          className="absolute inset-0 rounded-lg pointer-events-none z-0"
+          style={{
+            background: spotlight.spotlightStyle,
+            opacity: spotlight.spotlightOpacity,
+          }}
+        />
+        <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-purple-500/40 border-0 relative z-10">
+          <CardHeader>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-4">
+                <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-400/30 font-semibold">
+                  Featured
+                </Badge>
+                <CardTitle className="text-white text-xl font-bold">{project.title}</CardTitle>
+              </div>
+              <div className="flex space-x-2">
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Button variant="ghost" size="sm" asChild className="glass-morphism cursor-custom">
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center text-white hover:text-blue-400"
+                    >
+                      <Github className="w-4 h-4" />
+                    </a>
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Button variant="ghost" size="sm" asChild className="glass-morphism cursor-custom">
+                    <a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center text-white hover:text-green-400"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </a>
+                  </Button>
+                </motion.div>
+              </div>
+            </div>
+            <CardDescription className="text-zinc-400 leading-relaxed font-light">
+              {project.description}
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {project.tags.map((tag) => (
+                <motion.div key={tag.name} whileHover={{ scale: 1.08, y: -2 }}>
+                  <Badge className={`${tag.color} text-white border-2 font-medium cursor-custom shadow-lg hover:shadow-xl transition-all duration-300`} style={{
+                    boxShadow: `0 0 12px ${getTagBoxShadow(tag.color)}`
+                  }}>
+                    {tag.name}
+                  </Badge>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="flex justify-between text-sm text-gray-400 pt-4 border-t border-gray-700">
+              {Object.entries(project.metrics).map(([key, value]) => (
+                <div key={key} className="text-center">
+                  <div className="text-white font-bold text-lg">{value}</div>
+                  <div className="capitalize font-medium">{key}</div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </motion.div>
+  )
+}
+
+function OtherProjectCard({ project, index }: { project: typeof otherProjects[number]; index: number }) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const spotlight = useSpotlight(cardRef)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: index * 0.1 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -5 }}
+      className="group cursor-custom"
+    >
+      <div
+        ref={cardRef}
+        onMouseMove={spotlight.onMouseMove}
+        onMouseLeave={spotlight.onMouseLeave}
+        className="relative h-full"
+      >
+        {/* Spotlight effect layer */}
+        <motion.div
+          className="absolute inset-0 rounded-lg pointer-events-none z-0"
+          style={{
+            background: spotlight.spotlightStyle,
+            opacity: spotlight.spotlightOpacity,
+          }}
+        />
+        <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-500/40 border-0 relative z-10">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between mb-2">
+              <CardTitle className="text-white text-lg font-bold">{project.title}</CardTitle>
+              <div className="flex space-x-1">
+                <motion.div whileHover={{ scale: 1.1 }}>
+                  <Button variant="ghost" size="sm" asChild className="glass-morphism p-1 cursor-custom">
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white hover:text-blue-400"
+                    >
+                      <Github className="w-3 h-3" />
+                    </a>
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.1 }}>
+                  <Button variant="ghost" size="sm" asChild className="glass-morphism p-1 cursor-custom">
+                    <a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white hover:text-green-400"
+                    >
+                      <Eye className="w-3 h-3" />
+                    </a>
+                  </Button>
+                </motion.div>
+              </div>
+            </div>
+            <CardDescription className="text-zinc-400 text-sm leading-relaxed font-light">
+              {project.description}
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="pt-2">
+            <div className="flex flex-wrap gap-1 mb-3">
+              {project.tags.map((tag) => (
+                <motion.div key={tag.name} whileHover={{ scale: 1.08, y: -2 }}>
+                  <Badge className={`${tag.color} text-white border border-current text-xs font-medium cursor-custom shadow-md hover:shadow-lg transition-all duration-300`} style={{
+                    boxShadow: `0 0 8px ${getTagBoxShadow(tag.color, 0.5)}`
+                  }}>
+                    {tag.name}
+                  </Badge>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="flex justify-between text-xs text-gray-400 pt-3 border-t border-gray-700">
+              {Object.entries(project.metrics).map(([key, value]) => (
+                <div key={key} className="text-center">
+                  <div className="text-white font-bold">{value}</div>
+                  <div className="capitalize font-medium">{key}</div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </motion.div>
+  )
+}
+
 function SkillCard({ category, skills, index }: { category: string; skills: any[]; index: number }) {
   const ref = useRef(null)
   const cardRef = useRef<HTMLDivElement>(null)
@@ -1020,102 +1215,9 @@ export default function Portfolio() {
             </motion.h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-              {featuredProjects.map((project, index) => {
-                const cardRef = useRef<HTMLDivElement>(null)
-                const spotlight = useSpotlight(cardRef)
-                
-                return (
-                <motion.div
-                  key={project.title}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -5 }}
-                  className="group cursor-custom"
-                >
-                  <div
-                    ref={cardRef}
-                    onMouseMove={spotlight.onMouseMove}
-                    onMouseLeave={spotlight.onMouseLeave}
-                    className="relative h-full"
-                  >
-                    {/* Spotlight effect layer */}
-                    <motion.div
-                      className="absolute inset-0 rounded-lg pointer-events-none z-0"
-                      style={{
-                        background: spotlight.spotlightStyle,
-                        opacity: spotlight.spotlightOpacity,
-                      }}
-                    />
-                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-purple-500/40 border-0 relative z-10">
-                    <CardHeader>
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-4">
-                          <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-400/30 font-semibold">
-                            Featured
-                          </Badge>
-                          <CardTitle className="text-white text-xl font-bold">{project.title}</CardTitle>
-                        </div>
-                        <div className="flex space-x-2">
-                          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                            <Button variant="ghost" size="sm" asChild className="glass-morphism cursor-custom">
-                              <a
-                                href={project.github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center text-white hover:text-blue-400"
-                              >
-                                <Github className="w-4 h-4" />
-                              </a>
-                            </Button>
-                          </motion.div>
-                          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                            <Button variant="ghost" size="sm" asChild className="glass-morphism cursor-custom">
-                              <a
-                                href={project.demo}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center text-white hover:text-green-400"
-                              >
-                                <Eye className="w-4 h-4" />
-                              </a>
-                            </Button>
-                          </motion.div>
-                        </div>
-                      </div>
-                      <CardDescription className="text-zinc-400 leading-relaxed font-light">
-                        {project.description}
-                      </CardDescription>
-                    </CardHeader>
-
-                    <CardContent>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {project.tags.map((tag) => (
-                          <motion.div key={tag.name} whileHover={{ scale: 1.08, y: -2 }}>
-                            <Badge className={`${tag.color} text-white border-2 font-medium cursor-custom shadow-lg hover:shadow-xl transition-all duration-300`} style={{
-                              boxShadow: `0 0 12px ${tag.color.includes('blue') ? 'rgba(59, 130, 246, 0.4)' : tag.color.includes('green') ? 'rgba(34, 197, 94, 0.4)' : tag.color.includes('purple') ? 'rgba(168, 85, 247, 0.4)' : tag.color.includes('orange') ? 'rgba(234, 88, 12, 0.4)' : 'rgba(236, 72, 153, 0.4)'}`
-                            }}>
-                              {tag.name}
-                            </Badge>
-                          </motion.div>
-                        ))}
-                      </div>
-
-                      <div className="flex justify-between text-sm text-gray-400 pt-4 border-t border-gray-700">
-                        {Object.entries(project.metrics).map(([key, value]) => (
-                          <div key={key} className="text-center">
-                            <div className="text-white font-bold text-lg">{value}</div>
-                            <div className="capitalize font-medium">{key}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                  </div>
-                </motion.div>
-                )
-              })}
+              {featuredProjects.map((project, index) => (
+                <FeaturedProjectCard key={project.title} project={project} index={index} />
+              ))}
             </div>
           </div>
 
@@ -1133,97 +1235,9 @@ export default function Portfolio() {
             </motion.h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {otherProjects.map((project, index) => {
-                const cardRef = useRef<HTMLDivElement>(null)
-                const spotlight = useSpotlight(cardRef)
-                
-                return (
-                <motion.div
-                  key={project.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -5 }}
-                  className="group cursor-custom"
-                >
-                  <div
-                    ref={cardRef}
-                    onMouseMove={spotlight.onMouseMove}
-                    onMouseLeave={spotlight.onMouseLeave}
-                    className="relative h-full"
-                  >
-                    {/* Spotlight effect layer */}
-                    <motion.div
-                      className="absolute inset-0 rounded-lg pointer-events-none z-0"
-                      style={{
-                        background: spotlight.spotlightStyle,
-                        opacity: spotlight.spotlightOpacity,
-                      }}
-                    />
-                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-500/40 border-0 relative z-10">
-                      <CardHeader className="pb-2">
-                        <div className="flex items-center justify-between mb-2">
-                          <CardTitle className="text-white text-lg font-bold">{project.title}</CardTitle>
-                          <div className="flex space-x-1">
-                            <motion.div whileHover={{ scale: 1.1 }}>
-                              <Button variant="ghost" size="sm" asChild className="glass-morphism p-1 cursor-custom">
-                                <a
-                                  href={project.github}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-white hover:text-blue-400"
-                                >
-                                  <Github className="w-3 h-3" />
-                                </a>
-                              </Button>
-                            </motion.div>
-                            <motion.div whileHover={{ scale: 1.1 }}>
-                              <Button variant="ghost" size="sm" asChild className="glass-morphism p-1 cursor-custom">
-                                <a
-                                  href={project.demo}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-white hover:text-green-400"
-                                >
-                                  <Eye className="w-3 h-3" />
-                                </a>
-                              </Button>
-                            </motion.div>
-                          </div>
-                        </div>
-                        <CardDescription className="text-zinc-400 text-sm leading-relaxed font-light">
-                          {project.description}
-                        </CardDescription>
-                      </CardHeader>
-
-                      <CardContent className="pt-2">
-                        <div className="flex flex-wrap gap-1 mb-3">
-                          {project.tags.map((tag) => (
-                            <motion.div key={tag.name} whileHover={{ scale: 1.08, y: -2 }}>
-                              <Badge className={`${tag.color} text-white border border-current text-xs font-medium cursor-custom shadow-md hover:shadow-lg transition-all duration-300`} style={{
-                                boxShadow: `0 0 8px ${tag.color.includes('blue') ? 'rgba(59, 130, 246, 0.5)' : tag.color.includes('green') ? 'rgba(34, 197, 94, 0.5)' : tag.color.includes('purple') ? 'rgba(168, 85, 247, 0.5)' : tag.color.includes('orange') ? 'rgba(234, 88, 12, 0.5)' : 'rgba(236, 72, 153, 0.5)'}`
-                              }}>
-                                {tag.name}
-                              </Badge>
-                            </motion.div>
-                          ))}
-                        </div>
-
-                        <div className="flex justify-between text-xs text-gray-400 pt-3 border-t border-gray-700">
-                          {Object.entries(project.metrics).map(([key, value]) => (
-                            <div key={key} className="text-center">
-                              <div className="text-white font-bold">{value}</div>
-                              <div className="capitalize font-medium">{key}</div>
-                            </div>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </motion.div>
-                )
-              })}
+              {otherProjects.map((project, index) => (
+                <OtherProjectCard key={project.title} project={project} index={index} />
+              ))}
             </div>
           </div>
         </div>
