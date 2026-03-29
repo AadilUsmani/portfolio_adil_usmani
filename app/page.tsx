@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
-import { motion, useScroll, useTransform, AnimatePresence, useInView } from "framer-motion"
+import { motion, useScroll, useTransform, AnimatePresence, useInView, useMotionValue, useMotionTemplate } from "framer-motion"
 import {
   Github,
   Linkedin,
@@ -240,9 +240,39 @@ const style = `
   }
 `
 
+// Spotlight effect hook for mouse tracking
+function useSpotlight(ref: React.RefObject<HTMLDivElement>) {
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const opacity = useMotionValue(0)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return
+    const rect = ref.current.getBoundingClientRect()
+    x.set(e.clientX - rect.left)
+    y.set(e.clientY - rect.top)
+    opacity.set(1)
+  }
+
+  const handleMouseLeave = () => {
+    opacity.set(0)
+  }
+
+  const spotlightStyle = useMotionTemplate`radial-gradient(circle 150px at ${x}px ${y}px, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 50%, transparent 100%)`
+
+  return {
+    onMouseMove: handleMouseMove,
+    onMouseLeave: handleMouseLeave,
+    spotlightStyle,
+    spotlightOpacity: opacity,
+  }
+}
+
 function SkillCard({ category, skills, index }: { category: string; skills: any[]; index: number }) {
   const ref = useRef(null)
+  const cardRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const spotlight = useSpotlight(cardRef)
 
   const accentColors = [
     "from-blue-500/20 to-cyan-500/20",
@@ -258,9 +288,23 @@ function SkillCard({ category, skills, index }: { category: string; skills: any[
       transition={{ duration: 0.6, delay: index * 0.2 }}
       className="group"
     >
-      <Card
-        className={`glass-morphism hover:bg-white/10 transition-all duration-500 h-full border-l-4 border-l-blue-500 bg-gradient-to-br ${accentColors[index % 3]}`}
+      <div
+        ref={cardRef}
+        onMouseMove={spotlight.onMouseMove}
+        onMouseLeave={spotlight.onMouseLeave}
+        className="relative h-full"
       >
+        {/* Spotlight effect layer */}
+        <motion.div
+          className="absolute inset-0 rounded-lg pointer-events-none z-0"
+          style={{
+            background: spotlight.spotlightStyle,
+            opacity: spotlight.spotlightOpacity,
+          }}
+        />
+        <Card
+          className={`glass-morphism hover:bg-white/10 transition-all duration-500 h-full border-l-4 border-l-blue-500 bg-gradient-to-br ${accentColors[index % 3]} relative z-10`}
+        >
         <CardHeader className="pb-4">
           <CardTitle className="text-white text-xl font-bold flex items-center gap-2">
             <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
@@ -313,6 +357,7 @@ function SkillCard({ category, skills, index }: { category: string; skills: any[
           ))}
         </CardContent>
       </Card>
+      </div>
     </motion.div>
   )
 }
@@ -981,7 +1026,11 @@ export default function Portfolio() {
             </motion.h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-              {featuredProjects.map((project, index) => (
+              {featuredProjects.map((project, index) => {
+                const cardRef = useRef<HTMLDivElement>(null)
+                const spotlight = useSpotlight(cardRef)
+                
+                return (
                 <motion.div
                   key={project.title}
                   initial={{ opacity: 0, y: 50 }}
@@ -991,7 +1040,21 @@ export default function Portfolio() {
                   whileHover={{ y: -5 }}
                   className="group cursor-custom"
                 >
-                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-purple-500/40 border-0">
+                  <div
+                    ref={cardRef}
+                    onMouseMove={spotlight.onMouseMove}
+                    onMouseLeave={spotlight.onMouseLeave}
+                    className="relative h-full"
+                  >
+                    {/* Spotlight effect layer */}
+                    <motion.div
+                      className="absolute inset-0 rounded-lg pointer-events-none z-0"
+                      style={{
+                        background: spotlight.spotlightStyle,
+                        opacity: spotlight.spotlightOpacity,
+                      }}
+                    />
+                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-purple-500/40 border-0 relative z-10">
                     <CardHeader>
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
@@ -1055,8 +1118,10 @@ export default function Portfolio() {
                       </div>
                     </CardContent>
                   </Card>
+                  </div>
                 </motion.div>
-              ))}
+                )
+              })}
             </div>
           </div>
 
@@ -1074,7 +1139,11 @@ export default function Portfolio() {
             </motion.h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {otherProjects.map((project, index) => (
+              {otherProjects.map((project, index) => {
+                const cardRef = useRef<HTMLDivElement>(null)
+                const spotlight = useSpotlight(cardRef)
+                
+                return (
                 <motion.div
                   key={project.title}
                   initial={{ opacity: 0, y: 30 }}
@@ -1084,7 +1153,21 @@ export default function Portfolio() {
                   whileHover={{ y: -5 }}
                   className="group cursor-custom"
                 >
-                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-500/40 border-0">
+                  <div
+                    ref={cardRef}
+                    onMouseMove={spotlight.onMouseMove}
+                    onMouseLeave={spotlight.onMouseLeave}
+                    className="relative h-full"
+                  >
+                    {/* Spotlight effect layer */}
+                    <motion.div
+                      className="absolute inset-0 rounded-lg pointer-events-none z-0"
+                      style={{
+                        background: spotlight.spotlightStyle,
+                        opacity: spotlight.spotlightOpacity,
+                      }}
+                    />
+                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-500/40 border-0 relative z-10">
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between mb-2">
                           <CardTitle className="text-white text-lg font-bold">{project.title}</CardTitle>
@@ -1143,8 +1226,10 @@ export default function Portfolio() {
                         </div>
                       </CardContent>
                     </Card>
-                  </motion.div>
-                ))}
+                  </div>
+                </motion.div>
+                )
+              })}
             </div>
           </div>
         </div>
