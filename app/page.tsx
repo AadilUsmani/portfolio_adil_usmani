@@ -19,6 +19,8 @@ import {
   Code2,
   Moon,
   Sun,
+  Menu,
+  X,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -322,6 +324,7 @@ export default function Portfolio() {
   const [submitMessage, setSubmitMessage] = useState("")
   const [showBackToTop, setShowBackToTop] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 300], [0, 50])
   const y2 = useTransform(scrollY, [0, 300], [0, -50])
@@ -438,6 +441,8 @@ export default function Portfolio() {
           >
             Muhammad Adil Usmani
           </motion.div>
+          
+          {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
             {["about", "skills", "projects", "contact"].map((section) => (
               <motion.button
@@ -455,13 +460,15 @@ export default function Portfolio() {
               </motion.button>
             ))}
           </div>
+          
+          {/* Right Side Icons & Mobile Menu Button */}
           <div className="flex items-center space-x-4">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <a
                 href="/Muhammad Adil Usmani — Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass-morphism px-4 py-2 rounded-lg font-medium cursor-custom hover:bg-white/20 transition-all duration-300 flex items-center gap-2 text-sm"
+                className="glass-morphism px-4 py-2 rounded-lg font-medium cursor-custom hover:bg-white/20 transition-all duration-300 flex items-center gap-2 text-sm hidden sm:flex"
               >
                 Resume ↗
               </a>
@@ -474,14 +481,14 @@ export default function Portfolio() {
             >
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </motion.button>
-            <motion.div whileHover={{ scale: 1.1 }}>
+            <motion.div whileHover={{ scale: 1.1 }} className="hidden sm:block">
               <Button variant="ghost" size="icon" asChild className="glass-morphism cursor-custom">
                 <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer">
                   <Github className="w-5 h-5" />
                 </a>
               </Button>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.1 }}>
+            <motion.div whileHover={{ scale: 1.1 }} className="hidden sm:block">
               <Button variant="ghost" size="icon" asChild className="glass-morphism cursor-custom">
                 <a
                   href="https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/"
@@ -492,8 +499,112 @@ export default function Portfolio() {
                 </a>
               </Button>
             </motion.div>
+            
+            {/* Mobile Menu Button */}
+            <motion.button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden glass-morphism p-2 rounded-lg cursor-custom"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </motion.button>
           </div>
         </div>
+        
+        {/* Mobile Menu Panel */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="md:hidden bg-gradient-to-b from-slate-900/95 to-slate-900/80 backdrop-blur-xl border-t border-white/10"
+            >
+              <div className="px-4 py-6 space-y-3">
+                {/* Mobile Navigation Links */}
+                {["about", "skills", "projects", "contact"].map((section, index) => (
+                  <motion.button
+                    key={section}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.3 }}
+                    onClick={() => {
+                      scrollToSection(section)
+                      setIsMobileMenuOpen(false)
+                    }}
+                    className={`w-full text-left capitalize py-3 px-4 rounded-lg font-medium transition-all duration-300 ${
+                      activeSection === section
+                        ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
+                        : "hover:bg-white/10 text-zinc-400"
+                    }`}
+                  >
+                    {section}
+                  </motion.button>
+                ))}
+                
+                {/* Mobile Resume Button */}
+                <motion.a
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4, duration: 0.3 }}
+                  href="/Muhammad Adil Usmani — Resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full text-left py-3 px-4 rounded-lg font-medium bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 transition-all duration-300"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Resume ↗
+                </motion.a>
+                
+                {/* Mobile Social Links */}
+                <div className="flex gap-3 pt-3">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5, duration: 0.3 }}
+                    whileHover={{ scale: 1.1 }}
+                    className="flex-1"
+                  >
+                    <Button
+                      variant="ghost"
+                      asChild
+                      className="glass-morphism w-full cursor-custom hover:bg-white/20 text-zinc-400 hover:text-white"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer">
+                        <Github className="w-4 h-4" />
+                      </a>
+                    </Button>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6, duration: 0.3 }}
+                    whileHover={{ scale: 1.1 }}
+                    className="flex-1"
+                  >
+                    <Button
+                      variant="ghost"
+                      asChild
+                      className="glass-morphism w-full cursor-custom hover:bg-white/20 text-zinc-400 hover:text-white"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <a
+                        href="https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Linkedin className="w-4 h-4" />
+                      </a>
+                    </Button>
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Back to Top Button */}
