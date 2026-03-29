@@ -869,7 +869,7 @@ export default function Portfolio() {
               Featured Projects
             </motion.h3>
 
-            <div className="grid md:grid-cols-2 gap-8 mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
               {featuredProjects.map((project, index) => (
                 <motion.div
                   key={project.title}
@@ -877,10 +877,10 @@ export default function Portfolio() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: index * 0.2 }}
                   viewport={{ once: true }}
-                  whileHover={{ y: -10, scale: 1.02 }}
+                  whileHover={{ y: -5 }}
                   className="group cursor-custom"
                 >
-                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-500/20 border-0">
+                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-purple-500/40 border-0">
                     <CardHeader>
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
@@ -924,8 +924,10 @@ export default function Portfolio() {
                     <CardContent>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {project.tags.map((tag) => (
-                          <motion.div key={tag.name} whileHover={{ scale: 1.05 }}>
-                            <Badge className={`${tag.color} text-white border-0 font-medium cursor-custom`}>
+                          <motion.div key={tag.name} whileHover={{ scale: 1.08, y: -2 }}>
+                            <Badge className={`${tag.color} text-white border-2 font-medium cursor-custom shadow-lg hover:shadow-xl transition-all duration-300`} style={{
+                              boxShadow: `0 0 12px ${tag.color.includes('blue') ? 'rgba(59, 130, 246, 0.4)' : tag.color.includes('green') ? 'rgba(34, 197, 94, 0.4)' : tag.color.includes('purple') ? 'rgba(168, 85, 247, 0.4)' : tag.color.includes('orange') ? 'rgba(234, 88, 12, 0.4)' : 'rgba(236, 72, 153, 0.4)'}`
+                            }}>
                               {tag.name}
                             </Badge>
                           </motion.div>
@@ -960,27 +962,18 @@ export default function Portfolio() {
               Other Projects
             </motion.h3>
 
-            <div className="relative">
-              <div
-                className="flex gap-6 overflow-x-auto custom-scrollbar pb-4"
-                style={{
-                  scrollSnapType: "x mandatory",
-                  scrollBehavior: "smooth",
-                  WebkitOverflowScrolling: "touch",
-                }}
-              >
-                {otherProjects.map((project, index) => (
-                  <motion.div
-                    key={project.title}
-                    initial={{ opacity: 0, x: 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -10, scale: 1.02 }}
-                    className="flex-shrink-0 w-[350px] group cursor-custom"
-                    style={{ scrollSnapAlign: "start" }}
-                  >
-                    <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-purple-500/20 border-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {otherProjects.map((project, index) => (
+                <motion.div
+                  key={project.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5 }}
+                  className="group cursor-custom"
+                >
+                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-500/40 border-0">
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between mb-2">
                           <CardTitle className="text-white text-lg font-bold">{project.title}</CardTitle>
@@ -1019,8 +1012,10 @@ export default function Portfolio() {
                       <CardContent className="pt-2">
                         <div className="flex flex-wrap gap-1 mb-3">
                           {project.tags.map((tag) => (
-                            <motion.div key={tag.name} whileHover={{ scale: 1.05 }}>
-                              <Badge className={`${tag.color} text-white border-0 text-xs font-medium cursor-custom`}>
+                            <motion.div key={tag.name} whileHover={{ scale: 1.08, y: -2 }}>
+                              <Badge className={`${tag.color} text-white border border-current text-xs font-medium cursor-custom shadow-md hover:shadow-lg transition-all duration-300`} style={{
+                                boxShadow: `0 0 8px ${tag.color.includes('blue') ? 'rgba(59, 130, 246, 0.5)' : tag.color.includes('green') ? 'rgba(34, 197, 94, 0.5)' : tag.color.includes('purple') ? 'rgba(168, 85, 247, 0.5)' : tag.color.includes('orange') ? 'rgba(234, 88, 12, 0.5)' : 'rgba(236, 72, 153, 0.5)'}`
+                              }}>
                                 {tag.name}
                               </Badge>
                             </motion.div>
@@ -1039,7 +1034,6 @@ export default function Portfolio() {
                     </Card>
                   </motion.div>
                 ))}
-              </div>
             </div>
           </div>
         </div>
