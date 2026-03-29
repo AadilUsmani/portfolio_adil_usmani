@@ -543,13 +543,32 @@ export default function Portfolio() {
           ))}
         </div>
 
-        {/* Parallax Background Elements */}
+        {/* Parallax Background Elements with Breathing Animation */}
         <motion.div
           style={{ y: y1 }}
+          animate={{
+            scale: [1, 1.05, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
           className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-3xl"
         />
         <motion.div
           style={{ y: y2 }}
+          animate={{
+            scale: [1, 1.08, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+            delay: 0.5,
+          }}
           className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl"
         />
 
@@ -583,7 +602,11 @@ export default function Portfolio() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             <div className="text-center">
               {/* Professional Avatar */}
               <motion.div
@@ -593,22 +616,38 @@ export default function Portfolio() {
                 className="mb-8"
               >
                 <div className="relative inline-block">
-                  <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-purple-600 p-1">
-                    <div className="w-full h-full rounded-full bg-gray-800 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-white">MA</span>
-                    </div>
-                  </div>
+                  {/* Glowing Ring Background */}
                   <motion.div
                     animate={{
-                      scale: [1, 1.2, 1],
-                      opacity: [0.5, 0.8, 0.5],
+                      opacity: [0.4, 0.8, 0.4],
                     }}
                     transition={{
-                      duration: 2,
+                      duration: 3,
                       repeat: Number.POSITIVE_INFINITY,
                       ease: "easeInOut",
                     }}
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/30 to-purple-600/30 blur-xl"
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 blur-lg -z-10 scale-110"
+                  />
+                  <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-blue-400 to-purple-600 p-0.5 shadow-2xl shadow-blue-500/50">
+                    <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center">
+                      <span className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">MA</span>
+                    </div>
+                  </div>
+                  {/* Subtle pulsing outer ring */}
+                  <motion.div
+                    animate={{
+                      boxShadow: [
+                        "0 0 20px rgba(59, 130, 246, 0.4)",
+                        "0 0 40px rgba(168, 85, 247, 0.6)",
+                        "0 0 20px rgba(59, 130, 246, 0.4)",
+                      ],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "easeInOut",
+                    }}
+                    className="absolute inset-0 rounded-full border-2 border-transparent bg-gradient-to-r from-blue-500/30 to-purple-500/30 bg-clip-border"
                   />
                 </div>
               </motion.div>
@@ -621,10 +660,13 @@ export default function Portfolio() {
                 className="mb-6"
               >
                 <motion.h1
-                  className="text-6xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-100 mb-4 leading-tight"
+                  className="text-6xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 mb-4 leading-tight drop-shadow-2xl"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7, duration: 0.8 }}
+                  whileHover={{
+                    textShadow: "0 0 30px rgba(96, 165, 250, 0.5), 0 0 60px rgba(168, 85, 247, 0.3)",
+                  }}
                 >
                   Muhammad Adil Usmani
                 </motion.h1>
