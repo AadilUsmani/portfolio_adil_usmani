@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
-import { motion, useScroll, useTransform, AnimatePresence, useInView } from "framer-motion"
+import { motion, useScroll, useTransform, AnimatePresence, useInView, useMotionValue, useMotionTemplate } from "framer-motion"
 import {
   Github,
   Linkedin,
@@ -19,6 +19,8 @@ import {
   Code2,
   Moon,
   Sun,
+  Menu,
+  X,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -238,9 +240,39 @@ const style = `
   }
 `
 
+// Spotlight effect hook for mouse tracking
+function useSpotlight(ref: React.RefObject<HTMLDivElement>) {
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const opacity = useMotionValue(0)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return
+    const rect = ref.current.getBoundingClientRect()
+    x.set(e.clientX - rect.left)
+    y.set(e.clientY - rect.top)
+    opacity.set(1)
+  }
+
+  const handleMouseLeave = () => {
+    opacity.set(0)
+  }
+
+  const spotlightStyle = useMotionTemplate`radial-gradient(circle 150px at ${x}px ${y}px, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 50%, transparent 100%)`
+
+  return {
+    onMouseMove: handleMouseMove,
+    onMouseLeave: handleMouseLeave,
+    spotlightStyle,
+    spotlightOpacity: opacity,
+  }
+}
+
 function SkillCard({ category, skills, index }: { category: string; skills: any[]; index: number }) {
   const ref = useRef(null)
+  const cardRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const spotlight = useSpotlight(cardRef)
 
   const accentColors = [
     "from-blue-500/20 to-cyan-500/20",
@@ -256,9 +288,23 @@ function SkillCard({ category, skills, index }: { category: string; skills: any[
       transition={{ duration: 0.6, delay: index * 0.2 }}
       className="group"
     >
-      <Card
-        className={`glass-morphism hover:bg-white/10 transition-all duration-500 h-full border-l-4 border-l-blue-500 bg-gradient-to-br ${accentColors[index % 3]}`}
+      <div
+        ref={cardRef}
+        onMouseMove={spotlight.onMouseMove}
+        onMouseLeave={spotlight.onMouseLeave}
+        className="relative h-full"
       >
+        {/* Spotlight effect layer */}
+        <motion.div
+          className="absolute inset-0 rounded-lg pointer-events-none z-0"
+          style={{
+            background: spotlight.spotlightStyle,
+            opacity: spotlight.spotlightOpacity,
+          }}
+        />
+        <Card
+          className={`glass-morphism hover:bg-white/10 transition-all duration-500 h-full border-l-4 border-l-blue-500 bg-gradient-to-br ${accentColors[index % 3]} relative z-10`}
+        >
         <CardHeader className="pb-4">
           <CardTitle className="text-white text-xl font-bold flex items-center gap-2">
             <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
@@ -311,6 +357,7 @@ function SkillCard({ category, skills, index }: { category: string; skills: any[
           ))}
         </CardContent>
       </Card>
+      </div>
     </motion.div>
   )
 }
@@ -322,6 +369,7 @@ export default function Portfolio() {
   const [submitMessage, setSubmitMessage] = useState("")
   const [showBackToTop, setShowBackToTop] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 300], [0, 50])
   const y2 = useTransform(scrollY, [0, 300], [0, -50])
@@ -438,6 +486,8 @@ export default function Portfolio() {
           >
             Muhammad Adil Usmani
           </motion.div>
+          
+          {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
             {["about", "skills", "projects", "contact"].map((section) => (
               <motion.button
@@ -455,13 +505,15 @@ export default function Portfolio() {
               </motion.button>
             ))}
           </div>
+          
+          {/* Right Side Icons & Mobile Menu Button */}
           <div className="flex items-center space-x-4">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <a
                 href="/Muhammad Adil Usmani — Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass-morphism px-4 py-2 rounded-lg font-medium cursor-custom hover:bg-white/20 transition-all duration-300 flex items-center gap-2 text-sm"
+                className="glass-morphism px-4 py-2 rounded-lg font-medium cursor-custom hover:bg-white/20 transition-all duration-300 flex items-center gap-2 text-sm hidden sm:flex"
               >
                 Resume ↗
               </a>
@@ -474,14 +526,14 @@ export default function Portfolio() {
             >
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </motion.button>
-            <motion.div whileHover={{ scale: 1.1 }}>
+            <motion.div whileHover={{ scale: 1.1 }} className="hidden sm:block">
               <Button variant="ghost" size="icon" asChild className="glass-morphism cursor-custom">
                 <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer">
                   <Github className="w-5 h-5" />
                 </a>
               </Button>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.1 }}>
+            <motion.div whileHover={{ scale: 1.1 }} className="hidden sm:block">
               <Button variant="ghost" size="icon" asChild className="glass-morphism cursor-custom">
                 <a
                   href="https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/"
@@ -492,8 +544,112 @@ export default function Portfolio() {
                 </a>
               </Button>
             </motion.div>
+            
+            {/* Mobile Menu Button */}
+            <motion.button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden glass-morphism p-2 rounded-lg cursor-custom"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </motion.button>
           </div>
         </div>
+        
+        {/* Mobile Menu Panel */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="md:hidden bg-gradient-to-b from-slate-900/95 to-slate-900/80 backdrop-blur-xl border-t border-white/10"
+            >
+              <div className="px-4 py-6 space-y-3">
+                {/* Mobile Navigation Links */}
+                {["about", "skills", "projects", "contact"].map((section, index) => (
+                  <motion.button
+                    key={section}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.3 }}
+                    onClick={() => {
+                      scrollToSection(section)
+                      setIsMobileMenuOpen(false)
+                    }}
+                    className={`w-full text-left capitalize py-3 px-4 rounded-lg font-medium transition-all duration-300 ${
+                      activeSection === section
+                        ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
+                        : "hover:bg-white/10 text-zinc-400"
+                    }`}
+                  >
+                    {section}
+                  </motion.button>
+                ))}
+                
+                {/* Mobile Resume Button */}
+                <motion.a
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4, duration: 0.3 }}
+                  href="/Muhammad Adil Usmani — Resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full text-left py-3 px-4 rounded-lg font-medium bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 transition-all duration-300"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Resume ↗
+                </motion.a>
+                
+                {/* Mobile Social Links */}
+                <div className="flex gap-3 pt-3">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5, duration: 0.3 }}
+                    whileHover={{ scale: 1.1 }}
+                    className="flex-1"
+                  >
+                    <Button
+                      variant="ghost"
+                      asChild
+                      className="glass-morphism w-full cursor-custom hover:bg-white/20 text-zinc-400 hover:text-white"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer">
+                        <Github className="w-4 h-4" />
+                      </a>
+                    </Button>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6, duration: 0.3 }}
+                    whileHover={{ scale: 1.1 }}
+                    className="flex-1"
+                  >
+                    <Button
+                      variant="ghost"
+                      asChild
+                      className="glass-morphism w-full cursor-custom hover:bg-white/20 text-zinc-400 hover:text-white"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <a
+                        href="https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Linkedin className="w-4 h-4" />
+                      </a>
+                    </Button>
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Back to Top Button */}
@@ -543,13 +699,32 @@ export default function Portfolio() {
           ))}
         </div>
 
-        {/* Parallax Background Elements */}
+        {/* Parallax Background Elements with Breathing Animation */}
         <motion.div
           style={{ y: y1 }}
+          animate={{
+            scale: [1, 1.05, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
           className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-3xl"
         />
         <motion.div
           style={{ y: y2 }}
+          animate={{
+            scale: [1, 1.08, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+            delay: 0.5,
+          }}
           className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl"
         />
 
@@ -583,7 +758,11 @@ export default function Portfolio() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             <div className="text-center">
               {/* Professional Avatar */}
               <motion.div
@@ -593,22 +772,38 @@ export default function Portfolio() {
                 className="mb-8"
               >
                 <div className="relative inline-block">
-                  <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-purple-600 p-1">
-                    <div className="w-full h-full rounded-full bg-gray-800 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-white">MA</span>
-                    </div>
-                  </div>
+                  {/* Glowing Ring Background */}
                   <motion.div
                     animate={{
-                      scale: [1, 1.2, 1],
-                      opacity: [0.5, 0.8, 0.5],
+                      opacity: [0.4, 0.8, 0.4],
                     }}
                     transition={{
-                      duration: 2,
+                      duration: 3,
                       repeat: Number.POSITIVE_INFINITY,
                       ease: "easeInOut",
                     }}
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/30 to-purple-600/30 blur-xl"
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 blur-lg -z-10 scale-110"
+                  />
+                  <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-blue-400 to-purple-600 p-0.5 shadow-2xl shadow-blue-500/50">
+                    <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center">
+                      <span className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">MA</span>
+                    </div>
+                  </div>
+                  {/* Subtle pulsing outer ring */}
+                  <motion.div
+                    animate={{
+                      boxShadow: [
+                        "0 0 20px rgba(59, 130, 246, 0.4)",
+                        "0 0 40px rgba(168, 85, 247, 0.6)",
+                        "0 0 20px rgba(59, 130, 246, 0.4)",
+                      ],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "easeInOut",
+                    }}
+                    className="absolute inset-0 rounded-full border-2 border-transparent bg-gradient-to-r from-blue-500/30 to-purple-500/30 bg-clip-border"
                   />
                 </div>
               </motion.div>
@@ -621,10 +816,13 @@ export default function Portfolio() {
                 className="mb-6"
               >
                 <motion.h1
-                  className="text-6xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-100 mb-4 leading-tight"
+                  className="text-6xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 mb-4 leading-tight drop-shadow-2xl"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7, duration: 0.8 }}
+                  whileHover={{
+                    textShadow: "0 0 30px rgba(96, 165, 250, 0.5), 0 0 60px rgba(168, 85, 247, 0.3)",
+                  }}
                 >
                   Muhammad Adil Usmani
                 </motion.h1>
@@ -657,7 +855,7 @@ export default function Portfolio() {
   </motion.div>
 
               <motion.p
-                className="text-xl md:text-2xl text-gray-300 mb-12 max-w-5xl mx-auto leading-relaxed font-light"
+                className="text-xl md:text-2xl text-zinc-400 mb-12 max-w-5xl mx-auto leading-relaxed font-light"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.4, duration: 0.8 }}
@@ -809,7 +1007,7 @@ export default function Portfolio() {
             <h2 className="text-5xl md:text-6xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-100">
               Featured Projects
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto font-light">
+              <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
               Showcasing production-ready applications and innovative solutions
             </p>
           </motion.div>
@@ -827,18 +1025,36 @@ export default function Portfolio() {
               Featured Projects
             </motion.h3>
 
-            <div className="grid md:grid-cols-2 gap-8 mb-16">
-              {featuredProjects.map((project, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+              {featuredProjects.map((project, index) => {
+                const cardRef = useRef<HTMLDivElement>(null)
+                const spotlight = useSpotlight(cardRef)
+                
+                return (
                 <motion.div
                   key={project.title}
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: index * 0.2 }}
                   viewport={{ once: true }}
-                  whileHover={{ y: -10, scale: 1.02 }}
+                  whileHover={{ y: -5 }}
                   className="group cursor-custom"
                 >
-                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-500/20 border-0">
+                  <div
+                    ref={cardRef}
+                    onMouseMove={spotlight.onMouseMove}
+                    onMouseLeave={spotlight.onMouseLeave}
+                    className="relative h-full"
+                  >
+                    {/* Spotlight effect layer */}
+                    <motion.div
+                      className="absolute inset-0 rounded-lg pointer-events-none z-0"
+                      style={{
+                        background: spotlight.spotlightStyle,
+                        opacity: spotlight.spotlightOpacity,
+                      }}
+                    />
+                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-purple-500/40 border-0 relative z-10">
                     <CardHeader>
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">
@@ -874,7 +1090,7 @@ export default function Portfolio() {
                           </motion.div>
                         </div>
                       </div>
-                      <CardDescription className="text-gray-300 leading-relaxed font-light">
+                      <CardDescription className="text-zinc-400 leading-relaxed font-light">
                         {project.description}
                       </CardDescription>
                     </CardHeader>
@@ -882,8 +1098,10 @@ export default function Portfolio() {
                     <CardContent>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {project.tags.map((tag) => (
-                          <motion.div key={tag.name} whileHover={{ scale: 1.05 }}>
-                            <Badge className={`${tag.color} text-white border-0 font-medium cursor-custom`}>
+                          <motion.div key={tag.name} whileHover={{ scale: 1.08, y: -2 }}>
+                            <Badge className={`${tag.color} text-white border-2 font-medium cursor-custom shadow-lg hover:shadow-xl transition-all duration-300`} style={{
+                              boxShadow: `0 0 12px ${tag.color.includes('blue') ? 'rgba(59, 130, 246, 0.4)' : tag.color.includes('green') ? 'rgba(34, 197, 94, 0.4)' : tag.color.includes('purple') ? 'rgba(168, 85, 247, 0.4)' : tag.color.includes('orange') ? 'rgba(234, 88, 12, 0.4)' : 'rgba(236, 72, 153, 0.4)'}`
+                            }}>
                               {tag.name}
                             </Badge>
                           </motion.div>
@@ -900,8 +1118,10 @@ export default function Portfolio() {
                       </div>
                     </CardContent>
                   </Card>
+                  </div>
                 </motion.div>
-              ))}
+                )
+              })}
             </div>
           </div>
 
@@ -918,27 +1138,36 @@ export default function Portfolio() {
               Other Projects
             </motion.h3>
 
-            <div className="relative">
-              <div
-                className="flex gap-6 overflow-x-auto custom-scrollbar pb-4"
-                style={{
-                  scrollSnapType: "x mandatory",
-                  scrollBehavior: "smooth",
-                  WebkitOverflowScrolling: "touch",
-                }}
-              >
-                {otherProjects.map((project, index) => (
-                  <motion.div
-                    key={project.title}
-                    initial={{ opacity: 0, x: 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -10, scale: 1.02 }}
-                    className="flex-shrink-0 w-[350px] group cursor-custom"
-                    style={{ scrollSnapAlign: "start" }}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {otherProjects.map((project, index) => {
+                const cardRef = useRef<HTMLDivElement>(null)
+                const spotlight = useSpotlight(cardRef)
+                
+                return (
+                <motion.div
+                  key={project.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5 }}
+                  className="group cursor-custom"
+                >
+                  <div
+                    ref={cardRef}
+                    onMouseMove={spotlight.onMouseMove}
+                    onMouseLeave={spotlight.onMouseLeave}
+                    className="relative h-full"
                   >
-                    <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-purple-500/20 border-0">
+                    {/* Spotlight effect layer */}
+                    <motion.div
+                      className="absolute inset-0 rounded-lg pointer-events-none z-0"
+                      style={{
+                        background: spotlight.spotlightStyle,
+                        opacity: spotlight.spotlightOpacity,
+                      }}
+                    />
+                  <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-500/40 border-0 relative z-10">
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between mb-2">
                           <CardTitle className="text-white text-lg font-bold">{project.title}</CardTitle>
@@ -969,7 +1198,7 @@ export default function Portfolio() {
                             </motion.div>
                           </div>
                         </div>
-                        <CardDescription className="text-gray-300 text-sm leading-relaxed font-light">
+                        <CardDescription className="text-zinc-400 text-sm leading-relaxed font-light">
                           {project.description}
                         </CardDescription>
                       </CardHeader>
@@ -977,8 +1206,10 @@ export default function Portfolio() {
                       <CardContent className="pt-2">
                         <div className="flex flex-wrap gap-1 mb-3">
                           {project.tags.map((tag) => (
-                            <motion.div key={tag.name} whileHover={{ scale: 1.05 }}>
-                              <Badge className={`${tag.color} text-white border-0 text-xs font-medium cursor-custom`}>
+                            <motion.div key={tag.name} whileHover={{ scale: 1.08, y: -2 }}>
+                              <Badge className={`${tag.color} text-white border border-current text-xs font-medium cursor-custom shadow-md hover:shadow-lg transition-all duration-300`} style={{
+                                boxShadow: `0 0 8px ${tag.color.includes('blue') ? 'rgba(59, 130, 246, 0.5)' : tag.color.includes('green') ? 'rgba(34, 197, 94, 0.5)' : tag.color.includes('purple') ? 'rgba(168, 85, 247, 0.5)' : tag.color.includes('orange') ? 'rgba(234, 88, 12, 0.5)' : 'rgba(236, 72, 153, 0.5)'}`
+                              }}>
                                 {tag.name}
                               </Badge>
                             </motion.div>
@@ -995,9 +1226,10 @@ export default function Portfolio() {
                         </div>
                       </CardContent>
                     </Card>
-                  </motion.div>
-                ))}
-              </div>
+                  </div>
+                </motion.div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -1023,7 +1255,7 @@ export default function Portfolio() {
             <h2 className="text-5xl md:text-6xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-100">
               Get In Touch
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto font-light">
+              <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
               Ready to collaborate on innovative AI/ML projects? Let's build something amazing together.
             </p>
           </motion.div>
@@ -1124,7 +1356,7 @@ export default function Portfolio() {
             viewport={{ once: true }}
             className="text-center mt-12"
           >
-            <p className="text-gray-400 mb-4 font-light">Or connect directly:</p>
+            <p className="text-zinc-400 mb-4 font-light">Or connect directly:</p>
             <div className="flex justify-center space-x-6">
               {[
                 {
@@ -1162,7 +1394,7 @@ export default function Portfolio() {
 
       <footer className="py-8 border-t border-gray-800/50 glass-morphism">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-400 font-light">© 2025 Muhammad Adil Usmani. All rights reserved.</p>
+          <p className="text-zinc-400 font-light">© 2025 Muhammad Adil Usmani. All rights reserved.</p>
         </div>
       </footer>
     </div>
