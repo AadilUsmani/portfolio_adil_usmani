@@ -699,7 +699,7 @@ export default function Portfolio() {
   </motion.div>
 
               <motion.p
-                className="text-xl md:text-2xl text-gray-300 mb-12 max-w-5xl mx-auto leading-relaxed font-light"
+                className="text-xl md:text-2xl text-zinc-400 mb-12 max-w-5xl mx-auto leading-relaxed font-light"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.4, duration: 0.8 }}
@@ -851,7 +851,7 @@ export default function Portfolio() {
             <h2 className="text-5xl md:text-6xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-100">
               Featured Projects
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto font-light">
+              <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
               Showcasing production-ready applications and innovative solutions
             </p>
           </motion.div>
@@ -916,7 +916,7 @@ export default function Portfolio() {
                           </motion.div>
                         </div>
                       </div>
-                      <CardDescription className="text-gray-300 leading-relaxed font-light">
+                      <CardDescription className="text-zinc-400 leading-relaxed font-light">
                         {project.description}
                       </CardDescription>
                     </CardHeader>
@@ -1004,7 +1004,7 @@ export default function Portfolio() {
                             </motion.div>
                           </div>
                         </div>
-                        <CardDescription className="text-gray-300 text-sm leading-relaxed font-light">
+                        <CardDescription className="text-zinc-400 text-sm leading-relaxed font-light">
                           {project.description}
                         </CardDescription>
                       </CardHeader>
@@ -1059,7 +1059,7 @@ export default function Portfolio() {
             <h2 className="text-5xl md:text-6xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-100">
               Get In Touch
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto font-light">
+              <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
               Ready to collaborate on innovative AI/ML projects? Let's build something amazing together.
             </p>
           </motion.div>
@@ -1160,7 +1160,7 @@ export default function Portfolio() {
             viewport={{ once: true }}
             className="text-center mt-12"
           >
-            <p className="text-gray-400 mb-4 font-light">Or connect directly:</p>
+            <p className="text-zinc-400 mb-4 font-light">Or connect directly:</p>
             <div className="flex justify-center space-x-6">
               {[
                 {
@@ -1198,7 +1198,7 @@ export default function Portfolio() {
 
       <footer className="py-8 border-t border-gray-800/50 glass-morphism">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-400 font-light">© 2025 Muhammad Adil Usmani. All rights reserved.</p>
+          <p className="text-zinc-400 font-light">© 2025 Muhammad Adil Usmani. All rights reserved.</p>
         </div>
       </footer>
     </div>
