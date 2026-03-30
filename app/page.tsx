@@ -719,7 +719,7 @@ export default function Portfolio() {
           <div className="flex items-center space-x-4">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <a
-                href="/Muhammad-Adil-Usmani-Resume.pdf"
+                href="/Muhammad_Adil_Usmani_cv.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="glass-morphism px-4 py-2 rounded-lg font-medium cursor-custom hover:bg-white/20 transition-all duration-300 flex items-center gap-2 text-sm hidden sm:flex"
@@ -803,7 +803,7 @@ export default function Portfolio() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4, duration: 0.3 }}
-                  href="/Muhammad Adil Usmani — Resume.pdf"
+                  href="/Muhammad_Adil_Usmani_cv.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full text-left py-3 px-4 rounded-lg font-medium bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 transition-all duration-300"
@@ -1048,7 +1048,7 @@ export default function Portfolio() {
     className="mb-8"
   >
     <a
-      href="/Muhammad Adil Usmani — Resume.pdf"
+      href="/Muhammad_Adil_Usmani_cv.pdf"
       target="_blank"
       rel="noopener noreferrer"
       className="project-link inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl font-bold text-lg transition-all duration-300 hover:scale-105"
