@@ -963,58 +963,15 @@ export default function Portfolio() {
           ))}
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: 50 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <div className="text-center">
-              {/* Professional Avatar */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.8 }}
-                className="mb-8"
-              >
-                <div className="relative inline-block">
-                  {/* Glowing Ring Background */}
-                  <motion.div
-                    animate={{
-                      opacity: [0.4, 0.8, 0.4],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                    }}
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 blur-lg -z-10 scale-110"
-                  />
-                  <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-blue-400 to-purple-600 p-0.5 shadow-2xl shadow-blue-500/50">
-                    <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center">
-                      <span className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">MA</span>
-                    </div>
-                  </div>
-                  {/* Subtle pulsing outer ring */}
-                  <motion.div
-                    animate={{
-                      boxShadow: [
-                        "0 0 20px rgba(59, 130, 246, 0.4)",
-                        "0 0 40px rgba(168, 85, 247, 0.6)",
-                        "0 0 20px rgba(59, 130, 246, 0.4)",
-                      ],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                    }}
-                    className="absolute inset-0 rounded-full border-2 border-transparent bg-gradient-to-r from-blue-500/30 to-purple-500/30 bg-clip-border"
-                  />
-                </div>
-              </motion.div>
-
-              {/* Title */}
+            <div className="text-center pt-16"> {/* pt-16 adds spacing since the avatar is gone */}
+              
+              {/* AI/ML Focused Title Block */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -1022,7 +979,7 @@ export default function Portfolio() {
                 className="mb-6"
               >
                 <motion.h1
-                  className="text-6xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 mb-4 leading-tight drop-shadow-2xl"
+                  className="text-5xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 mb-6 leading-tight drop-shadow-2xl"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7, duration: 0.8 }}
@@ -1030,18 +987,20 @@ export default function Portfolio() {
                     textShadow: "0 0 30px rgba(96, 165, 250, 0.5), 0 0 60px rgba(168, 85, 247, 0.3)",
                   }}
                 >
-                  Muhammad Adil Usmani
+                  Engineering Intelligence with AI & Machine Learning
                 </motion.h1>
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1, duration: 0.8 }}
-                  className="text-2xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 mb-8"
+                  className="text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 mb-8"
                 >
-                  AI/ML Developer
+                  Specializing in LLM Development & Advanced RAG Architectures
                 </motion.div>
               </motion.div>
+
+              {/* Download Resume Button (Leaves this as you had it) */}
 
   {/* Download Resume Button */}
   <motion.div
