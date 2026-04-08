@@ -66,8 +66,8 @@ const skillsData = {
     { name: "Scikit-Learn", level: 88, icon: "🧠", color: "from-blue-500 to-cyan-500", description: "Machine learning algorithms" },
   ],
   "Tools & Infrastructure": [
-    { name: "GitHub", level: 90, icon: "🐙", color: "from-gray-700 to-black", description: "Version control and collaboration" },
-    { name: "Docker", level: 85, icon: "🐳", color: "from-blue-500 to-cyan-500", description: "Container orchestration" },
+    { name: "GitHub", level: 80, icon: "🐙", color: "from-gray-700 to-black", description: "Version control and collaboration" },
+    { name: "Docker", level: 75, icon: "🐳", color: "from-blue-500 to-cyan-500", description: "Container orchestration" },
     { name: "GitHub Actions", level: 84, icon: "⚙️", color: "from-purple-500 to-blue-500", description: "CI/CD automation" },
     { name: "Render", level: 83, icon: "🚀", color: "from-blue-500 to-purple-500", description: "Cloud deployment platform" },
     { name: "Vercel", level: 87, icon: "▲", color: "from-black to-gray-600", description: "Frontend deployment platform" },
@@ -77,6 +77,9 @@ const skillsData = {
     { name: "Gemini CLI", level: 80, icon: "🎯", color: "from-purple-500 to-blue-500", description: "AI command line tools" },
     { name: "Deepwiki", level: 80, icon: "📚", color: "from-green-500 to-teal-500", description: "Project documentation platform" },
     { name: "Airflow", level: 78, icon: "🔄", color: "from-orange-500 to-red-500", description: "Workflow orchestration" },
+    { name: "Copilot CLI", level: 82, icon: "⌨️", color: "from-gray-500 to-gray-300", description: "AI-powered terminal assistant" },
+    { name: "Claude", level: 85, icon: "🧠", color: "from-orange-500 to-amber-500", description: "Anthropic's LLM assistant" },
+    { name: "Modal.com", level: 80, icon: "☁️", color: "from-green-500 to-emerald-500", description: "Serverless cloud for AI" },
   ],
 }
 
@@ -1196,21 +1199,23 @@ export default function Portfolio() {
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       </section>
 
-      {/* Premium Projects Section */}
+     {/* Premium Projects Section */}
       <section id="projects" className="min-h-screen py-32 bg-gradient-to-b from-gray-900/50 to-black relative">
         <div className="absolute inset-0 bg-pattern opacity-5" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          
+          {/* UPDATED: Changed text-center to text-left and removed mx-auto from the p tag */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-20"
+            className="text-left mb-20"
           >
             <h2 className="text-5xl md:text-6xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-100">
               Featured Projects
             </h2>
-              <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+            <p className="text-xl text-zinc-400 max-w-2xl font-light">
               Showcasing production-ready applications and innovative solutions
             </p>
           </motion.div>
@@ -1234,7 +1239,6 @@ export default function Portfolio() {
               ))}
             </div>
           </div>
-
           {/* Other Projects */}
           <div>
             <motion.h3
