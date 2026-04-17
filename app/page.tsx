@@ -188,7 +188,7 @@ const otherProjects = [
       { name: "TensorFlow", color: "bg-orange-600" },
     ],
     github: "https://github.com/AadilUsmani/nvdia_stock_predictor",
-    demo: "https://preview-nvidia-stock-dashboard-kzmqjnlxx9b97rmuji28.vusercontent.net/",
+    demo: "https://v0-nvidia-stock-dashboard.vercel.app/",
     image: "/images/stock-predictor.png",
     metrics: { accuracy: "78%", predictions: "Predictions" },
   },
