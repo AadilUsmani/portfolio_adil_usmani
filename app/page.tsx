@@ -94,7 +94,7 @@ const featuredProjects = [
       { name: "Knowledge Graphs", color: "bg-purple-500" },
     ],
     github: "https://github.com/AadilUsmani/Lexical_Graph_RAG",
-    demo: "", // Add a live demo link here if you have one
+    demo: "https://deepwiki.com/AadilUsmani/Lexical_Graph_RAG", 
     image: "/placeholder.svg", // Update this to point to a screenshot of the project in your public/ folder
     metrics: { metrics: "Signal-to-Noise", domain: "SEC Filings" },
     featured: true,
