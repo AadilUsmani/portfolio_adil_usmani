@@ -85,6 +85,21 @@ const skillsData = {
 
 const featuredProjects = [
   {
+    title: "Lexical Graph RAG — Graph-Based Retrieval Research",
+    description: "Engineered a Graph-based Retrieval-Augmented Generation system using lexical graphs to enhance factual accuracy and contextual depth in AI-driven query responses. Implemented knowledge graph deduplication workflows to synthesize structured data from unstructured SEC filings.",
+    tags: [
+      { name: "Python", color: "bg-yellow-500" },
+      { name: "Neo4j", color: "bg-blue-500" },
+      { name: "LangGraph", color: "bg-orange-500" },
+      { name: "Knowledge Graphs", color: "bg-purple-500" },
+    ],
+    github: "https://github.com/AadilUsmani/Lexical_Graph_RAG",
+    demo: "", // Add a live demo link here if you have one
+    image: "/placeholder.svg", // Update this to point to a screenshot of the project in your public/ folder
+    metrics: { metrics: "Signal-to-Noise", domain: "SEC Filings" },
+    featured: true,
+  },
+  {
     title: "AeroSphere — Air Quality Forecasting System",
     description: "Built LSTM model forecasting 72-hour PM2.5 across 45 cities achieving 85%+ accuracy, 30% above baseline. Designed Airflow pipeline processing 1.2M+ records with GPT-based natural language summaries for public air quality reports. Contributed to model training, batch scheduling, and end-to-end Azure cloud deployment.",
     tags: [
