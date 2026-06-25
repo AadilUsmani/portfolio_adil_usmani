@@ -17,6 +17,75 @@ body {
   }
 }
 
+/* ============================================
+   Global Component Utilities
+   (Moved from inline page.tsx style injection)
+   ============================================ */
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+}
+
+.skill-progress {
+  border-radius: 8px;
+}
+
+.bg-pattern {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+.cursor-custom {
+  cursor: pointer;
+}
+
+.cursor-custom:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+/* Hero title — hover glow now handled by Framer Motion whileHover spring */
+.hero-title {
+  cursor: default;
+}
+
+/* Scroll-progress ring button — ensure icon is centered over SVG */
+.scroll-ring-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
