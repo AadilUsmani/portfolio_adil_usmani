@@ -16,10 +16,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Please enter a valid email address" }, { status: 400 })
     }
 
-    // Replace the placeholder access key and uncomment the Web3Forms integration.
-    // Also, remove the temporary demo response.
+    // Validate field lengths (mirrors client-side maxLength attributes)
+    if (name.length > 100 || email.length > 254 || subject.length > 200 || message.length > 5000) {
+      return NextResponse.json({ error: "Input exceeds maximum allowed length" }, { status: 400 })
+    }
 
-    // --- START: Web3Forms Integration ---
+    const accessKey = process.env.WEB3FORMS_ACCESS_KEY || "d8aced0c-d6f6-478a-821f-1dffd06e0d12"
+
     const web3formsResponse = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
       headers: {
@@ -27,7 +30,7 @@ export async function POST(request: NextRequest) {
         Accept: "application/json",
       },
       body: JSON.stringify({
-        access_key: "d8aced0c-d6f6-478a-821f-1dffd06e0d12", // <--- YOUR KEY IS HERE NOW
+        access_key: accessKey,
         name: name,
         email: email,
         subject: `Portfolio Contact: ${subject}`,
@@ -51,28 +54,6 @@ export async function POST(request: NextRequest) {
     } else {
       throw new Error(result.message || "Failed to send email")
     }
-    // --- END: Web3Forms Integration ---
-
-    // --- REMOVE THIS TEMPORARY BLOCK AFTER WEB3FORMS IS SET UP ---
-    /*
-  console.log("📧 Contact form submission received:", {
-    name,
-    email,
-    subject,
-    message,
-    timestamp: new Date().toISOString(),
-  })
-  await new Promise((resolve) => setTimeout(resolve, 1500))
-  return NextResponse.json(
-    {
-      message: "Message received! Please use the direct email link below for now, or wait for email service setup.",
-      success: true,
-      demo: true,
-    },
-    { status: 200 },
-  )
-  */
-    // --- END OF TEMPORARY BLOCK ---
   } catch (error) {
     console.error("❌ Contact form error:", error)
     return NextResponse.json(
