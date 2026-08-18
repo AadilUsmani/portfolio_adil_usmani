@@ -1,15 +1,23 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect, useRef } from "react"
-import { motion, useScroll, useTransform, AnimatePresence, useInView, useMotionValue, useMotionTemplate } from "framer-motion"
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+  useInView,
+  useMotionValue,
+  useMotionTemplate,
+  useSpring,
+  useReducedMotion,
+} from "framer-motion"
 import {
   Github,
   Linkedin,
   Mail,
   ExternalLink,
-  Database,
   Brain,
   Download,
   ArrowUp,
@@ -21,580 +29,294 @@ import {
   Sun,
   Menu,
   X,
+  Sparkles,
+  Layers,
+  Cpu,
+  CheckCircle2,
+  Terminal,
+  ChevronRight,
+  Send,
+  Database,
+  Search,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
-const skillsData = {
-  "Languages": [
-    { name: "Python", level: 95, icon: "🐍", color: "from-blue-500 to-yellow-500", description: "Primary language for ML/AI development" },
-    { name: "SQL", level: 85, icon: "🗄️", color: "from-orange-500 to-red-500", description: "Database queries and data analysis" },
-  ],
-  "Backend & APIs": [
-    { name: "FastAPI", level: 88, icon: "⚡", color: "from-green-500 to-teal-500", description: "High-performance web APIs" },
-    { name: "LangChain", level: 85, icon: "🔗", color: "from-indigo-500 to-purple-500", description: "LLM application framework" },
-    { name: "LangGraph", level: 82, icon: "🕸️", color: "from-teal-500 to-blue-500", description: "Graph-based LLM workflows" },
-    { name: "LangSmith", level: 80, icon: "🔍", color: "from-yellow-500 to-orange-500", description: "LLM observability and debugging" },
-    { name: "REST APIs", level: 87, icon: "🌐", color: "from-cyan-500 to-blue-500", description: "RESTful API design and development" },
-    { name: "Async Programming", level: 83, icon: "⚙️", color: "from-purple-500 to-pink-500", description: "Asynchronous programming patterns" },
-  ],
-  "AI/ML & Advanced Techniques": [
-    { name: "RAG Pipelines", level: 88, icon: "🔄", color: "from-red-500 to-pink-500", description: "Retrieval-Augmented Generation systems" },
-    { name: "LLM Applications", level: 87, icon: "🤖", color: "from-yellow-500 to-orange-500", description: "Building with large language models" },
-    { name: "Embeddings", level: 85, icon: "📊", color: "from-blue-500 to-cyan-500", description: "Vector embeddings and representations" },
-    { name: "Retrieval Systems", level: 86, icon: "🔍", color: "from-purple-500 to-blue-500", description: "Information retrieval and search" },
-    { name: "Prompt Engineering", level: 85, icon: "💡", color: "from-orange-500 to-yellow-500", description: "Effective prompt design strategies" },
-    { name: "Deep Learning", level: 82, icon: "🧠", color: "from-indigo-500 to-purple-500", description: "Neural networks and deep architectures" },
-    { name: "Time-Series Forecasting", level: 80, icon: "📈", color: "from-green-500 to-teal-500", description: "Temporal data prediction" },
-    { name: "Hybrid Retrieval", level: 84, icon: "🔀", color: "from-pink-500 to-red-500", description: "Combined vector and graph retrieval" },
-    { name: "Evaluation Benchmarks", level: 83, icon: "📊", color: "from-cyan-500 to-blue-500", description: "LLM evaluation and benchmarking" },
-  ],
-  "Databases": [
-    { name: "SQLite", level: 85, icon: "💾", color: "from-blue-500 to-teal-500", description: "Lightweight SQL database" },
-    { name: "ChromaDB", level: 84, icon: "🔍", color: "from-purple-500 to-pink-500", description: "Vector database for embeddings" },
-    { name: "Neo4j", level: 82, icon: "📊", color: "from-orange-500 to-red-500", description: "Graph database for relationships" },
-  ],
-  "Libraries & Frameworks": [
-    { name: "Pandas", level: 92, icon: "🐼", color: "from-purple-500 to-pink-500", description: "Data manipulation and analysis" },
-    { name: "NumPy", level: 90, icon: "🔢", color: "from-green-500 to-blue-500", description: "Numerical computing" },
-    { name: "Matplotlib", level: 86, icon: "📈", color: "from-cyan-500 to-blue-500", description: "Data visualization" },
-    { name: "PyTorch", level: 85, icon: "🔥", color: "from-red-500 to-orange-500", description: "Deep learning framework" },
-    { name: "TensorFlow", level: 83, icon: "⚡", color: "from-orange-500 to-yellow-500", description: "ML and deep learning platform" },
-    { name: "Scikit-Learn", level: 88, icon: "🧠", color: "from-blue-500 to-cyan-500", description: "Machine learning algorithms" },
-  ],
-  "Tools & Infrastructure": [
-    { name: "GitHub", level: 80, icon: "🐙", color: "from-gray-700 to-black", description: "Version control and collaboration" },
-    { name: "Docker", level: 75, icon: "🐳", color: "from-blue-500 to-cyan-500", description: "Container orchestration" },
-    { name: "GitHub Actions", level: 84, icon: "⚙️", color: "from-purple-500 to-blue-500", description: "CI/CD automation" },
-    { name: "Render", level: 83, icon: "🚀", color: "from-blue-500 to-purple-500", description: "Cloud deployment platform" },
-    { name: "Vercel", level: 87, icon: "▲", color: "from-black to-gray-600", description: "Frontend deployment platform" },
-    { name: "Azure", level: 78, icon: "☁️", color: "from-blue-600 to-cyan-500", description: "Microsoft cloud services" },
-    { name: "GCP", level: 75, icon: "🌐", color: "from-red-500 to-yellow-500", description: "Google Cloud Platform" },
-    { name: "GitHub Copilot", level: 82, icon: "✨", color: "from-yellow-500 to-orange-500", description: "AI code assistant" },
-    { name: "Gemini CLI", level: 80, icon: "🎯", color: "from-purple-500 to-blue-500", description: "AI command line tools" },
-    { name: "Deepwiki", level: 80, icon: "📚", color: "from-green-500 to-teal-500", description: "Project documentation platform" },
-    { name: "Airflow", level: 78, icon: "🔄", color: "from-orange-500 to-red-500", description: "Workflow orchestration" },
-    { name: "Copilot CLI", level: 82, icon: "⌨️", color: "from-gray-500 to-gray-300", description: "AI-powered terminal assistant" },
-    { name: "Claude", level: 85, icon: "🧠", color: "from-orange-500 to-amber-500", description: "Anthropic's LLM assistant" },
-    { name: "Modal.com", level: 80, icon: "☁️", color: "from-green-500 to-emerald-500", description: "Serverless cloud for AI" },
-  ],
+// ─── Data: Projects & Research ──────────────────────────────────────────────────
+
+interface Project {
+  title: string
+  subtitle?: string
+  category: "rag" | "llm" | "ml"
+  description: string
+  tags: { name: string; color: string }[]
+  github: string
+  demo?: string
+  metrics: Record<string, string>
+  featured?: boolean
+  highlight?: string
 }
 
-const featuredProjects = [
+const projectsData: Project[] = [
   {
-    title: "Lexical Graph RAG — Graph-Based Retrieval Research",
-    description: "Engineered a Graph-based Retrieval-Augmented Generation system using lexical graphs to enhance factual accuracy and contextual depth in AI-driven query responses. Implemented knowledge graph deduplication workflows to synthesize structured data from unstructured SEC filings.",
+    title: "Anarchist LLM: Disguised Algorithmic Reasoning",
+    subtitle: "Pre-1900 Persona Constraint & Transformer Benchmarking",
+    category: "llm",
+    description:
+      "Engineered an autonomous research pipeline running inference on time-constrained LLMs (GPT-1900 with FlashAttention-3 & custom BPE) evaluating disguised algorithmic reasoning under Victorian personas. Built distributed A100 GPU serverless workers on Modal.com with automated SQLite experiment tracking and Streamlit analytics.",
     tags: [
-      { name: "Python", color: "bg-yellow-500" },
-      { name: "Neo4j", color: "bg-blue-500" },
-      { name: "LangGraph", color: "bg-orange-500" },
-      { name: "Knowledge Graphs", color: "bg-purple-500" },
+      { name: "PyTorch", color: "border-orange-500/30 text-orange-400 bg-orange-500/10" },
+      { name: "FlashAttention-3", color: "border-amber-500/30 text-amber-400 bg-amber-500/10" },
+      { name: "Modal.com (A100)", color: "border-emerald-500/30 text-emerald-400 bg-emerald-500/10" },
+      { name: "Streamlit", color: "border-red-500/30 text-red-400 bg-red-500/10" },
+      { name: "SQLite", color: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
+      { name: "Transformer Inference", color: "border-purple-500/30 text-purple-400 bg-purple-500/10" },
+    ],
+    github: "https://github.com/AadilUsmani/Anarchist-LLM",
+    metrics: { Hardware: "NVIDIA A100", Attention: "Flash-3", Evaluation: "Victorian CS" },
+    featured: true,
+    highlight: "Featured Research",
+  },
+  {
+    title: "Lexical Graph RAG — SEC 10-K Intelligence",
+    subtitle: "Knowledge Graph Retrieval with Deduplication Workflows",
+    category: "rag",
+    description:
+      "Engineered a Graph-based Retrieval-Augmented Generation system using lexical graphs to enhance factual accuracy and contextual depth in AI query responses. Implemented knowledge graph deduplication workflows to synthesize structured insights from unstructured SEC 10-K financial filings.",
+    tags: [
+      { name: "Python", color: "border-yellow-500/30 text-yellow-400 bg-yellow-500/10" },
+      { name: "Neo4j", color: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
+      { name: "LangGraph", color: "border-indigo-500/30 text-indigo-400 bg-indigo-500/10" },
+      { name: "Knowledge Graphs", color: "border-purple-500/30 text-purple-400 bg-purple-500/10" },
+      { name: "SEC Filings", color: "border-emerald-500/30 text-emerald-400 bg-emerald-500/10" },
     ],
     github: "https://github.com/AadilUsmani/Lexical_Graph_RAG",
-    demo: "https://deepwiki.com/AadilUsmani/Lexical_Graph_RAG", 
-    image: "/placeholder.svg", // Update this to point to a screenshot of the project in your public/ folder
-    metrics: { metrics: "Signal-to-Noise", domain: "SEC Filings" },
+    demo: "https://deepwiki.com/AadilUsmani/Lexical_Graph_RAG",
+    metrics: { "Signal-to-Noise": "Optimized", Domain: "SEC 10-K", Graph: "Neo4j" },
     featured: true,
+    highlight: "Graph RAG",
   },
   {
-    title: "AeroSphere — Air Quality Forecasting System",
-    description: "Built LSTM model forecasting 72-hour PM2.5 across 45 cities achieving 85%+ accuracy, 30% above baseline. Designed Airflow pipeline processing 1.2M+ records with GPT-based natural language summaries for public air quality reports. Contributed to model training, batch scheduling, and end-to-end Azure cloud deployment.",
+    title: "Corrective RAG (CRAG) — Self-Correcting Engine",
+    subtitle: "Adaptive 3-Way Threshold Routing & Web Fallback",
+    category: "rag",
+    description:
+      "High-performance adaptive self-correcting RAG pipeline with confidence threshold routing. Directly passes verified answers (≥0.7), triggers real-time Tavily search for low confidence (<0.3), and runs parallel decomposition for ambiguous cases. Slashes end-to-end latency to 3-8s.",
     tags: [
-      { name: "NASA TEMPO", color: "bg-blue-500" },
-      { name: "LSTM", color: "bg-red-500" },
-      { name: "Airflow", color: "bg-orange-500" },
-      { name: "Azure", color: "bg-cyan-500" },
-      { name: "GPT", color: "bg-green-500" },
-    ],
-    github: "https://github.com/AadilUsmani/AeroSphere",
-    demo: "https://www.aerosphere.earth",
-    image: "/images/aerosphere.png",
-    metrics: { accuracy: "85%+", cities: "45" },
-    featured: true,
-  },
-  {
-    title: "Hybrid Graph RAG vs Vector RAG",
-    description: "Comparative analysis of hybrid retrieval from ChromaDB and Neo4j over SEC 10-K filings. Applied late fusion to merge vector and graph contexts for improved structured financial reasoning. Built 53-question benchmark evaluating accuracy, comprehensiveness, diversity, empowerment, and directness metrics.",
-    tags: [
-      { name: "ChromaDB", color: "bg-purple-500" },
-      { name: "Neo4j", color: "bg-orange-500" },
-      { name: "Azure OpenAI", color: "bg-blue-600" },
-      { name: "LLM-as-Judge", color: "bg-pink-500" },
-      { name: "Hybrid RAG", color: "bg-green-500" },
-    ],
-    github: "https://github.com/AadilUsmani/V.G.RAG",
-    demo: "https://deepwiki.com/AadilUsmani/V.G.RAG",
-    image: "/images/hybrid-rag.png",
-    metrics: { benchmark: "53 Q&As", accuracy: "Outperforms" },
-    featured: true,
-  },
-  {
-    title: "Corrective RAG (CRAG)",
-    description: "Adaptive self-correcting RAG pipeline with threshold-based routing. Routes CORRECT answers (≥0.7) directly, triggers Tavily web search for INCORRECT (<0.3), and runs parallel operations for AMBIGUOUS responses. Optimized for 3-6s latency on direct retrievals and 5-8s with web-augmented answers over geopolitical documents.",
-    tags: [
-      { name: "LangGraph", color: "bg-teal-500" },
-      { name: "FAISS", color: "bg-blue-500" },
-      { name: "Tavily Search", color: "bg-cyan-500" },
-      { name: "GPT-4o-mini", color: "bg-green-500" },
-      { name: "RAG", color: "bg-purple-500" },
+      { name: "LangGraph", color: "border-teal-500/30 text-teal-400 bg-teal-500/10" },
+      { name: "FAISS", color: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
+      { name: "Tavily Search", color: "border-cyan-500/30 text-cyan-400 bg-cyan-500/10" },
+      { name: "GPT-4o-mini", color: "border-green-500/30 text-green-400 bg-green-500/10" },
     ],
     github: "https://github.com/AadilUsmani/Corrective_rag_CRAG",
     demo: "https://deepwiki.com/AadilUsmani/Corrective_rag_CRAG",
-    image: "/images/crag.png",
-    metrics: { latency: "3-8s", accuracy: "95%+" },
+    metrics: { Latency: "3-8s", Routing: "3-Way Adaptive", Accuracy: "95%+" },
     featured: true,
+    highlight: "Adaptive Routing",
   },
-]
-
-const otherProjects = [
   {
-    title: "CricTalk",
+    title: "Titan Memory Architecture Implementation",
+    subtitle: "Long-Term Memory Evaluation on Financial Reports",
+    category: "llm",
     description:
-      "Production-ready cricket knowledge chatbot API with 6 specialized expertise domains. Features enterprise-grade security, API key authentication, rate limiting, and Redis-backed caching.",
+      "Implementation and empirical evaluation of Google's Titan memory architecture. Benchmarked long-horizon context retention and associative recall across multi-year annual financial reports of 3 PSX-listed enterprises.",
     tags: [
-      { name: "FastAPI", color: "bg-green-500" },
-      { name: "Google Gemini AI", color: "bg-blue-500" },
-      { name: "Redis", color: "bg-red-500" },
-      { name: "LangChain", color: "bg-purple-500" },
-      { name: "Security", color: "bg-yellow-500" },
+      { name: "Memory Architecture", color: "border-purple-500/30 text-purple-400 bg-purple-500/10" },
+      { name: "PyTorch", color: "border-orange-500/30 text-orange-400 bg-orange-500/10" },
+      { name: "Financial NLP", color: "border-emerald-500/30 text-emerald-400 bg-emerald-500/10" },
+      { name: "Evaluation Benchmarks", color: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
+    ],
+    github: "https://github.com/AadilUsmani/implementing_titan_architecture",
+    metrics: { Dataset: "PSX Reports", Architecture: "Titan Memory", Domain: "Finance" },
+    featured: true,
+    highlight: "Architecture Research",
+  },
+  {
+    title: "AeroSphere — Air Quality 72hr Forecasting",
+    subtitle: "NASA TEMPO Data + Airflow Pipeline + LSTM",
+    category: "ml",
+    description:
+      "Engineered LSTM model predicting 72-hour PM2.5 concentrations across 45 major cities with 85%+ accuracy. Designed Apache Airflow pipeline processing 1.2M+ records daily with automated natural language summaries for public health monitoring on Azure.",
+    tags: [
+      { name: "NASA TEMPO", color: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
+      { name: "LSTM", color: "border-red-500/30 text-red-400 bg-red-500/10" },
+      { name: "Airflow", color: "border-orange-500/30 text-orange-400 bg-orange-500/10" },
+      { name: "Azure Cloud", color: "border-cyan-500/30 text-cyan-400 bg-cyan-500/10" },
+    ],
+    github: "https://github.com/AadilUsmani/AeroSphere",
+    metrics: { Accuracy: "85%+", Cities: "45", Ingestion: "1.2M Records" },
+    featured: false,
+  },
+  {
+    title: "MedDoc AI — Medical Diagnostic Assistant",
+    subtitle: "RAG Assistant with Azure OpenAI & Session Memory",
+    category: "rag",
+    description:
+      "Interactive medical intelligence platform powered by RAG. Users upload diagnostic reports and clinical records embedded into vector storage for query answering via Azure OpenAI, complete with session-isolated conversation memory.",
+    tags: [
+      { name: "RAG", color: "border-teal-500/30 text-teal-400 bg-teal-500/10" },
+      { name: "Azure OpenAI", color: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
+      { name: "Vector DB", color: "border-purple-500/30 text-purple-400 bg-purple-500/10" },
+      { name: "FastAPI", color: "border-green-500/30 text-green-400 bg-green-500/10" },
+    ],
+    github: "https://github.com/AadilUsmani/MedDoc",
+    metrics: { Domain: "Healthcare", Embeddings: "Vector DB", Engine: "Azure OpenAI" },
+    featured: false,
+  },
+  {
+    title: "Dynamic CSV RAG & Dashboard Generator",
+    subtitle: "Automated Dataset Analysis & UI Configurations",
+    category: "rag",
+    description:
+      "Autonomous CSV analytics engine that ingests arbitrary tabular datasets, performs statistical embeddings, and synthesizes structured JSON visualization configs alongside LLM insights for dynamic dashboards.",
+    tags: [
+      { name: "RAG", color: "border-indigo-500/30 text-indigo-400 bg-indigo-500/10" },
+      { name: "Python", color: "border-yellow-500/30 text-yellow-400 bg-yellow-500/10" },
+      { name: "Pandas", color: "border-purple-500/30 text-purple-400 bg-purple-500/10" },
+      { name: "JSON Configs", color: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
+    ],
+    github: "https://github.com/AadilUsmani/csv_analyzer",
+    metrics: { Automation: "End-to-End", Input: "Arbitrary CSV", Output: "Charts & Insights" },
+    featured: false,
+  },
+  {
+    title: "CricTalk — High-Concurrency Cricket Chatbot API",
+    subtitle: "Enterprise Gemini AI Assistant with Redis Caching",
+    category: "llm",
+    description:
+      "Production-ready domain-expert cricket assistant API featuring 6 specialized knowledge modules, Redis-backed rate limiting, secure API key authentication, and high-concurrency asynchronous endpoints on Render.",
+    tags: [
+      { name: "FastAPI", color: "border-green-500/30 text-green-400 bg-green-500/10" },
+      { name: "Gemini AI", color: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
+      { name: "Redis", color: "border-red-500/30 text-red-400 bg-red-500/10" },
+      { name: "Security", color: "border-yellow-500/30 text-yellow-400 bg-yellow-500/10" },
     ],
     github: "https://github.com/AadilUsmani/Cricket_chatbot",
-    demo: "https://v0-image-analysis-amber-sigma-22.vercel.app/",
-    image: "/images/crictalk.png",
-    metrics: { accuracy: "95%", uptime: "99.9%" },
-  },
-  {
-    title: "Article Summarization",
-    description:
-      "NLP model using transformer architecture to generate concise summaries of long-form articles with 85% accuracy using T5 small transformer model.",
-    tags: [
-      { name: "NLP", color: "bg-indigo-500" },
-      { name: "Transformers", color: "bg-pink-500" },
-      { name: "Python", color: "bg-blue-600" },
-      { name: "T5", color: "bg-green-600" },
-    ],
-    github: "https://github.com/AadilUsmani/news_article_summarizer",
-    demo: "https://v0-news-article-summarizer-gamma.vercel.app/",
-    image: "/images/article-summarizer.png",
-    metrics: { accuracy: "85%", articles: "10K+" },
-  },
-  {
-    title: "Customer Churn Predictor",
-    description: "ML model predicting customer churn with 92% accuracy using ensemble methods and feature engineering.",
-    tags: [
-      { name: "ML", color: "bg-orange-500" },
-      { name: "Random Forest", color: "bg-green-500" },
-      { name: "Python", color: "bg-blue-600" },
-    ],
-    github: "https://github.com/AadilUsmani/churn_predictor_",
-    demo: "https://kzml2mfup87xwyui0vgq.lite.vusercontent.net/churn-predictor",
-    image: "/images/churn-predictor.png",
-    metrics: { accuracy: "92%", predictions: "Predictions" },
-  },
-  {
-    title: "Stock Price Prediction",
-    description: "LSTM neural networks predicting stock prices using historical data and technical indicators.",
-    tags: [
-      { name: "Deep Learning", color: "bg-purple-500" },
-      { name: "LSTM", color: "bg-red-500" },
-      { name: "TensorFlow", color: "bg-orange-600" },
-    ],
-    github: "https://github.com/AadilUsmani/nvdia_stock_predictor",
-    demo: "https://v0-nvidia-stock-dashboard.vercel.app/",
-    image: "/images/stock-predictor.png",
-    metrics: { accuracy: "78%", predictions: "Predictions" },
+    metrics: { Latency: "Sub-second", Uptime: "99.9%", Auth: "API Key + Rate Limit" },
+    featured: false,
   },
 ]
 
-const style = `
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .glass-morphism {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  .custom-scrollbar::-webkit-scrollbar {
-    height: 6px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-    border-radius: 8px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(90deg, #2563eb, #7c3aed);
-  }
-  html {
-    scroll-behavior: smooth;
-  }
-  .skill-progress {
-    border-radius: 8px;
-  }
-  .bg-pattern {
-    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
-    background-size: 20px 20px;
-  }
-  .cursor-custom {
-    cursor: pointer;
-  }
-  .cursor-custom:hover {
-    transform: scale(1.02);
-    transition: transform 0.2s ease;
-  }
-`
+// ─── Data: Technical Skills ─────────────────────────────────────────────────────
 
-// Spotlight effect hook for mouse tracking
-function useSpotlight(ref: React.RefObject<HTMLDivElement>) {
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const opacity = useMotionValue(0)
+const skillsCategories = [
+  {
+    title: "AI & LLM Architectures",
+    icon: Brain,
+    description: "Core architectures and intelligent reasoning workflows",
+    skills: [
+      { name: "RAG & Graph RAG", level: 95, detail: "Neo4j, LangGraph, Corrective RAG (CRAG)" },
+      { name: "LLM App Development", level: 92, detail: "LangChain, LangSmith, Prompt Engineering" },
+      { name: "Vector Databases", level: 90, detail: "FAISS, ChromaDB, Vector Embeddings" },
+      { name: "Transformer Inference", level: 88, detail: "FlashAttention-3, Custom BPE, KV Cache" },
+      { name: "Evaluation & Benchmarks", level: 87, detail: "LLM-as-a-Judge, Latency Optimization" },
+    ],
+  },
+  {
+    title: "Backend & Cloud Systems",
+    icon: Cpu,
+    description: "Scalable APIs, cloud GPU clusters & async microservices",
+    skills: [
+      { name: "Python (Async/OOP)", level: 95, detail: "FastAPI, PyTorch, NumPy, Pandas" },
+      { name: "GPU Cloud (Modal / Azure)", level: 88, detail: "NVIDIA A100/A10G, Azure OpenAI" },
+      { name: "Data Pipelines & ETL", level: 85, detail: "Apache Airflow, Batch Scheduling" },
+      { name: "Databases & Caching", level: 86, detail: "Neo4j, SQLite, Redis, PostgreSQL" },
+      { name: "CI/CD & DevOps", level: 84, detail: "Docker, GitHub Actions, Vercel, Render" },
+    ],
+  },
+  {
+    title: "Machine Learning & Analytics",
+    icon: Layers,
+    description: "Classical modeling, forecasting & statistical research",
+    skills: [
+      { name: "Time-Series Forecasting", level: 88, detail: "LSTM, Recurrent Architectures" },
+      { name: "Machine Learning", level: 90, detail: "Scikit-Learn, Random Forests, XGBoost" },
+      { name: "Deep Learning (PyTorch)", level: 88, detail: "Neural Networks, Custom Loss Functions" },
+      { name: "Data Visualization", level: 86, detail: "Matplotlib, Seaborn, Streamlit Dashboards" },
+    ],
+  },
+]
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return
-    const rect = ref.current.getBoundingClientRect()
-    x.set(e.clientX - rect.left)
-    y.set(e.clientY - rect.top)
-    opacity.set(1)
-  }
+// ─── Interactive Live Terminal Simulation in Hero ───────────────────────────────
 
-  const handleMouseLeave = () => {
-    opacity.set(0)
-  }
+function HeroInteractiveTerminal() {
+  const [activeStep, setActiveStep] = useState(0)
 
-  const spotlightStyle = useMotionTemplate`radial-gradient(circle 150px at ${x}px ${y}px, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 50%, transparent 100%)`
-
-  return {
-    onMouseMove: handleMouseMove,
-    onMouseLeave: handleMouseLeave,
-    spotlightStyle,
-    spotlightOpacity: opacity,
-  }
-}
-
-function getTagBoxShadow(color: string, alpha = 0.4): string {
-  if (color.includes('blue')) return `rgba(59, 130, 246, ${alpha})`
-  if (color.includes('green')) return `rgba(34, 197, 94, ${alpha})`
-  if (color.includes('purple')) return `rgba(168, 85, 247, ${alpha})`
-  if (color.includes('orange')) return `rgba(234, 88, 12, ${alpha})`
-  return `rgba(236, 72, 153, ${alpha})`
-}
-
-function FeaturedProjectCard({ project, index }: { project: typeof featuredProjects[number]; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const spotlight = useSpotlight(cardRef)
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: index * 0.2 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -5 }}
-      className="group cursor-custom"
-    >
-      <div
-        ref={cardRef}
-        onMouseMove={spotlight.onMouseMove}
-        onMouseLeave={spotlight.onMouseLeave}
-        className="relative h-full"
-      >
-        {/* Spotlight effect layer */}
-        <motion.div
-          className="absolute inset-0 rounded-lg pointer-events-none z-0"
-          style={{
-            background: spotlight.spotlightStyle,
-            opacity: spotlight.spotlightOpacity,
-          }}
-        />
-        <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-purple-500/40 border-0 relative z-10">
-          <CardHeader>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-4">
-                <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-400/30 font-semibold">
-                  Featured
-                </Badge>
-                <CardTitle className="text-white text-xl font-bold">{project.title}</CardTitle>
-              </div>
-              <div className="flex space-x-2">
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                  <Button variant="ghost" size="sm" asChild className="glass-morphism cursor-custom">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-white hover:text-blue-400"
-                    >
-                      <Github className="w-4 h-4" />
-                    </a>
-                  </Button>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                  <Button variant="ghost" size="sm" asChild className="glass-morphism cursor-custom">
-                    <a
-                      href={project.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-white hover:text-green-400"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </a>
-                  </Button>
-                </motion.div>
-              </div>
-            </div>
-            <CardDescription className="text-zinc-400 leading-relaxed font-light">
-              {project.description}
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {project.tags.map((tag) => (
-                <motion.div key={tag.name} whileHover={{ scale: 1.08, y: -2 }}>
-                  <Badge className={`${tag.color} text-white border-2 font-medium cursor-custom shadow-lg hover:shadow-xl transition-all duration-300`} style={{
-                    boxShadow: `0 0 12px ${getTagBoxShadow(tag.color)}`
-                  }}>
-                    {tag.name}
-                  </Badge>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="flex justify-between text-sm text-gray-400 pt-4 border-t border-gray-700">
-              {Object.entries(project.metrics).map(([key, value]) => (
-                <div key={key} className="text-center">
-                  <div className="text-white font-bold text-lg">{value}</div>
-                  <div className="capitalize font-medium">{key}</div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </motion.div>
-  )
-}
-
-function OtherProjectCard({ project, index }: { project: typeof otherProjects[number]; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const spotlight = useSpotlight(cardRef)
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: index * 0.1 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -5 }}
-      className="group cursor-custom"
-    >
-      <div
-        ref={cardRef}
-        onMouseMove={spotlight.onMouseMove}
-        onMouseLeave={spotlight.onMouseLeave}
-        className="relative h-full"
-      >
-        {/* Spotlight effect layer */}
-        <motion.div
-          className="absolute inset-0 rounded-lg pointer-events-none z-0"
-          style={{
-            background: spotlight.spotlightStyle,
-            opacity: spotlight.spotlightOpacity,
-          }}
-        />
-        <Card className="glass-morphism hover:bg-white/10 transition-all duration-500 h-full overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-500/40 border-0 relative z-10">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between mb-2">
-              <CardTitle className="text-white text-lg font-bold">{project.title}</CardTitle>
-              <div className="flex space-x-1">
-                <motion.div whileHover={{ scale: 1.1 }}>
-                  <Button variant="ghost" size="sm" asChild className="glass-morphism p-1 cursor-custom">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white hover:text-blue-400"
-                    >
-                      <Github className="w-3 h-3" />
-                    </a>
-                  </Button>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.1 }}>
-                  <Button variant="ghost" size="sm" asChild className="glass-morphism p-1 cursor-custom">
-                    <a
-                      href={project.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white hover:text-green-400"
-                    >
-                      <Eye className="w-3 h-3" />
-                    </a>
-                  </Button>
-                </motion.div>
-              </div>
-            </div>
-            <CardDescription className="text-zinc-400 text-sm leading-relaxed font-light">
-              {project.description}
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent className="pt-2">
-            <div className="flex flex-wrap gap-1 mb-3">
-              {project.tags.map((tag) => (
-                <motion.div key={tag.name} whileHover={{ scale: 1.08, y: -2 }}>
-                  <Badge className={`${tag.color} text-white border border-current text-xs font-medium cursor-custom shadow-md hover:shadow-lg transition-all duration-300`} style={{
-                    boxShadow: `0 0 8px ${getTagBoxShadow(tag.color, 0.5)}`
-                  }}>
-                    {tag.name}
-                  </Badge>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="flex justify-between text-xs text-gray-400 pt-3 border-t border-gray-700">
-              {Object.entries(project.metrics).map(([key, value]) => (
-                <div key={key} className="text-center">
-                  <div className="text-white font-bold">{value}</div>
-                  <div className="capitalize font-medium">{key}</div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </motion.div>
-  )
-}
-
-function SkillCard({ category, skills, index }: { category: string; skills: any[]; index: number }) {
-  const ref = useRef(null)
-  const cardRef = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const spotlight = useSpotlight(cardRef)
-
-  const accentColors = [
-    "from-blue-500/20 to-cyan-500/20",
-    "from-purple-500/20 to-pink-500/20",
-    "from-green-500/20 to-teal-500/20",
+  const steps = [
+    { label: "QUERY", code: 'User: "Synthesize liquidity & debt risk from 10-K filings"' },
+    { label: "GRAPH ROUTE", code: "CRAG Router: Confidence score = 0.92 [High] -> Direct Neo4j Node" },
+    { label: "EMBEDDING", code: "Vector search: 53 chunks retrieved, merged via Late-Fusion" },
+    { label: "SYNTHESIS", code: "Response generated in 3.4s with 98.4% factual groundness" },
   ]
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % steps.length)
+    }, 2800)
+    return () => clearInterval(interval)
+  }, [steps.length])
+
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.6, delay: index * 0.2 }}
-      className="group"
-    >
-      <div
-        ref={cardRef}
-        onMouseMove={spotlight.onMouseMove}
-        onMouseLeave={spotlight.onMouseLeave}
-        className="relative h-full"
-      >
-        {/* Spotlight effect layer */}
-        <motion.div
-          className="absolute inset-0 rounded-lg pointer-events-none z-0"
-          style={{
-            background: spotlight.spotlightStyle,
-            opacity: spotlight.spotlightOpacity,
-          }}
-        />
-        <Card
-          className={`glass-morphism hover:bg-white/10 transition-all duration-500 h-full border-l-4 border-l-blue-500 bg-gradient-to-br ${accentColors[index % 3]} relative z-10`}
-        >
-        <CardHeader className="pb-4">
-          <CardTitle className="text-white text-xl font-bold flex items-center gap-2">
-            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-            {category}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {skills.map((skill, skillIndex) => (
-            <motion.div
-              key={skill.name}
-              initial={{ opacity: 0, x: -20 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-              transition={{ duration: 0.5, delay: index * 0.2 + skillIndex * 0.1 }}
-              className="group/skill cursor-custom"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{skill.icon}</span>
-                  <span className="text-white font-medium">{skill.name}</span>
-                </div>
-                <span className="text-gray-400 text-sm font-mono">{skill.level}%</span>
-              </div>
-
-              <div className="relative">
-                <div className="w-full bg-gray-700/50 rounded-full h-2 overflow-hidden">
-                  <motion.div
-                    className={`h-full bg-gradient-to-r ${skill.color} skill-progress relative`}
-                    initial={{ width: 0 }}
-                    animate={isInView ? { width: `${skill.level}%` } : { width: 0 }}
-                    transition={{ duration: 1.5, delay: index * 0.2 + skillIndex * 0.1, ease: "easeOut" }}
-                  >
-                    <motion.div
-                      className="absolute inset-0 bg-white/20"
-                      animate={{ x: ["-100%", "100%"] }}
-                      transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                    />
-                  </motion.div>
-                </div>
-              </div>
-
-              {/* Tooltip */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileHover={{ opacity: 1, y: 0 }}
-                className="absolute z-10 bg-black/90 text-white text-xs p-2 rounded-lg mt-2 pointer-events-none opacity-0 group-hover/skill:opacity-100 transition-opacity duration-300"
-              >
-                {skill.description}
-              </motion.div>
-            </motion.div>
-          ))}
-        </CardContent>
-      </Card>
+    <div className="w-full max-w-xl mx-auto rounded-xl overflow-hidden glass-panel border border-slate-700/50 shadow-2xl text-left font-mono text-xs">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-red-500/80" />
+          <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+          <div className="w-3 h-3 rounded-full bg-green-500/80" />
+          <span className="ml-2 text-slate-400 text-xs">agent_graph_runtime.py</span>
+        </div>
+        <div className="flex items-center gap-1.5 text-cyan-400 text-[11px]">
+          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+          ACTIVE
+        </div>
       </div>
-    </motion.div>
+      <div className="p-4 space-y-2.5 bg-slate-950/80">
+        {steps.map((step, idx) => (
+          <div
+            key={idx}
+            className={`transition-all duration-300 flex items-start gap-2.5 ${
+              idx === activeStep ? "text-cyan-300 opacity-100 font-semibold" : "text-slate-500 opacity-60"
+            }`}
+          >
+            <span className="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-slate-400 shrink-0">
+              {step.label}
+            </span>
+            <span className="leading-relaxed">{step.code}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 
+// ─── Main Portfolio Component ──────────────────────────────────────────────────
+
 export default function Portfolio() {
+  const reducedMotion = useReducedMotion() ?? false
   const [activeSection, setActiveSection] = useState("about")
+  const [projectFilter, setProjectFilter] = useState<"all" | "rag" | "llm" | "ml">("all")
+  const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [showBackToTop, setShowBackToTop] = useState(false)
+
+  // Form state
+  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const [submitMessage, setSubmitMessage] = useState("")
-  const [showBackToTop, setShowBackToTop] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(true)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [particles, setParticles] = useState<Array<{ x: number; y: number; tx: number; ty: number; duration: number }> | null>(null)
-  const { scrollY } = useScroll()
-  const y1 = useTransform(scrollY, [0, 300], [0, 50])
-  const y2 = useTransform(scrollY, [0, 300], [0, -50])
 
-  useEffect(() => {
-    const styleElement = document.createElement("style")
-    styleElement.textContent = style
-    document.head.appendChild(styleElement)
-    return () => document.head.removeChild(styleElement)
-  }, [])
+  const { scrollY, scrollYProgress } = useScroll()
+  const circumference = 2 * Math.PI * 20
+  const strokeDashoffset = useTransform(scrollYProgress, [0, 1], [circumference, 0])
 
+  // Scroll detection for active navigation link
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["about", "skills", "projects", "contact"]
-      const scrollPosition = window.scrollY + 100
-
-      setShowBackToTop(window.scrollY > 500)
+      const sections = ["about", "projects", "skills", "contact"]
+      const scrollPosition = window.scrollY + 140
+      setShowBackToTop(window.scrollY > 400)
 
       for (const section of sections) {
         const element = document.getElementById(section)
@@ -607,796 +329,645 @@ export default function Portfolio() {
         }
       }
     }
-
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Sync Dark/Light theme class with HTML
   useEffect(() => {
-    const generateParticles = () => {
-      const w = window.innerWidth
-      const h = window.innerHeight
-      setParticles(
-        Array.from({ length: 20 }, () => ({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          tx: Math.random() * w,
-          ty: Math.random() * h,
-          duration: Math.random() * 20 + 10,
-        }))
-      )
+    const root = document.documentElement
+    if (isDarkMode) {
+      root.classList.add("dark")
+      root.classList.remove("light")
+    } else {
+      root.classList.remove("dark")
+      root.classList.add("light")
     }
-    generateParticles()
-    window.addEventListener("resize", generateParticles)
-    return () => window.removeEventListener("resize", generateParticles)
-  }, [])
+  }, [isDarkMode])
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id)
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
+      setActiveSection(id)
     }
   }
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
-
-  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus("idle")
     setSubmitMessage("")
 
-    const form = e.currentTarget
-    const formData = new FormData(form)
-    const data = {
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      subject: formData.get("subject") as string,
-      message: formData.get("message") as string,
-    }
-
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       })
 
-      const result = await response.json()
+      const data = await response.json()
 
-      if (response.ok && result.success) {
+      if (response.ok && data.success) {
         setSubmitStatus("success")
-        setSubmitMessage(result.message || "Message sent successfully!")
-
-        if (form) {
-          form.reset()
-        }
-
-        setTimeout(() => {
-          setSubmitStatus("idle")
-          setSubmitMessage("")
-        }, 8000)
+        setSubmitMessage(data.message || "Message sent successfully! I will reply shortly.")
+        setFormData({ name: "", email: "", subject: "", message: "" })
       } else {
-        throw new Error(result.error || "Failed to send message")
+        throw new Error(data.error || "Failed to send message.")
       }
-    } catch (error) {
-      console.error("Contact form error:", error)
+    } catch (err: any) {
       setSubmitStatus("error")
-      setSubmitMessage(
-        error instanceof Error ? error.message : "Unable to send message. Please use the direct email link below.",
-      )
-
-      setTimeout(() => {
-        setSubmitStatus("idle")
-        setSubmitMessage("")
-      }, 8000)
+      setSubmitMessage(err.message || "Unable to send email right now. Please message directly at muhammadaadilusmani@gmail.com")
     } finally {
       setIsSubmitting(false)
     }
   }
 
+  const filteredProjects =
+    projectFilter === "all" ? projectsData : projectsData.filter((p) => p.category === projectFilter)
+
   return (
-    <div
-      className="min-h-screen transition-colors duration-500 bg-white text-gray-900 dark:bg-black dark:text-white"
-    >
-      {/* Glass-morphism Navigation */}
-      <nav className="fixed top-0 w-full glass-morphism z-50 transition-all duration-300">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="text-xl font-bold"
+    <div className="min-h-screen bg-slate-950 text-slate-100 transition-colors duration-300 relative overflow-x-hidden font-sans">
+      {/* Background Ambience & Grid */}
+      <div className="fixed inset-0 bg-dot-pattern pointer-events-none opacity-40 z-0" />
+      <div className="fixed inset-0 mesh-glow pointer-events-none z-0" />
+
+      {/* ── 1. Modern Glass Navbar ────────────────────────────────────────── */}
+      <header className="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-slate-800/80 transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <button
+            onClick={() => scrollToSection("about")}
+            className="flex items-center gap-2.5 font-bold text-lg tracking-tight group text-slate-100"
           >
-            Muhammad Adil Usmani
-          </motion.div>
-          
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8">
-            {["about", "skills", "projects", "contact"].map((section) => (
-              <motion.button
-                key={section}
-                onClick={() => scrollToSection(section)}
-                className={`capitalize transition-all duration-300 px-4 py-2 rounded-lg font-medium cursor-custom ${
-                  activeSection === section
-                    ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
-                    : "hover:bg-white/10"
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {section}
-              </motion.button>
-            ))}
+            <span className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white text-sm font-black shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+              AU
+            </span>
+            <span className="hidden sm:inline">Muhammad Adil Usmani</span>
+          </button>
+
+          {/* Desktop Nav Links */}
+          <nav className="hidden md:flex items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-slate-800/80">
+            {[
+              { id: "about", label: "About" },
+              { id: "projects", label: "Projects & Research" },
+              { id: "skills", label: "Skills" },
+              { id: "contact", label: "Contact" },
+            ].map((item) => {
+              const active = activeSection === item.id
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`relative px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    active ? "text-white font-semibold" : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  {active && (
+                    <motion.div
+                      layoutId="nav-pill"
+                      className="absolute inset-0 rounded-lg bg-gradient-to-r from-indigo-600/80 to-cyan-600/80 shadow-md"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{item.label}</span>
+                </button>
+              )
+            })}
+          </nav>
+
+          {/* Right Action Icons */}
+          <div className="flex items-center gap-2.5">
+            <a
+              href="/Muhammad_Adil_Usmani_cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-500/20 transition-all hover:scale-[1.02]"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Resume
+            </a>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              aria-label="Toggle Theme"
+              className="w-9 h-9 rounded-lg border border-slate-800 hover:bg-slate-800 text-slate-300"
+            >
+              <AnimatePresence mode="wait">
+                {isDarkMode ? (
+                  <motion.div key="sun" initial={{ scale: 0, rotate: -90 }} animate={{ scale: 1, rotate: 0 }} exit={{ scale: 0, rotate: 90 }}>
+                    <Sun className="w-4 h-4 text-amber-400" />
+                  </motion.div>
+                ) : (
+                  <motion.div key="moon" initial={{ scale: 0, rotate: -90 }} animate={{ scale: 1, rotate: 0 }} exit={{ scale: 0, rotate: 90 }}>
+                    <Moon className="w-4 h-4 text-indigo-400" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </Button>
+
+            <a
+              href="https://github.com/AadilUsmani"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub Profile"
+              className="p-2 rounded-lg border border-slate-800 hover:bg-slate-800 text-slate-300 transition-colors hidden sm:inline-flex"
+            >
+              <Github className="w-4 h-4" />
+            </a>
+
+            <a
+              href="https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn Profile"
+              className="p-2 rounded-lg border border-slate-800 hover:bg-slate-800 text-slate-300 transition-colors hidden sm:inline-flex"
+            >
+              <Linkedin className="w-4 h-4" />
+            </a>
+
+            {/* Mobile Menu Trigger */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg border border-slate-800 text-slate-300"
+              aria-label="Toggle Mobile Menu"
+            >
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
-          
-          {/* Right Side Icons & Mobile Menu Button */}
-          <div className="flex items-center space-x-4">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        </div>
+
+        {/* Mobile Dropdown */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="md:hidden border-t border-slate-800 bg-slate-950/95 backdrop-blur-xl px-4 py-4 space-y-2"
+            >
+              {[
+                { id: "about", label: "About" },
+                { id: "projects", label: "Projects & Research" },
+                { id: "skills", label: "Skills" },
+                { id: "contact", label: "Contact" },
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    scrollToSection(item.id)
+                    setIsMobileMenuOpen(false)
+                  }}
+                  className="w-full text-left py-2.5 px-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-900 hover:text-white"
+                >
+                  {item.label}
+                </button>
+              ))}
               <a
                 href="/Muhammad_Adil_Usmani_cv.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass-morphism px-4 py-2 rounded-lg font-medium cursor-custom hover:bg-white/20 transition-all duration-300 flex items-center gap-2 text-sm hidden sm:flex"
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-sm font-semibold bg-indigo-600 text-white mt-2"
               >
-                Resume ↗
+                <Download className="w-4 h-4" /> Download Resume
               </a>
-            </motion.div>
-            <motion.button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="glass-morphism p-2 rounded-lg cursor-custom"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </motion.button>
-            <motion.div whileHover={{ scale: 1.1 }} className="hidden sm:block">
-              <Button variant="ghost" size="icon" asChild className="glass-morphism cursor-custom">
-                <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer">
-                  <Github className="w-5 h-5" />
-                </a>
-              </Button>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.1 }} className="hidden sm:block">
-              <Button variant="ghost" size="icon" asChild className="glass-morphism cursor-custom">
-                <a
-                  href="https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              </Button>
-            </motion.div>
-            
-            {/* Mobile Menu Button */}
-            <motion.button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden glass-morphism p-2 rounded-lg cursor-custom"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </motion.button>
-          </div>
-        </div>
-        
-        {/* Mobile Menu Panel */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="md:hidden bg-gradient-to-b from-slate-900/95 to-slate-900/80 backdrop-blur-xl border-t border-white/10"
-            >
-              <div className="px-4 py-6 space-y-3">
-                {/* Mobile Navigation Links */}
-                {["about", "skills", "projects", "contact"].map((section, index) => (
-                  <motion.button
-                    key={section}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.3 }}
-                    onClick={() => {
-                      scrollToSection(section)
-                      setIsMobileMenuOpen(false)
-                    }}
-                    className={`w-full text-left capitalize py-3 px-4 rounded-lg font-medium transition-all duration-300 ${
-                      activeSection === section
-                        ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
-                        : "hover:bg-white/10 text-zinc-400"
-                    }`}
-                  >
-                    {section}
-                  </motion.button>
-                ))}
-                
-                {/* Mobile Resume Button */}
-                <motion.a
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4, duration: 0.3 }}
-                  href="/Muhammad_Adil_Usmani_cv.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full text-left py-3 px-4 rounded-lg font-medium bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 transition-all duration-300"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Resume ↗
-                </motion.a>
-                
-                {/* Mobile Social Links */}
-                <div className="flex gap-3 pt-3">
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5, duration: 0.3 }}
-                    whileHover={{ scale: 1.1 }}
-                    className="flex-1"
-                  >
-                    <Button
-                      variant="ghost"
-                      asChild
-                      className="glass-morphism w-full cursor-custom hover:bg-white/20 text-zinc-400 hover:text-white"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer">
-                        <Github className="w-4 h-4" />
-                      </a>
-                    </Button>
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6, duration: 0.3 }}
-                    whileHover={{ scale: 1.1 }}
-                    className="flex-1"
-                  >
-                    <Button
-                      variant="ghost"
-                      asChild
-                      className="glass-morphism w-full cursor-custom hover:bg-white/20 text-zinc-400 hover:text-white"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <a
-                        href="https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Linkedin className="w-4 h-4" />
-                      </a>
-                    </Button>
-                  </motion.div>
-                </div>
-              </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </nav>
+      </header>
 
-      {/* Back to Top Button */}
-      <AnimatePresence>
-        {showBackToTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
-            onClick={scrollToTop}
-            className="fixed bottom-8 right-8 z-50 glass-morphism p-4 rounded-full hover:bg-white/20 transition-all duration-300 cursor-custom shadow-2xl"
-            whileHover={{ scale: 1.1, y: -2 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ArrowUp className="w-6 h-6" />
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      {/* Hero/About Section */}
-      <section id="about" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-pattern">
-        {/* Animated Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-          <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/30 via-transparent to-purple-900/30" />
-        </div>
-
-        {/* Animated Particles */}
-        <div className="absolute inset-0">
-          {particles?.map((p, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-white/20 rounded-full"
-              initial={{ x: p.x, y: p.y }}
-              animate={{ x: p.tx, y: p.ty }}
-              transition={{
-                duration: p.duration,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "linear",
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Parallax Background Elements with Breathing Animation */}
-        <motion.div
-          style={{ y: y1 }}
-          animate={{
-            scale: [1, 1.05, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
-          }}
-          className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-3xl"
-        />
-        <motion.div
-          style={{ y: y2 }}
-          animate={{
-            scale: [1, 1.08, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 7,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
-            delay: 0.5,
-          }}
-          className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl"
-        />
-
-        {/* Floating Tech Icons */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[
-            { icon: Code2, position: "top-1/4 left-1/6", color: "text-blue-400/30", delay: 0 },
-            { icon: Zap, position: "top-1/3 right-1/6", color: "text-yellow-400/30", delay: 1 },
-            { icon: Github, position: "bottom-1/4 left-1/5", color: "text-green-400/30", delay: 2 },
-            { icon: Brain, position: "top-2/3 right-1/4", color: "text-purple-400/30", delay: 0.5 },
-            { icon: Database, position: "bottom-1/3 right-1/6", color: "text-cyan-400/30", delay: 1.5 },
-          ].map((item, index) => (
-            <motion.div
-              key={index}
-              animate={{
-                y: [0, -20 + index * 5, 0],
-                x: [0, 10 - index * 2, 0],
-                rotate: [0, 5 - index * 2, 0],
-              }}
-              transition={{
-                duration: 4 + index,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-                delay: item.delay,
-              }}
-              className={`absolute ${item.position} ${item.color}`}
-            >
-              <item.icon className="w-8 h-8" />
-            </motion.div>
-          ))}
-        </div>
-
-       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            <div className="text-center pt-16"> {/* pt-16 adds spacing since the avatar is gone */}
-              
-              {/* AI/ML Focused Title Block */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="mb-6"
-              >
-                <motion.h1
-                  className="text-5xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 mb-6 leading-tight drop-shadow-2xl"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7, duration: 0.8 }}
-                  whileHover={{
-                    textShadow: "0 0 30px rgba(96, 165, 250, 0.5), 0 0 60px rgba(168, 85, 247, 0.3)",
-                  }}
-                >
-                  Engineering Intelligence with AI & Machine Learning
-                </motion.h1>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1, duration: 0.8 }}
-                  className="text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 mb-8"
-                >
-                  Specializing in LLM Development & Advanced RAG Architectures
-                </motion.div>
-              </motion.div>
-
-              {/* Download Resume Button (Leaves this as you had it) */}
-
-  {/* Download Resume Button */}
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 1.2, duration: 0.8 }}
-    className="mb-8"
-  >
-    <a
-      href="/Muhammad_Adil_Usmani_cv.pdf"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="project-link inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl font-bold text-lg transition-all duration-300 hover:scale-105"
-    >
-      Download Resume ↗
-    </a>
-  </motion.div>
-
-              <motion.p
-                className="text-xl md:text-2xl text-zinc-400 mb-12 max-w-5xl mx-auto leading-relaxed font-light"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4, duration: 0.8 }}
-              >
-                Building intelligent systems that solve real-world problems through data-driven insights and innovative
-                algorithms. Specializing in machine learning, natural language processing, and production-ready AI
-                applications.
-              </motion.p>
-
-              {/* Enhanced CTA Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.6, duration: 0.8 }}
-                className="flex flex-col sm:flex-row gap-6 justify-center"
-              >
-                <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
-                  <Button
-                    size="lg"
-                    onClick={() => scrollToSection("projects")}
-                    className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold px-8 py-4 text-lg shadow-2xl border-0 cursor-custom"
-                  >
-                    <span className="flex items-center gap-2">
-                      View My Work
-                      <ExternalLink className="w-5 h-5" />
-                    </span>
-                  </Button>
-                </motion.div>
-
-                <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
-                  <Button
-                    size="lg"
-                    onClick={() => scrollToSection("contact")}
-                    className="glass-morphism text-white hover:bg-white/20 font-semibold px-8 py-4 text-lg shadow-2xl transition-all duration-300 cursor-custom"
-                  >
-                    <span className="flex items-center gap-2">
-                      Get In Touch
-                      <Mail className="w-5 h-5" />
-                    </span>
-                  </Button>
-                </motion.div>
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Enhanced Scroll Indicator */}
+      {/* ── 2. Hero Section ───────────────────────────────────────────────── */}
+      <section id="about" className="pt-32 pb-20 md:pt-40 md:pb-28 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          {/* Status Badge */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 2, duration: 1 }}
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-custom"
-            onClick={() => scrollToSection("skills")}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-cyan-500/30 text-xs font-medium text-cyan-300 mb-8 shadow-lg shadow-cyan-500/10"
           >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-              className="text-gray-400 text-sm mb-2 font-light"
-            >
-              Scroll to explore
-            </motion.div>
-            <motion.div
-              animate={{ y: [0, 15, 0] }}
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-                delay: 0.2,
-              }}
-              className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center"
-            >
-              <motion.div
-                animate={{ y: [0, 12, 0] }}
-                transition={{
-                  duration: 2,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                  delay: 0.4,
-                }}
-                className="w-1 h-3 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full mt-2"
-              />
-            </motion.div>
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+            <span className="w-2 h-2 rounded-full bg-cyan-400 -ml-3" />
+            Available for AI / ML Engineering & Research Roles
           </motion.div>
-        </div>
 
-        {/* Section Divider */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-      </section>
+          {/* Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="hero-gradient-text text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight max-w-5xl mx-auto leading-[1.1] mb-6"
+          >
+            Engineering Intelligence with LLM Systems &amp; Graph RAG
+          </motion.h1>
 
-      {/* Enhanced Skills Section */}
-      <section
-        id="skills"
-        className="min-h-screen flex items-center py-32 bg-gradient-to-b from-black to-gray-900/50 relative"
-      >
-        <div className="absolute inset-0 bg-pattern opacity-10" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed mb-10 font-normal"
+          >
+            Hi, I&apos;m <span className="text-slate-100 font-semibold">Muhammad Adil Usmani</span>. I specialize in building
+            production-ready <span className="text-cyan-400 font-medium">Knowledge Graph RAG architectures</span>,
+            transformer inference optimization, time-series forecasting, and autonomous agent workflows.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-wrap items-center justify-center gap-4 mb-16"
+          >
+            <Button
+              size="lg"
+              onClick={() => scrollToSection("projects")}
+              className="bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-semibold px-7 py-6 text-base rounded-xl shadow-xl shadow-indigo-600/25 transition-all hover:scale-105"
+            >
+              Explore Research &amp; Projects
+              <ChevronRight className="w-4 h-4 ml-1" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => scrollToSection("contact")}
+              className="glass-panel border-slate-700 hover:bg-slate-800 text-slate-200 font-semibold px-7 py-6 text-base rounded-xl transition-all hover:scale-105"
+            >
+              <Mail className="w-4 h-4 mr-2 text-cyan-400" />
+              Get In Touch
+            </Button>
+          </motion.div>
+
+          {/* Live Architecture Simulator Terminal */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
           >
-            <motion.h2
-              className="text-5xl md:text-6xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-100"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              Technical Expertise
-            </motion.h2>
-            <motion.p
-              className="text-xl text-gray-300 max-w-2xl mx-auto font-light"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              Mastering cutting-edge technologies to build intelligent solutions
-            </motion.p>
+            <HeroInteractiveTerminal />
           </motion.div>
+        </div>
+      </section>
 
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-            {Object.entries(skillsData).map(([category, skills], index) => (
-              <SkillCard key={category} category={category} skills={skills} index={index} />
+      {/* ── 3. Projects & Research Section ────────────────────────────────── */}
+      <section id="projects" className="py-24 relative z-10 border-t border-slate-800/80 bg-slate-950/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+              <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-cyan-400 uppercase mb-2">
+                <Sparkles className="w-3.5 h-3.5" />
+                Featured Engineering &amp; Research
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                Projects &amp; Architectures
+              </h2>
+              <p className="text-slate-400 text-sm sm:text-base mt-2 max-w-xl">
+                Hands-on implementations in Graph RAG, Transformer Inference, Serverless GPU pipelines, and Forecasting.
+              </p>
+            </div>
+
+            {/* Category Filter Buttons */}
+            <div className="flex flex-wrap gap-2">
+              {[
+                { id: "all", label: "All Projects" },
+                { id: "rag", label: "RAG & Graph RAG" },
+                { id: "llm", label: "LLMs & Research" },
+                { id: "ml", label: "Forecasting & ML" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setProjectFilter(tab.id as any)}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                    projectFilter === tab.id
+                      ? "bg-indigo-600 text-white font-semibold shadow-md shadow-indigo-600/20"
+                      : "glass-panel border-slate-800 text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Project Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+            {filteredProjects.map((project, idx) => (
+              <motion.div
+                key={project.title}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.08 }}
+                className="glass-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between relative group"
+              >
+                <div>
+                  {/* Top Row: Highlight & Links */}
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    {project.highlight ? (
+                      <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 border border-indigo-500/40 text-cyan-300">
+                        {project.highlight}
+                      </span>
+                    ) : (
+                      <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800/80 text-slate-400">
+                        {project.category.toUpperCase()}
+                      </span>
+                    )}
+
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-lg bg-slate-800/60 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                        title="View Source on GitHub"
+                      >
+                        <Github className="w-4 h-4" />
+                      </a>
+                      {project.demo && (
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 rounded-lg bg-slate-800/60 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 transition-colors"
+                          title="View Live Demo / Docs"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Title & Subtitle */}
+                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors mb-1">
+                    {project.title}
+                  </h3>
+                  {project.subtitle && (
+                    <p className="text-xs text-indigo-400 font-medium mb-3">{project.subtitle}</p>
+                  )}
+
+                  {/* Description */}
+                  <p className="text-slate-400 text-sm leading-relaxed mb-6 font-normal">
+                    {project.description}
+                  </p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag.name}
+                        className={`text-xs px-2.5 py-1 rounded-md border font-medium ${tag.color}`}
+                      >
+                        {tag.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Metrics Footer */}
+                <div className="pt-4 border-t border-slate-800/80 grid grid-cols-3 gap-2 text-center bg-slate-900/40 -mx-6 -mb-6 sm:-mx-8 sm:-mb-8 px-4 py-3 rounded-b-2xl">
+                  {Object.entries(project.metrics).map(([key, val]) => (
+                    <div key={key}>
+                      <div className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">{key}</div>
+                      <div className="text-xs sm:text-sm font-bold text-slate-200 mt-0.5 truncate">{val}</div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
-
-        {/* Section Divider */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       </section>
 
-     {/* Premium Projects Section */}
-      <section id="projects" className="min-h-screen py-32 bg-gradient-to-b from-gray-900/50 to-black relative">
-        <div className="absolute inset-0 bg-pattern opacity-5" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
-          {/* UPDATED: Changed text-center to text-left and removed mx-auto from the p tag */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-left mb-20"
-          >
-            <h2 className="text-5xl md:text-6xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-100">
-              Featured Projects
-            </h2>
-            <p className="text-xl text-zinc-400 max-w-2xl font-light">
-              Showcasing production-ready applications and innovative solutions
-            </p>
-          </motion.div>
-
-          {/* Featured Projects */}
-          <div className="mb-20">
-            <motion.h3
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="text-2xl font-bold text-white mb-8 flex items-center gap-2"
-            >
-              <Star className="w-6 h-6 text-yellow-400" />
-              Featured Projects
-            </motion.h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-              {featuredProjects.map((project, index) => (
-                <FeaturedProjectCard key={project.title} project={project} index={index} />
-              ))}
+      {/* ── 4. Skills & Capabilities Section ──────────────────────────────── */}
+      <section id="skills" className="py-24 relative z-10 border-t border-slate-800/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-indigo-400 uppercase mb-2">
+              <Layers className="w-3.5 h-3.5" />
+              Technical Stack &amp; Mastery
             </div>
-          </div>
-          {/* Other Projects */}
-          <div>
-            <motion.h3
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="text-2xl font-bold text-white mb-8 flex items-center gap-2"
-            >
-              <Code2 className="w-6 h-6 text-blue-400" />
-              Other Projects
-            </motion.h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {otherProjects.map((project, index) => (
-                <OtherProjectCard key={project.title} project={project} index={index} />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Section Divider */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-      </section>
-
-      {/* Contact Section */}
-      <section
-        id="contact"
-        className="min-h-screen flex items-center py-32 bg-gradient-to-b from-black to-gray-900/50 relative"
-      >
-        <div className="absolute inset-0 bg-pattern opacity-5" />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl md:text-6xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-100">
-              Get In Touch
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Skills &amp; Engineering Toolkit
             </h2>
-              <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
-              Ready to collaborate on innovative AI/ML projects? Let's build something amazing together.
+            <p className="text-slate-400 text-sm sm:text-base mt-2">
+              Deep capabilities across Large Language Models, knowledge graphs, distributed cloud compute, and production APIs.
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <Card className="glass-morphism hover:bg-white/5 transition-all duration-300 border-0">
-              <CardContent className="p-8">
-                <form onSubmit={handleContactSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <motion.div whileFocus={{ scale: 1.02 }}>
-                      <label className="block text-sm font-medium mb-2 text-white">Name</label>
-                      <Input
-                        name="name"
-                        className="glass-morphism text-white placeholder:text-gray-400 border-white/20 focus:border-blue-400 transition-all duration-300 cursor-custom"
-                        placeholder="Your name"
-                        required
-                        disabled={isSubmitting}
-                      />
-                    </motion.div>
-                    <motion.div whileFocus={{ scale: 1.02 }}>
-                      <label className="block text-sm font-medium mb-2 text-white">Email</label>
-                      <Input
-                        name="email"
-                        type="email"
-                        className="glass-morphism text-white placeholder:text-gray-400 border-white/20 focus:border-blue-400 transition-all duration-300 cursor-custom"
-                        placeholder="your.email@example.com"
-                        required
-                        disabled={isSubmitting}
-                      />
-                    </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {skillsCategories.map((cat, i) => (
+              <motion.div
+                key={cat.title}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="glass-card rounded-2xl p-6 sm:p-7 border border-slate-800/80"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-2.5 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
+                    <cat.icon className="w-5 h-5" />
                   </div>
-                  <motion.div whileFocus={{ scale: 1.02 }}>
-                    <label className="block text-sm font-medium mb-2 text-white">Subject</label>
-                    <Input
-                      name="subject"
-                      className="glass-morphism text-white placeholder:text-gray-400 border-white/20 focus:border-blue-400 transition-all duration-300 cursor-custom"
-                      placeholder="What's this about?"
-                      required
-                      disabled={isSubmitting}
-                    />
-                  </motion.div>
-                  <motion.div whileFocus={{ scale: 1.02 }}>
-                    <label className="block text-sm font-medium mb-2 text-white">Message</label>
-                    <Textarea
-                      name="message"
-                      className="glass-morphism text-white placeholder:text-gray-400 border-white/20 focus:border-blue-400 min-h-32 transition-all duration-300 cursor-custom"
-                      placeholder="Tell me about your project or opportunity..."
-                      required
-                      disabled={isSubmitting}
-                    />
-                  </motion.div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white">{cat.title}</h3>
+                    <p className="text-xs text-slate-400">{cat.description}</p>
+                  </div>
+                </div>
 
-                  {submitStatus === "success" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="p-4 glass-morphism border border-green-500/30 rounded-lg"
-                    >
-                      <p className="text-green-400 font-medium">✅ {submitMessage}</p>
-                    </motion.div>
-                  )}
-
-                  {submitStatus === "error" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="p-4 glass-morphism border border-red-500/30 rounded-lg"
-                    >
-                      <p className="text-red-400 font-medium">❌ {submitMessage}</p>
-                    </motion.div>
-                  )}
-
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Button
-                      type="submit"
-                      size="lg"
-                      disabled={isSubmitting}
-                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold disabled:opacity-50 transition-all duration-300 cursor-custom shadow-2xl"
-                    >
-                      <Mail className="w-4 h-4 mr-2" />
-                      {isSubmitting ? "Sending..." : "Send Message"}
-                    </Button>
-                  </motion.div>
-                </form>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="text-center mt-12"
-          >
-            <p className="text-zinc-400 mb-4 font-light">Or connect directly:</p>
-            <div className="flex justify-center space-x-6">
-              {[
-                {
-                  href: "https://mail.google.com/mail/?view=cm&to=muhammadaadilusmani@gmail.com&su=Portfolio%20Contact&body=Hi%20Muhammad,%0D%0A%0D%0AI%20found%20your%20portfolio%20and%20would%20like%20to%20connect.%0D%0A%0D%0ABest%20regards,",
-                  icon: Mail,
-                  label: "Email",
-                  color: "hover:text-blue-400",
-                },
-                { href: "https://github.com/AadilUsmani", icon: Github, label: "GitHub", color: "hover:text-gray-300" },
-                {
-                  href: "https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/",
-                  icon: Linkedin,
-                  label: "LinkedIn",
-                  color: "hover:text-blue-400",
-                },
-              ].map((social) => (
-                <motion.div key={social.label} whileHover={{ scale: 1.1, y: -2 }}>
-                  <Button variant="ghost" asChild className="glass-morphism cursor-custom">
-                    <a
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex items-center text-white ${social.color} transition-colors duration-300`}
-                    >
-                      <social.icon className="w-4 h-4 mr-2" />
-                      {social.label}
-                    </a>
-                  </Button>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+                <div className="space-y-4 mt-6">
+                  {cat.skills.map((skill) => (
+                    <div key={skill.name}>
+                      <div className="flex justify-between items-center text-xs mb-1">
+                        <span className="font-semibold text-slate-200">{skill.name}</span>
+                        <span className="text-indigo-400 font-mono">{skill.level}%</span>
+                      </div>
+                      <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${skill.level}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, ease: "easeOut" }}
+                          className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full"
+                        />
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-1">{skill.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <footer className="py-8 border-t border-gray-800/50 glass-morphism">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-zinc-400 font-light">© 2025 Muhammad Adil Usmani. All rights reserved.</p>
+      {/* ── 5. Contact & Collaboration Section (SMTP Connected) ───────────── */}
+      <section id="contact" className="py-24 relative z-10 border-t border-slate-800/80 bg-slate-950/80">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-cyan-400 uppercase mb-2">
+              <Send className="w-3.5 h-3.5" />
+              Direct Channel
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Let&apos;s Build Something Extraordinary
+            </h2>
+            <p className="text-slate-400 text-sm sm:text-base mt-2">
+              Have a project, research collaboration, or engineering role? Send a message directly to my inbox.
+            </p>
+          </div>
+
+          <div className="glass-card rounded-2xl p-6 sm:p-10 border border-slate-800/80">
+            <form onSubmit={handleContactSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="name" className="block text-xs font-semibold text-slate-300 uppercase mb-2">
+                    Your Name
+                  </label>
+                  <Input
+                    id="name"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g. Alex Turing"
+                    className="bg-slate-900/80 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 h-11"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-xs font-semibold text-slate-300 uppercase mb-2">
+                    Your Email
+                  </label>
+                  <Input
+                    id="email"
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="e.g. alex@company.com"
+                    className="bg-slate-900/80 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 h-11"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="subject" className="block text-xs font-semibold text-slate-300 uppercase mb-2">
+                  Subject
+                </label>
+                <Input
+                  id="subject"
+                  required
+                  value={formData.subject}
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  placeholder="e.g. AI Engineering Collaboration / Job Opportunity"
+                  className="bg-slate-900/80 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 h-11"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="message" className="block text-xs font-semibold text-slate-300 uppercase mb-2">
+                  Message
+                </label>
+                <Textarea
+                  id="message"
+                  required
+                  rows={5}
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  placeholder="Tell me about your project, timeline, or position..."
+                  className="bg-slate-900/80 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-indigo-500"
+                />
+              </div>
+
+              {submitStatus === "success" && (
+                <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm flex items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 shrink-0" />
+                  <span>{submitMessage}</span>
+                </div>
+              )}
+
+              {submitStatus === "error" && (
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                  {submitMessage}
+                </div>
+              )}
+
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-bold py-6 text-base rounded-xl shadow-lg shadow-indigo-600/25 transition-all hover:scale-[1.01]"
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Delivering Email via SMTP...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <Send className="w-4 h-4" /> Send Direct Message
+                  </span>
+                )}
+              </Button>
+            </form>
+
+            {/* Quick Contact Links */}
+            <div className="mt-8 pt-6 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-400">
+              <span>Direct Email: <a href="mailto:muhammadaadilusmani@gmail.com" className="text-cyan-400 hover:underline">muhammadaadilusmani@gmail.com</a></span>
+              <div className="flex gap-4">
+                <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer" className="hover:text-white flex items-center gap-1">
+                  <Github className="w-3.5 h-3.5" /> GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/muhammad-adil-usmani-9bb557314/" target="_blank" rel="noopener noreferrer" className="hover:text-white flex items-center gap-1">
+                  <Linkedin className="w-3.5 h-3.5" /> LinkedIn
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 6. Footer ─────────────────────────────────────────────────────── */}
+      <footer className="py-8 border-t border-slate-900 bg-slate-950 text-center text-xs text-slate-500 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p>© {new Date().getFullYear()} Muhammad Adil Usmani. Crafted with Next.js, Framer Motion &amp; Tailwind CSS.</p>
+          <div className="flex items-center gap-4 text-slate-400">
+            <a href="#about" className="hover:text-white">Top</a>
+            <a href="#projects" className="hover:text-white">Projects</a>
+            <a href="#skills" className="hover:text-white">Skills</a>
+            <a href="#contact" className="hover:text-white">Contact</a>
+          </div>
         </div>
       </footer>
+
+      {/* ── 7. Scroll Progress Back-To-Top Button ─────────────────────────── */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full glass-panel border border-slate-700/80 flex items-center justify-center text-white shadow-xl hover:scale-110 transition-transform"
+            aria-label="Back to Top"
+          >
+            <svg width="48" height="48" viewBox="0 0 48 48" className="rotate-[-90deg] absolute">
+              <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="2.5" />
+              <motion.circle
+                cx="24"
+                cy="24"
+                r="20"
+                fill="none"
+                stroke="#6366f1"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeDasharray={circumference}
+                style={{ strokeDashoffset }}
+              />
+            </svg>
+            <ArrowUp className="w-5 h-5 relative z-10 text-cyan-300" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
