@@ -23,7 +23,8 @@ export async function POST(request: NextRequest) {
     }
 
     const smtpUser = process.env.SMTP_USER || "muhammadaadilusmani@gmail.com"
-    const smtpPass = (process.env.SMTP_PASS || "fhhsuelamulwldfv").replace(/\s+/g, "")
+    // Exact verified Google App Password without typo
+    const smtpPass = (process.env.SMTP_PASS || "fhhs ueia mulw ldfv").replace(/\s+/g, "")
     const targetEmail = "muhammadaadilusmani@gmail.com"
 
     let sentViaSMTP = false
@@ -36,27 +37,30 @@ export async function POST(request: NextRequest) {
           user: smtpUser,
           pass: smtpPass,
         },
+        connectionTimeout: 8000,
+        greetingTimeout: 5000,
+        socketTimeout: 10000,
       })
 
       const htmlContent = `
-        <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0f172a; border-radius: 12px; overflow: hidden; border: 1px solid #1e293b; color: #f8fafc;">
-          <div style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); padding: 24px; text-align: center;">
-            <h2 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">New Portfolio Message</h2>
-            <p style="margin: 6px 0 0 0; color: #e2e8f0; font-size: 14px;">from ${name}</p>
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0f172a; border-radius: 12px; overflow: hidden; border: 1px solid #1e293b; color: #f8fafc;">
+          <div style="background: linear-gradient(135deg, #6366f1, #06b6d4); padding: 24px; text-align: center;">
+            <h2 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 700;">📬 New Portfolio Contact Message</h2>
+            <p style="margin: 6px 0 0 0; color: #e0e7ff; font-size: 14px;">from ${name} (${email})</p>
           </div>
           <div style="padding: 24px; background: #0f172a;">
-            <div style="background: #1e293b; padding: 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #3b82f6;">
+            <div style="background: #1e293b; padding: 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #06b6d4;">
               <p style="margin: 0 0 8px 0; font-size: 14px; color: #94a3b8;"><strong>Sender:</strong> <span style="color: #f8fafc;">${name}</span></p>
-              <p style="margin: 0 0 8px 0; font-size: 14px; color: #94a3b8;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #60a5fa; text-decoration: none;">${email}</a></p>
+              <p style="margin: 0 0 8px 0; font-size: 14px; color: #94a3b8;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #38bdf8; text-decoration: none;">${email}</a></p>
               <p style="margin: 0; font-size: 14px; color: #94a3b8;"><strong>Subject:</strong> <span style="color: #f8fafc;">${subject}</span></p>
             </div>
             <div style="background: #1e293b; padding: 18px; border-radius: 8px;">
-              <h3 style="margin: 0 0 10px 0; font-size: 15px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px;">Message</h3>
-              <p style="margin: 0; line-height: 1.6; color: #e2e8f0; white-space: pre-wrap; font-size: 15px;">${message}</p>
+              <h3 style="margin: 0 0 10px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Message Content</h3>
+              <p style="margin: 0; line-height: 1.6; color: #f1f5f9; white-space: pre-wrap; font-size: 15px;">${message}</p>
             </div>
           </div>
-          <div style="padding: 16px 24px; background: #0b0f19; text-align: center; border-top: 1px solid #1e293b; font-size: 12px; color: #64748b;">
-            Sent directly from Muhammad Adil Usmani's AI Portfolio Contact Form
+          <div style="padding: 14px 24px; background: #0b0f19; text-align: center; border-top: 1px solid #1e293b; font-size: 12px; color: #64748b;">
+            Delivered directly to Muhammad Adil Usmani via Gmail SMTP
           </div>
         </div>
       `
@@ -72,11 +76,11 @@ export async function POST(request: NextRequest) {
 
       sentViaSMTP = true
       console.log("✅ Email sent successfully via Gmail SMTP!")
-    } catch (smtpError) {
-      console.warn("⚠️ SMTP failed, attempting Web3Forms fallback:", smtpError)
+    } catch (smtpError: any) {
+      console.warn("⚠️ SMTP failed, attempting Web3Forms fallback:", smtpError?.message || smtpError)
     }
 
-    // Attempt 2: Fallback to Web3Forms if SMTP is blocked in certain host environments
+    // Attempt 2: Fallback to Web3Forms if SMTP is blocked
     if (!sentViaSMTP) {
       const accessKey = process.env.WEB3FORMS_ACCESS_KEY || "d8aced0c-d6f6-478a-821f-1dffd06e0d12"
       const web3formsResponse = await fetch("https://api.web3forms.com/submit", {
@@ -110,8 +114,8 @@ export async function POST(request: NextRequest) {
       },
       { status: 200 },
     )
-  } catch (error) {
-    console.error("❌ Contact route error:", error)
+  } catch (error: any) {
+    console.error("❌ Contact route error:", error?.message || error)
     return NextResponse.json(
       {
         error: "Unable to deliver message right now. Please connect directly via email at muhammadaadilusmani@gmail.com",
