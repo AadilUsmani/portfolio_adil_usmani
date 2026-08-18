@@ -574,6 +574,33 @@ export default function Portfolio() {
             transformer inference optimization, time-series forecasting, and autonomous agent workflows.
           </motion.p>
 
+          {/* Recruiter Impact Stat Strip */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+            className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto mb-10 text-left"
+          >
+            {[
+              { label: "AI Architectures", val: "4+ Custom RAG & LLMs", sub: "Graph RAG, CRAG, Titan Memory", icon: Brain, color: "text-amber-400 border-amber-500/20 bg-amber-500/5" },
+              { label: "Retrieval Latency", val: "3–8s End-to-End", sub: "Adaptive 3-way routing", icon: Zap, color: "text-cyan-400 border-cyan-500/20 bg-cyan-500/5" },
+              { label: "GPU Cloud Infrastructure", val: "Modal A100 Clusters", sub: "FlashAttention-3 & BPE", icon: Cpu, color: "text-indigo-400 border-indigo-500/20 bg-indigo-500/5" },
+              { label: "Data Pipeline Scale", val: "1.2M+ Records / Day", sub: "Apache Airflow + Azure", icon: Database, color: "text-emerald-400 border-emerald-500/20 bg-emerald-500/5" },
+            ].map((stat, i) => {
+              const Icon = stat.icon
+              return (
+                <div key={i} className={`p-4 rounded-xl border glass-panel ${stat.color} transition-all hover:scale-[1.02]`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Icon className="w-4 h-4" />
+                    <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{stat.label}</span>
+                  </div>
+                  <div className="text-base sm:text-lg font-extrabold text-white">{stat.val}</div>
+                  <div className="text-[11px] text-slate-400 mt-0.5">{stat.sub}</div>
+                </div>
+              )
+            })}
+          </motion.div>
+
           {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -598,6 +625,15 @@ export default function Portfolio() {
               <Mail className="w-4 h-4 mr-2 text-cyan-400" />
               Get In Touch
             </Button>
+            <a
+              href="/Muhammad_Adil_Usmani_cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 glass-panel border-slate-700 hover:bg-slate-800 text-slate-200 font-semibold px-6 py-3.5 text-base rounded-xl transition-all hover:scale-105"
+            >
+              <Download className="w-4 h-4 text-indigo-400" />
+              Resume (PDF)
+            </a>
           </motion.div>
 
           {/* Live Architecture Simulator Terminal */}
@@ -608,6 +644,89 @@ export default function Portfolio() {
           >
             <HeroInteractiveTerminal />
           </motion.div>
+        </div>
+      </section>
+
+      {/* ── 2.5. Core Architectural Pillars (Why Hire Me) ─────────────────── */}
+      <section className="py-16 relative z-10 border-t border-slate-800/80 bg-slate-950/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-amber-400 uppercase mb-2">
+              <Sparkles className="w-3.5 h-3.5" />
+              Engineering Philosophy &amp; Depth
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Core Architectural Strengths
+            </h2>
+            <p className="text-slate-400 text-sm mt-2">
+              How I design, scale, and evaluate AI systems for real-world production environments.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="glass-card rounded-2xl p-6 border border-slate-800 hover:border-cyan-500/40 transition-all group"
+            >
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-4 group-hover:scale-110 transition-transform">
+                <Brain className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                Knowledge Graph RAG &amp; Reasoning
+              </h3>
+              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                Specialized in multi-hop entity extraction, Neo4j graph schemas, confidence-based 3-way threshold routing (CRAG), and slashing retrieval hallucination down to sub-2%.
+              </p>
+              <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center gap-2 text-[11px] font-semibold text-cyan-400">
+                <span>Neo4j</span> • <span>LangGraph</span> • <span>Self-Correction</span>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="glass-card rounded-2xl p-6 border border-slate-800 hover:border-amber-500/40 transition-all group"
+            >
+              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-4 group-hover:scale-110 transition-transform">
+                <Cpu className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-300 transition-colors">
+                Distributed Serverless GPU Inference
+              </h3>
+              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                Hands-on with Modal.com NVIDIA A100 GPU workers, FlashAttention-3 kernel optimization, KV cache management, and distributed evaluation harnesses.
+              </p>
+              <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center gap-2 text-[11px] font-semibold text-amber-400">
+                <span>Modal A100</span> • <span>FlashAttention-3</span> • <span>PyTorch</span>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="glass-card rounded-2xl p-6 border border-slate-800 hover:border-indigo-500/40 transition-all group"
+            >
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-4 group-hover:scale-110 transition-transform">
+                <Layers className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors">
+                Production Rigor &amp; Automated Guardrails
+              </h3>
+              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                Strict TypeScript engineering, asynchronous FastAPI endpoints with Redis token buckets, Next.js 14 App Router, and recursive autonomous deployment pipelines.
+              </p>
+              <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center gap-2 text-[11px] font-semibold text-indigo-400">
+                <span>Strict TS</span> • <span>FastAPI</span> • <span>State Graphs</span>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
