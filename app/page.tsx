@@ -148,54 +148,7 @@ const projectsData: Project[] = [
     github: "https://github.com/AadilUsmani/AeroSphere",
     metrics: { Accuracy: "85%+", Cities: "45", Ingestion: "1.2M Records" },
     featured: false,
-  },
-  {
-    title: "MedDoc AI — Medical Diagnostic Assistant",
-    subtitle: "RAG Assistant with Azure OpenAI & Session Memory",
-    category: "rag",
-    description:
-      "Interactive medical intelligence platform powered by RAG. Users upload diagnostic reports and clinical records embedded into vector storage for query answering via Azure OpenAI, complete with session-isolated conversation memory.",
-    tags: [
-      { name: "RAG", color: "border-teal-500/30 text-teal-400 bg-teal-500/10" },
-      { name: "Azure OpenAI", color: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
-      { name: "Vector DB", color: "border-purple-500/30 text-purple-400 bg-purple-500/10" },
-      { name: "FastAPI", color: "border-green-500/30 text-green-400 bg-green-500/10" },
-    ],
-    github: "https://github.com/AadilUsmani/MedDoc",
-    metrics: { Domain: "Healthcare", Embeddings: "Vector DB", Engine: "Azure OpenAI" },
-    featured: false,
-  },
-  {
-    title: "Dynamic CSV RAG & Dashboard Generator",
-    subtitle: "Automated Dataset Analysis & UI Configurations",
-    category: "rag",
-    description:
-      "Autonomous CSV analytics engine that ingests arbitrary tabular datasets, performs statistical embeddings, and synthesizes structured JSON visualization configs alongside LLM insights for dynamic dashboards.",
-    tags: [
-      { name: "RAG", color: "border-indigo-500/30 text-indigo-400 bg-indigo-500/10" },
-      { name: "Python", color: "border-yellow-500/30 text-yellow-400 bg-yellow-500/10" },
-      { name: "Pandas", color: "border-purple-500/30 text-purple-400 bg-purple-500/10" },
-      { name: "JSON Configs", color: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
-    ],
-    github: "https://github.com/AadilUsmani/csv_analyzer",
-    metrics: { Automation: "End-to-End", Input: "Arbitrary CSV", Output: "Charts & Insights" },
-    featured: false,
-  },
-  {
-    title: "CricTalk — High-Concurrency Cricket Chatbot API",
-    subtitle: "Enterprise Gemini AI Assistant with Redis Caching",
-    category: "llm",
-    description:
-      "Production-ready domain-expert cricket assistant API featuring 6 specialized knowledge modules, Redis-backed rate limiting, secure API key authentication, and high-concurrency asynchronous endpoints on Render.",
-    tags: [
-      { name: "FastAPI", color: "border-green-500/30 text-green-400 bg-green-500/10" },
-      { name: "Gemini AI", color: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
-      { name: "Redis", color: "border-red-500/30 text-red-400 bg-red-500/10" },
-      { name: "Security", color: "border-yellow-500/30 text-yellow-400 bg-yellow-500/10" },
-    ],
-    github: "https://github.com/AadilUsmani/Cricket_chatbot",
-    metrics: { Latency: "Sub-second", Uptime: "99.9%", Auth: "API Key + Rate Limit" },
-    featured: false,
+    highlight: "Deep Learning & Forecasting",
   },
 ]
 
@@ -348,7 +301,14 @@ export default function Portfolio() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+      const navOffset = 75
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - navOffset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      })
       setActiveSection(id)
     }
   }
@@ -770,92 +730,98 @@ export default function Portfolio() {
             </div>
           </div>
 
-          {/* Project Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {filteredProjects.map((project, idx) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.08 }}
-                className="glass-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between relative group"
-              >
-                <div>
-                  {/* Top Row: Highlight & Links */}
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    {project.highlight ? (
-                      <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 border border-indigo-500/40 text-cyan-300">
-                        {project.highlight}
-                      </span>
-                    ) : (
-                      <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800/80 text-slate-400">
-                        {project.category.toUpperCase()}
-                      </span>
-                    )}
+          {/* Project Grid with Fluid Spring Layout & Pop Animations */}
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <AnimatePresence mode="popLayout">
+              {filteredProjects.map((project, idx) => (
+                <motion.div
+                  key={project.title}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
+                  transition={{ duration: 0.4, delay: idx * 0.05 }}
+                  className="glass-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between relative group cursor-pointer"
+                >
+                  <div>
+                    {/* Top Row: Highlight & Links */}
+                    <div className="flex items-center justify-between gap-2 mb-4">
+                      {project.highlight ? (
+                        <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 border border-indigo-500/40 text-cyan-300">
+                          {project.highlight}
+                        </span>
+                      ) : (
+                        <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800/80 text-slate-400">
+                          {project.category.toUpperCase()}
+                        </span>
+                      )}
 
-                    <div className="flex items-center gap-2">
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-slate-800/60 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
-                        title="View Source on GitHub"
-                      >
-                        <Github className="w-4 h-4" />
-                      </a>
-                      {project.demo && (
+                      <div className="flex items-center gap-2">
                         <a
-                          href={project.demo}
+                          href={project.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 rounded-lg bg-slate-800/60 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 transition-colors"
-                          title="View Live Demo / Docs"
+                          className="p-2 rounded-lg bg-slate-800/60 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                          title="View Source on GitHub"
+                          onClick={(e) => e.stopPropagation()}
                         >
-                          <Eye className="w-4 h-4" />
+                          <Github className="w-4 h-4" />
                         </a>
-                      )}
+                        {project.demo && (
+                          <a
+                            href={project.demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-lg bg-slate-800/60 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 transition-colors"
+                            title="View Live Demo / Docs"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Title & Subtitle */}
+                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors mb-1">
+                      {project.title}
+                    </h3>
+                    {project.subtitle && (
+                      <p className="text-xs text-indigo-400 font-medium mb-3">{project.subtitle}</p>
+                    )}
+
+                    {/* Description */}
+                    <p className="text-slate-400 text-sm leading-relaxed mb-6 font-normal">
+                      {project.description}
+                    </p>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-1.5 mb-6">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag.name}
+                          className={`text-xs px-2.5 py-1 rounded-md border font-medium ${tag.color}`}
+                        >
+                          {tag.name}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
-                  {/* Title & Subtitle */}
-                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors mb-1">
-                    {project.title}
-                  </h3>
-                  {project.subtitle && (
-                    <p className="text-xs text-indigo-400 font-medium mb-3">{project.subtitle}</p>
-                  )}
-
-                  {/* Description */}
-                  <p className="text-slate-400 text-sm leading-relaxed mb-6 font-normal">
-                    {project.description}
-                  </p>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 mb-6">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag.name}
-                        className={`text-xs px-2.5 py-1 rounded-md border font-medium ${tag.color}`}
-                      >
-                        {tag.name}
-                      </span>
+                  {/* Metrics Footer */}
+                  <div className="pt-4 border-t border-slate-800/80 grid grid-cols-3 gap-2 text-center bg-slate-900/40 -mx-6 -mb-6 sm:-mx-8 sm:-mb-8 px-4 py-3 rounded-b-2xl">
+                    {Object.entries(project.metrics).map(([key, val]) => (
+                      <div key={key}>
+                        <div className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">{key}</div>
+                        <div className="text-xs sm:text-sm font-bold text-slate-200 mt-0.5 truncate">{val}</div>
+                      </div>
                     ))}
                   </div>
-                </div>
-
-                {/* Metrics Footer */}
-                <div className="pt-4 border-t border-slate-800/80 grid grid-cols-3 gap-2 text-center bg-slate-900/40 -mx-6 -mb-6 sm:-mx-8 sm:-mb-8 px-4 py-3 rounded-b-2xl">
-                  {Object.entries(project.metrics).map(([key, val]) => (
-                    <div key={key}>
-                      <div className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">{key}</div>
-                      <div className="text-xs sm:text-sm font-bold text-slate-200 mt-0.5 truncate">{val}</div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         </div>
       </section>
 
