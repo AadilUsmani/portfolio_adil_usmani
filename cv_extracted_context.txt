@@ -1,0 +1,53 @@
+Muhammad Adil Usmani
+03114086626 | muhammadaadilusmani@gmail.com | linkedin.com/in/muhammad-adil-usmani | github.com/AadilUsmani | v0-
+muhammadaadilusmani.vercel.app
+SUMMARY
+Software Engineer specializing in Applicational AI, Retrieval-Augmented Generation (RAG) pipelines, and LLM workflow
+orchestration. Builds and integrates ML models served through FastAPI across unstructured text and structured JSON data flows,
+applying prompt and context engineering to optimize LLM outputs across varied retrieval architectures.
+TECHNICAL SKILLS
+Languages: Python, SQL  |  Backend: FastAPI
+AI & LLM: RAG, Prompt Engineering, Context Engineering, LLM Orchestration, LangChain, LangGraph, LangSmith, Azure
+OpenAI, OpenAI API, Gemini API, GPT-4o-mini, T5 Transformers
+Databases: Neo4j, ChromaDB, FAISS, SQLite
+Cloud & Tools: Azure, GCP, Render, Vercel, Claude, Claude Code, GitHub Copilot CLI, Digital Ocean, GitHub Actions, Git,
+Modal, Hugging Face
+EXPERIENCE
+Data Science Intern — ML1 Jul 2026 – Present
+Build end-to-end automation pipelines and workflows for international clients, including HR process automation and legal data
+acquisition for applicational AI; developed an internal scheduling tool.
+Data Science Trainee — ML1 Jun 2026 – Jul 2026
+Strengthened foundational machine learning knowledge with a focus on implementing and training algorithms from scratch.
+RESEARCH
+Anarchist LLM — Emergent Pattern Discovery Python, Modal, GPT-1900
+github.com/AadilUsmani/Anarchist-LLM
+Ran inference on GPT-1900 via Modal to evaluate the model's ability to identify and optimize algorithms and patterns without
+being explicitly told about them, probing emergent unsupervised reasoning behavior.
+Implementing Titan Architecture Python, Titan Architecture
+github.com/AadilUsmani/implementing_titan_architecture
+Built backend infrastructure using the Titan architecture to process large-scale financial datasets (incl. Engro 2025 annual
+report) with PDF extraction and preprocessing pipelines for corporate documents.
+Lexical Graph RAG Python, Neo4j, LangGraph
+github.com/AadilUsmani/Lexical_Graph_RAG
+Engineered a graph-based RAG system with knowledge graph deduplication for unstructured SEC filings; evaluated with
+Signal-to-Noise and Cumulative Recall metrics to balance latency and hallucination rates.
+PROJECTS
+AeroSphere – Air Quality Forecasting System Python, LSTM, Azure, Airflow, NASA TEMPO
+aerosphere.earth
+Built a 72-hour PM2.5 forecasting pipeline across 45 cities using LSTM models and NASA TEMPO satellite data via Apache
+Airflow; integrated GPT-based NLG reporting and deployed the backend on Azure.
+Hybrid Graph RAG vs Vector RAG Evaluation System Python, ChromaDB, Neo4j, Azure OpenAI
+github.com/AadilUsmani/V.G.RAG
+Built a hybrid RAG system over Apple/Tesla SEC 10-K filings (ChromaDB + Neo4j) with late-fusion aggregation and a 53-
+question automated benchmark for accuracy, comprehensiveness, and directness.
+Corrective RAG (CRAG) – Adaptive Routing API Python, LangGraph, FAISS, GPT-4o-mini
+github.com/AadilUsmani/Corrective_rag_CRAG
+Architected a LangGraph stateful workflow with confidence-score routing: low-confidence queries (<0.3) trigger live web
+search; high-confidence (≥0.7) resolve from a local FAISS store.
+EDUCATION
+University of Central Punjab, Lahore, Pakistan — BS Computer Science
+Unique Group of Institutions, Lahore, Pakistan — Intermediate
+Lahore Grammar School, Lahore, Pakistan — Schooling
+CERTIFICATIONS
+Supervised Machine Learning: Regression and Classification | Introduction to Generative AI | Machine Learning Specialization –
+Stanford University, Coursera (In Progress) | LLMOps Specialization – Duke University, Coursera (In Progress)
