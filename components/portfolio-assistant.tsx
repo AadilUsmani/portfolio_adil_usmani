@@ -56,6 +56,13 @@ export function PortfolioAssistant() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
+  // Allow external "Try AI" CTAs to open the assistant via a custom event
+  useEffect(() => {
+    const handler = () => setIsOpen(true)
+    window.addEventListener("open-portfolio-assistant", handler)
+    return () => window.removeEventListener("open-portfolio-assistant", handler)
+  }, [])
+
   useEffect(() => {
     if (isOpen) {
       scrollToBottom()
