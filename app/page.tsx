@@ -43,6 +43,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { PortfolioAssistant } from "@/components/portfolio-assistant"
 
 // ─── Data: Projects & Research ──────────────────────────────────────────────────
 
@@ -1032,10 +1033,10 @@ export default function Portfolio() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full glass-panel border border-slate-700/80 flex items-center justify-center text-white shadow-xl hover:scale-110 transition-transform"
+            className="fixed bottom-24 right-6 z-40 w-11 h-11 rounded-full glass-panel border border-slate-700/80 flex items-center justify-center text-white shadow-xl hover:scale-110 transition-transform"
             aria-label="Back to Top"
           >
-            <svg width="48" height="48" viewBox="0 0 48 48" className="rotate-[-90deg] absolute">
+            <svg width="44" height="44" viewBox="0 0 48 48" className="rotate-[-90deg] absolute">
               <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="2.5" />
               <motion.circle
                 cx="24"
@@ -1049,10 +1050,13 @@ export default function Portfolio() {
                 style={{ strokeDashoffset }}
               />
             </svg>
-            <ArrowUp className="w-5 h-5 relative z-10 text-cyan-300" />
+            <ArrowUp className="w-4 h-4 relative z-10 text-cyan-300" />
           </motion.button>
         )}
       </AnimatePresence>
+
+      {/* ── 8. Interactive AI Portfolio Assistant ────────────────────────── */}
+      <PortfolioAssistant />
     </div>
   )
 }
