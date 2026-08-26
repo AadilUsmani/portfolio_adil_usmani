@@ -227,8 +227,8 @@ const timelineData = [
     location: "Lahore, Pakistan",
     type: "work" as const,
     description:
-      "Researching Graph RAG pipelines, LLM inference optimization, and production-scale AI agent engineering. Working on real-world problems in knowledge graph construction and retrieval accuracy.",
-    tags: ["Graph RAG", "LLM Research", "Python", "Agent Engineering"],
+      "Building end-to-end AI automation products that eliminate complex manual workflows for companies — automating internal operations (ticketing triage & resolution), customer support orchestration, and external business processes (hiring & candidate screening pipelines).",
+    tags: ["End-to-End Automation", "Ticketing Triage", "Hiring Workflows", "Customer Support", "Graph RAG", "Python"],
   },
   {
     period: "2022 – 2026",
@@ -243,11 +243,11 @@ const timelineData = [
 ]
 
 const heroRoles = [
+  "Autonomous Workflows",
   "Knowledge Graph RAG",
-  "Autonomous AI Agents",
-  "Large Language Models",
+  "Multi-Agent Pipelines",
   "Distributed GPU Systems",
-  "Transformer Architectures",
+  "Self-Correcting RAG",
 ]
 
 // ─── Hooks ─────────────────────────────────────────────────────────────────
@@ -485,7 +485,7 @@ export default function Portfolio() {
                 <span className="text-amber-800 dark:text-amber-300 font-bold hidden sm:inline">LIVE &mdash;</span>
                 <span className="text-slate-800 dark:text-slate-300">
                   Data Science Intern <span className="text-amber-800 dark:text-amber-300 font-semibold">@ ML1</span>
-                  <span className="hidden sm:inline text-slate-600 dark:text-slate-400"> &middot; Researching Graph RAG + LLM Inference Optimization &middot; Open to AI Engineering roles</span>
+                  <span className="hidden sm:inline text-slate-600 dark:text-slate-400"> &middot; Automating enterprise workflows (ticketing, hiring &amp; support) &middot; Open to AI Engineering roles</span>
                 </span>
               </div>
               <button onClick={dismissBanner} className="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors shrink-0 ml-4" aria-label="Dismiss">
@@ -595,20 +595,20 @@ export default function Portfolio() {
             <span className="w-2 h-2 rounded-full bg-cyan-500 -ml-3" />
             <span>AI APPARATUS: ALL SYSTEMS NOMINAL</span>
             <span className="text-slate-400">·</span>
-            <span className="hidden sm:inline">MODAL A100 GPU INFRASTRUCTURE</span>
+            <span className="hidden sm:inline">AUTOMATION WORKFLOWS &amp; GRAPH RAG</span>
           </motion.div>
 
-          <motion.h1 initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight max-w-5xl mx-auto leading-[1.15] mb-6 flex flex-col items-center justify-center gap-1">
-            <span className="hero-gradient-text">Engineering Intelligence with</span>
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight max-w-3xl mx-auto leading-tight mb-4 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1">
+            <span className="hero-gradient-text">Automating the un-automatable with</span>
             <TypingRotator />
           </motion.h1>
 
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed mb-10 font-normal">
-            Hi, I&apos;m <span className="text-slate-900 dark:text-slate-100 font-semibold">Muhammad Adil Usmani</span>. I specialize in
-            building production-ready <span className="text-cyan-700 dark:text-cyan-400 font-medium">Knowledge Graph RAG architectures</span>,
-            transformer inference optimization, time-series forecasting, and autonomous agent workflows.
+          <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed mb-8 font-normal">
+            Hi, I&apos;m <span className="text-slate-900 dark:text-slate-100 font-semibold">Muhammad Adil Usmani</span>. I build end-to-end AI automation
+            products that replace complex manual workflows for companies &mdash; from internal ticketing triage and hiring pipelines to{" "}
+            <span className="text-cyan-700 dark:text-cyan-400 font-medium">Knowledge Graph RAG</span> and serverless GPU clusters.
           </motion.p>
 
           {/* Count-Up Impact Metrics */}

@@ -185,11 +185,11 @@ export function CommandPalette({
     {
       id: "ai-experience-query",
       title: 'Ask AI: "Summarize Adil\'s experience at ML1"',
-      subtitle: "Data pipelines & domain-specific legal AI models",
+      subtitle: "End-to-end automation products (ticketing, hiring & support)",
       category: "AI Assistant",
       icon: Sparkles,
       action: () => openAiAgent("What is Adil's experience at ML1?"),
-      keywords: ["ml1", "intern", "experience"],
+      keywords: ["ml1", "intern", "experience", "automation", "ticketing", "hiring"],
     },
 
     // Actions

@@ -100,11 +100,12 @@ export const PORTFOLIO_CV_DATA: CVData = {
       company: "ML1",
       period: "Jul 2026 – Present",
       description:
-        "Build end-to-end automation pipelines and workflows for international clients, including HR process automation and legal data acquisition for applicational AI; developed an internal scheduling tool.",
+        "Building end-to-end AI automation products that eliminate complex manual workflows for companies — automating internal operations (ticketing triage & resolution), customer support orchestration, and external business processes (hiring & candidate screening pipelines).",
       highlights: [
-        "Architected end-to-end automation pipelines and workflows for international enterprise clients.",
-        "Engineered legal data acquisition and parsing pipelines for domain-specific applicational AI.",
-        "Developed internal scheduling and process automation tooling.",
+        "Engineered end-to-end automation workflows that replace repetitive manual tasks for enterprises across internal and external operations.",
+        "Built automated internal ticketing triage, routing, and resolution systems that cut operational overhead.",
+        "Developed multi-agent customer support workflows for real-time inquiry classification and context-grounded response generation.",
+        "Architected external hiring automation pipelines — automating candidate resume parsing, screening workflows, and interview scheduling.",
       ],
     },
     {

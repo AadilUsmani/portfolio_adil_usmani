@@ -202,7 +202,7 @@ Resume Download: /Muhammad_Adil_Usmani_cv.pdf`)
     default: {
       // General overview: include skills and top project highlights
       contextParts.push(`### Core Skills & Research Highlights:
-- Experience: Data Science Intern at ML1 (building automation pipelines & legal data acquisition for AI).
+- Experience: Data Science Intern at ML1 (building end-to-end AI automation products for internal ticketing, customer support, and hiring pipelines).
 - Flagship Projects:
   1. Anarchist LLM (${PORTFOLIO_PROJECTS[0].githubUrl}): Inference on GPT-1900 with FlashAttention-3 & Modal A100 GPUs.
   2. Lexical Graph RAG (${PORTFOLIO_PROJECTS[1].githubUrl}): Neo4j knowledge graph deduplication over SEC 10-K filings.
@@ -320,9 +320,10 @@ Adil developed an adaptive self-correcting RAG pipeline featuring **3-way confid
       return `### Experience at ML1
 Adil currently works as a **Data Science Intern at ML1** (Jul 2026 – Present), previously serving as a **Data Science Trainee** (Jun 2026 – Jul 2026).
 
-- **Enterprise Automation:** Builds end-to-end automation pipelines for international clients.
-- **Applicational AI:** Engineered legal data acquisition and parsing workflows for domain-specific AI models.
-- **Internal Tools:** Developed internal scheduling and process optimization utilities.`
+- **Enterprise Automation Products:** Builds end-to-end AI automation products that replace complex manual workflows for companies.
+- **Internal Operations:** Automated internal ticketing triage, routing, and resolution workflows to cut operational overhead.
+- **Customer Support Orchestration:** Engineered multi-agent workflows for automated customer inquiry classification and grounded responses.
+- **External Hiring Pipelines:** Built candidate resume parsing, qualification screening, and automated recruitment pipelines.`
 
     default:
       return `### Muhammad Adil Usmani
