@@ -246,7 +246,19 @@ function FocusRotator() {
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("about")
   const [projectFilter, setProjectFilter] = useState<"all" | "rag" | "llm" | "ml">("all")
-  const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isDarkMode, setIsDarkMode] = useState(false)
+
+  // Initialize theme from localStorage if set, default to light
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem("adil-theme")
+      if (savedTheme === "dark") {
+        setIsDarkMode(true)
+      } else {
+        setIsDarkMode(false)
+      }
+    } catch {}
+  }, [])
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false)
   const [showBackToTop, setShowBackToTop] = useState(false)
@@ -290,9 +302,11 @@ export default function Portfolio() {
     if (isDarkMode) {
       root.classList.add("dark")
       root.classList.remove("light")
+      try { localStorage.setItem("adil-theme", "dark") } catch {}
     } else {
       root.classList.remove("dark")
       root.classList.add("light")
+      try { localStorage.setItem("adil-theme", "light") } catch {}
     }
   }, [isDarkMode])
 
