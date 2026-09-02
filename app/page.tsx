@@ -26,6 +26,8 @@ import {
   Layers,
   Cpu,
   CheckCircle2,
+  Copy,
+  Check,
   ChevronRight,
   Send,
   Database,
@@ -262,6 +264,24 @@ export default function Portfolio() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false)
   const [showBackToTop, setShowBackToTop] = useState(false)
+  const [copiedEmail, setCopiedEmail] = useState(false)
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText("muhammadaadilusmani@gmail.com")
+    setCopiedEmail(true)
+    setTimeout(() => setCopiedEmail(false), 2200)
+  }
+
+  // Cross-tab theme sync
+  useEffect(() => {
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "adil-theme") {
+        setIsDarkMode(e.newValue === "dark")
+      }
+    }
+    window.addEventListener("storage", handleStorage)
+    return () => window.removeEventListener("storage", handleStorage)
+  }, [])
 
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -279,12 +299,18 @@ export default function Portfolio() {
     return () => window.removeEventListener("open-command-palette", handleOpenPalette)
   }, [])
 
-  // Section observer on scroll
+  // Section observer on scroll with bottom-detection
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["about", "workbench", "projects", "experience", "skills", "contact"]
-      const scrollPosition = window.scrollY + 140
       setShowBackToTop(window.scrollY > 400)
+      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80
+      if (isAtBottom) {
+        setActiveSection("contact")
+        return
+      }
+
+      const sections = ["about", "workbench", "projects", "experience", "skills", "contact"]
+      const scrollPosition = window.scrollY + 160
       for (const section of sections) {
         const el = document.getElementById(section)
         if (el && scrollPosition >= el.offsetTop && scrollPosition < el.offsetTop + el.offsetHeight) {
@@ -931,11 +957,29 @@ export default function Portfolio() {
             </form>
 
             <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">
-              <span>
-                Direct Email:{" "}
-                <a href="mailto:muhammadaadilusmani@gmail.com" className="text-indigo-600 dark:text-cyan-400 hover:underline">
+              <span className="flex items-center flex-wrap gap-1.5">
+                <span>Direct Email:</span>
+                <a href="mailto:muhammadaadilusmani@gmail.com" className="text-indigo-600 dark:text-cyan-400 font-semibold hover:underline">
                   muhammadaadilusmani@gmail.com
                 </a>
+                <button
+                  type="button"
+                  onClick={copyEmail}
+                  className="inline-flex items-center gap-1 ml-1 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-[11px] font-mono transition-colors"
+                  title="Copy email to clipboard"
+                >
+                  {copiedEmail ? (
+                    <>
+                      <Check className="w-3 h-3 text-emerald-500" />
+                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3 h-3 text-slate-500" />
+                      <span>Copy</span>
+                    </>
+                  )}
+                </button>
               </span>
               <div className="flex gap-4">
                 <a href="https://github.com/AadilUsmani" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 dark:hover:text-white flex items-center gap-1">

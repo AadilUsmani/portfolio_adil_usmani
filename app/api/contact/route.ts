@@ -1,8 +1,45 @@
 import { type NextRequest, NextResponse } from "next/server"
 import nodemailer from "nodemailer"
 
+// In-memory IP rate limiter: max 5 submissions per 10 minutes
+const ipRequestCounts = new Map<string, { count: number; resetAt: number }>()
+
+function isRateLimited(ip: string, limit = 5, windowMs = 10 * 60 * 1000): boolean {
+  const now = Date.now()
+  const record = ipRequestCounts.get(ip)
+
+  if (!record || now > record.resetAt) {
+    ipRequestCounts.set(ip, { count: 1, resetAt: now + windowMs })
+    return false
+  }
+
+  if (record.count >= limit) {
+    return true
+  }
+
+  record.count++
+  return false
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
+}
+
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() || "anonymous"
+    if (isRateLimited(ip, 5, 10 * 60 * 1000)) {
+      return NextResponse.json(
+        { error: "Too many contact requests. Please wait a few minutes before trying again." },
+        { status: 429 },
+      )
+    }
+
     const body = await request.json()
     const { name, email, subject, message } = body
 
@@ -21,6 +58,10 @@ export async function POST(request: NextRequest) {
     if (name.length > 100 || email.length > 254 || subject.length > 200 || message.length > 5000) {
       return NextResponse.json({ error: "Input exceeds maximum allowed length" }, { status: 400 })
     }
+
+    const safeName = escapeHtml(name.trim())
+    const safeSubject = escapeHtml(subject.trim())
+    const safeMessage = escapeHtml(message.trim())
 
     const smtpUser = process.env.SMTP_USER || "muhammadaadilusmani@gmail.com"
     // Exact verified Google App Password without typo
@@ -46,17 +87,17 @@ export async function POST(request: NextRequest) {
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0f172a; border-radius: 12px; overflow: hidden; border: 1px solid #1e293b; color: #f8fafc;">
           <div style="background: linear-gradient(135deg, #6366f1, #06b6d4); padding: 24px; text-align: center;">
             <h2 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 700;">📬 New Portfolio Contact Message</h2>
-            <p style="margin: 6px 0 0 0; color: #e0e7ff; font-size: 14px;">from ${name} (${email})</p>
+            <p style="margin: 6px 0 0 0; color: #e0e7ff; font-size: 14px;">from ${safeName} (${email})</p>
           </div>
           <div style="padding: 24px; background: #0f172a;">
             <div style="background: #1e293b; padding: 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #06b6d4;">
-              <p style="margin: 0 0 8px 0; font-size: 14px; color: #94a3b8;"><strong>Sender:</strong> <span style="color: #f8fafc;">${name}</span></p>
+              <p style="margin: 0 0 8px 0; font-size: 14px; color: #94a3b8;"><strong>Sender:</strong> <span style="color: #f8fafc;">${safeName}</span></p>
               <p style="margin: 0 0 8px 0; font-size: 14px; color: #94a3b8;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #38bdf8; text-decoration: none;">${email}</a></p>
-              <p style="margin: 0; font-size: 14px; color: #94a3b8;"><strong>Subject:</strong> <span style="color: #f8fafc;">${subject}</span></p>
+              <p style="margin: 0; font-size: 14px; color: #94a3b8;"><strong>Subject:</strong> <span style="color: #f8fafc;">${safeSubject}</span></p>
             </div>
             <div style="background: #1e293b; padding: 18px; border-radius: 8px;">
               <h3 style="margin: 0 0 10px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Message Content</h3>
-              <p style="margin: 0; line-height: 1.6; color: #f1f5f9; white-space: pre-wrap; font-size: 15px;">${message}</p>
+              <p style="margin: 0; line-height: 1.6; color: #f1f5f9; white-space: pre-wrap; font-size: 15px;">${safeMessage}</p>
             </div>
           </div>
           <div style="padding: 14px 24px; background: #0b0f19; text-align: center; border-top: 1px solid #1e293b; font-size: 12px; color: #64748b;">
