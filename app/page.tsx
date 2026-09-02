@@ -43,6 +43,7 @@ import {
   Code2,
   Terminal,
   ExternalLink,
+  FileText,
   ArrowRight,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -57,13 +58,14 @@ import { ArchitectureWorkbench } from "@/components/architecture-workbench"
 interface CaseStudyProject {
   title: string
   subtitle: string
-  category: "rag" | "llm" | "ml"
+  category: "rag" | "llm" | "ml" | "sec"
   challenge: string
   architecturalDecision: string
   outcome: string
   tags: string[]
   github: string
   demo?: string
+  paper?: string
   metrics: Record<string, string>
   highlight?: string
 }
@@ -97,6 +99,7 @@ const projectsData: CaseStudyProject[] = [
     tags: ["Neo4j", "LangGraph", "Python", "Knowledge Graphs", "SEC 10-K"],
     github: "https://github.com/AadilUsmani/Lexical_Graph_RAG",
     demo: "https://deepwiki.com/AadilUsmani/Lexical_Graph_RAG",
+    paper: "/Deterministic_Data_Fusion_for_FinTech.pdf",
     metrics: { Hallucination: "< 2.0%", Domain: "SEC 10-K", Graph: "Neo4j" },
     highlight: "Graph RAG",
   },
@@ -145,6 +148,21 @@ const projectsData: CaseStudyProject[] = [
     github: "https://github.com/AadilUsmani/AeroSphere",
     metrics: { Accuracy: "85%+", Cities: "45 Hubs", Ingestion: "1.2M / Day" },
     highlight: "Forecasting ETL",
+  },
+  {
+    title: "Secure Examination Management System (SEMS)",
+    subtitle: "Hybrid AES-256-GCM + RSA-3072 Cryptosystem & RBAC Portal",
+    category: "sec",
+    challenge:
+      "Safeguarding and distributing confidential academic examination papers across multi-tier faculty hierarchies without risk of unauthorized access, key leakage, or in-transit tampering.",
+    architecturalDecision:
+      "Engineered a zero-trust hybrid cryptosystem pairing symmetric AES-256 (GCM mode with authenticated ciphertext integrity) and asymmetric RSA-3072 key exchange. Built a high-performance async FastAPI backend with Argon2id password hashing, scoped JWTs across 4 administrative tiers, MIME-sniffing file validation, client-side malware heuristic inspection, and Alembic-managed SQLAlchemy 2.x persistence.",
+    outcome:
+      "Achieved sub-10ms authenticated encryption latency, rigid role isolation (Admin, Faculty, HOD, Department), and 100% test coverage with automated Pytest E2E suites.",
+    tags: ["AES-256-GCM", "RSA-3072", "FastAPI", "Argon2id", "SQLAlchemy 2.x", "Streamlit", "Pytest"],
+    github: "https://github.com/AadilUsmani/Crypto_secure_system",
+    metrics: { Encryption: "AES-256-GCM", "Key Exchange": "RSA-3072", Auth: "Argon2id + JWT" },
+    highlight: "Security & Cryptosystem",
   },
 ]
 
@@ -247,7 +265,7 @@ function FocusRotator() {
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("about")
-  const [projectFilter, setProjectFilter] = useState<"all" | "rag" | "llm" | "ml">("all")
+  const [projectFilter, setProjectFilter] = useState<"all" | "rag" | "llm" | "sec" | "ml">("all")
   const [isDarkMode, setIsDarkMode] = useState(false)
 
   // Initialize theme from localStorage if set, default to light
@@ -626,6 +644,7 @@ export default function Portfolio() {
                 { id: "all", label: "All Projects" },
                 { id: "rag", label: "RAG & Graphs" },
                 { id: "llm", label: "LLMs & GPU" },
+                { id: "sec", label: "Security & Systems" },
                 { id: "ml", label: "Forecasting" },
               ].map((tab) => (
                 <button
@@ -665,6 +684,18 @@ export default function Portfolio() {
                         </span>
                       )}
                       <div className="flex items-center gap-1.5 ml-auto">
+                        {project.paper && (
+                          <a
+                            href={project.paper}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-2 py-1 rounded-lg border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50 dark:bg-indigo-500/10 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 text-indigo-700 dark:text-cyan-400 transition-colors flex items-center gap-1 text-[11px] font-semibold"
+                            title="Read Research Paper (PDF)"
+                          >
+                            <FileText className="w-3.5 h-3.5" />
+                            <span>Paper</span>
+                          </a>
+                        )}
                         <a
                           href={project.github}
                           target="_blank"

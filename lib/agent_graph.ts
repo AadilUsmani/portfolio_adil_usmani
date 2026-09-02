@@ -17,6 +17,7 @@ export type QueryIntent =
   | "GRAPH_RAG"
   | "CRAG"
   | "TITAN_MEMORY"
+  | "CRYPTO_SEMS"
   | "AEROSPHERE"
   | "EXPERIENCE_ML1"
   | "TECHNICAL_SKILLS"
@@ -51,6 +52,8 @@ export function routeIntentNode(state: AgentGraphState): AgentGraphState {
     intent = "CRAG"
   } else if (q.includes("titan") || q.includes("long-term memory") || q.includes("engro")) {
     intent = "TITAN_MEMORY"
+  } else if (q.includes("crypto") || q.includes("sems") || q.includes("examination") || q.includes("aes") || q.includes("rsa") || q.includes("encryption")) {
+    intent = "CRYPTO_SEMS"
   } else if (q.includes("aerosphere") || q.includes("air quality") || q.includes("lstm") || q.includes("nasa") || q.includes("airflow")) {
     intent = "AEROSPHERE"
   } else if (q.includes("ml1") || q.includes("intern") || q.includes("experience") || q.includes("job") || q.includes("work")) {

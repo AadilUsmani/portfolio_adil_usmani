@@ -15,6 +15,8 @@ import {
   Github,
   Linkedin,
   ExternalLink,
+  FileText,
+  Shield,
   Bot,
   Terminal,
   Activity,
@@ -213,6 +215,30 @@ export function CommandPalette({
         onClose()
       },
       keywords: ["cv", "resume", "pdf", "download"],
+    },
+    {
+      id: "act-read-paper",
+      title: "Read Research Paper: Deterministic Data Fusion for FinTech",
+      subtitle: "Official Lexical Graph RAG paper on SEC 10-K deduplication",
+      category: "Actions",
+      icon: FileText,
+      action: () => {
+        window.open("/Deterministic_Data_Fusion_for_FinTech.pdf", "_blank")
+        onClose()
+      },
+      keywords: ["paper", "research", "fintech", "graph rag", "pdf"],
+    },
+    {
+      id: "act-crypto-repo",
+      title: "Open SEMS Cryptosystem Repo",
+      subtitle: "github.com/AadilUsmani/Crypto_secure_system",
+      category: "Actions",
+      icon: Shield,
+      action: () => {
+        window.open("https://github.com/AadilUsmani/Crypto_secure_system", "_blank")
+        onClose()
+      },
+      keywords: ["crypto", "sems", "security", "github"],
     },
     {
       id: "act-toggle-theme",

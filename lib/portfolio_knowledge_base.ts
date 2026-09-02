@@ -42,9 +42,10 @@ export interface ProjectData {
   id: string
   name: string
   subtitle: string
-  category: "rag" | "llm" | "ml" | "agent"
+  category: "rag" | "llm" | "ml" | "agent" | "sec"
   githubUrl: string
   liveUrl?: string
+  paperUrl?: string
   description: string
   techStack: string[]
   metricsAndBenchmarks: Record<string, string>
@@ -174,6 +175,7 @@ export const PORTFOLIO_PROJECTS: ProjectData[] = [
     category: "rag",
     githubUrl: "https://github.com/AadilUsmani/Lexical_Graph_RAG",
     liveUrl: "https://deepwiki.com/AadilUsmani/Lexical_Graph_RAG",
+    paperUrl: "/Deterministic_Data_Fusion_for_FinTech.pdf",
     description:
       "Graph-based Retrieval-Augmented Generation system using lexical graphs to enhance factual accuracy and contextual depth in AI query responses. Implemented knowledge graph deduplication workflows to synthesize structured insights from unstructured SEC 10-K financial filings.",
     techStack: ["Python", "Neo4j", "LangGraph", "Knowledge Graphs", "SEC Filings"],
@@ -266,6 +268,27 @@ export const PORTFOLIO_PROJECTS: ProjectData[] = [
     keyFeatures: [
       "Late-fusion aggregation combining dense vector search and knowledge graph traversal.",
       "Automated evaluation framework comparing pure vector vs hybrid graph retrieval.",
+    ],
+  },
+  {
+    id: "crypto-secure-system",
+    name: "Secure Examination Management System (SEMS)",
+    subtitle: "Hybrid AES-256-GCM + RSA-3072 Cryptosystem & RBAC Portal",
+    category: "sec",
+    githubUrl: "https://github.com/AadilUsmani/Crypto_secure_system",
+    description:
+      "A zero-trust, end-to-end encrypted academic examination management portal. Employs hybrid encryption with AES-256-GCM authenticated symmetric encryption and RSA-3072 key exchange. Features an async FastAPI backend with Argon2id password hashing, JWT role-based access control (Admin, Faculty, HOD, Department), real-time MIME-sniffing, client-side malware heuristic scanning, and Alembic database migrations.",
+    techStack: ["AES-256-GCM", "RSA-3072", "FastAPI", "Argon2id", "SQLAlchemy 2.x", "Alembic", "Streamlit", "Pytest"],
+    metricsAndBenchmarks: {
+      Encryption: "AES-256-GCM (Authenticated)",
+      "Key Exchange": "RSA-3072 Asymmetric",
+      Auth: "Argon2id + Scoped JWTs",
+    },
+    keyFeatures: [
+      "Hybrid cryptosystem guaranteeing data confidentiality and tamper-proof ciphertext verification.",
+      "Multi-tiered Role-Based Access Control (Admin, Faculty, HOD, Department) with constrained privilege scopes.",
+      "MIME-sniffing file validation, audit logging, rate-limiting, and client-side malware heuristic inspection.",
+      "Comprehensive Pytest test suite covering unit, integration, and End-to-End (E2E) flows.",
     ],
   },
 ]
