@@ -43,7 +43,7 @@ export function ArchitectureWorkbench() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-cyan-600 dark:text-cyan-400 uppercase mb-1.5 font-mono">
+            <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-indigo-600 dark:text-cyan-400 uppercase mb-1.5 font-mono">
               <Zap className="w-3.5 h-3.5" /> Interactive Technical Sandbox
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
@@ -56,14 +56,14 @@ export function ArchitectureWorkbench() {
 
           {/* Telemetry Status HUD */}
           <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-semibold">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-300 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-semibold">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>MODAL A100: READY</span>
             </div>
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-200/60 dark:bg-slate-850 dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 text-slate-700 dark:text-slate-300">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 shadow-2xs">
               <span>LATENCY: 3.4s</span>
             </div>
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-200/60 dark:bg-slate-850 dark:bg-slate-900 border border-slate-300/80 dark:border-slate-800 text-slate-700 dark:text-slate-300">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 shadow-2xs">
               <span>NEO4J: 5.4k NODES</span>
             </div>
           </div>
@@ -72,7 +72,7 @@ export function ArchitectureWorkbench() {
         {/* Main Workbench Card */}
         <div className="glass-card rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 shadow-xl overflow-hidden">
           {/* Workbench Tab Navigation */}
-          <div className="flex flex-wrap border-b border-slate-200/80 dark:border-slate-800 bg-slate-100/70 dark:bg-slate-900/60 p-1.5 gap-1.5">
+          <div className="flex flex-wrap border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-900/60 p-2 gap-1.5">
             {tabs.map((tab) => {
               const Icon = tab.icon
               const isActive = activeTab === tab.id

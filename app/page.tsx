@@ -505,7 +505,7 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-xs text-slate-700 dark:text-slate-300 mb-6 font-mono"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-200/90 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 text-xs text-slate-700 dark:text-slate-300 mb-6 font-mono shadow-2xs"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Data Science Intern @ ML1 &middot; Open to AI Engineering Roles</span>
@@ -516,7 +516,7 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight max-w-3xl mx-auto leading-tight mb-4 text-slate-900 dark:text-white"
+            className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-[-0.035em] max-w-4xl mx-auto leading-[1.08] mb-5 text-slate-900 dark:text-white"
           >
             Building AI that actually does the work.
           </motion.h1>
@@ -528,7 +528,7 @@ export default function Portfolio() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="text-base sm:text-xl text-slate-600 dark:text-slate-400 font-medium mb-6 flex items-center justify-center gap-2"
           >
-            <span>Focus:</span>
+            <span className="text-slate-500 dark:text-slate-400">Focus:</span>
             <FocusRotator />
           </motion.div>
 
@@ -537,10 +537,10 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed mb-8"
+            className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed mb-8 font-normal"
           >
-            Hi, I&apos;m <span className="font-semibold text-slate-900 dark:text-slate-100">Muhammad Adil Usmani</span>. I build end-to-end AI automation products that eliminate complex manual workflows for companies &mdash; from internal ticketing triage and hiring pipelines to{" "}
-            <span className="font-medium text-indigo-600 dark:text-cyan-400">Knowledge Graph RAG</span> and serverless GPU clusters on Modal A100s.
+            Hi, I&apos;m <span className="font-bold text-slate-900 dark:text-slate-100">Muhammad Adil Usmani</span>. I build end-to-end AI automation products that eliminate complex manual workflows for companies &mdash; from internal ticketing triage and hiring pipelines to{" "}
+            <span className="font-semibold text-indigo-600 dark:text-cyan-400">Knowledge Graph RAG</span> and serverless GPU clusters on Modal A100s.
           </motion.p>
 
           {/* Clean Action Buttons */}
@@ -553,7 +553,7 @@ export default function Portfolio() {
             <Button
               size="default"
               onClick={() => scrollToSection("projects")}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 text-sm rounded-xl shadow-sm transition-all"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 text-sm rounded-xl shadow-sm hover:shadow-md transition-all"
             >
               Explore Case Studies <ArrowRight className="w-4 h-4 ml-1.5" />
             </Button>
@@ -561,13 +561,13 @@ export default function Portfolio() {
               size="default"
               variant="outline"
               onClick={() => window.dispatchEvent(new CustomEvent("open-portfolio-assistant"))}
-              className="border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-800 dark:text-slate-200 font-medium px-4 py-2.5 text-sm rounded-xl transition-all"
+              className="border border-slate-300/90 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium px-4 py-2.5 text-sm rounded-xl shadow-2xs transition-all"
             >
               <Bot className="w-4 h-4 mr-1.5 text-indigo-600 dark:text-cyan-400" /> Ask AI Assistant
             </Button>
             <button
               onClick={() => setIsCommandPaletteOpen(true)}
-              className="inline-flex items-center gap-1.5 border border-slate-300 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 px-3 py-2 text-xs rounded-xl font-mono transition-colors"
+              className="inline-flex items-center gap-1.5 border border-slate-300/90 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 px-3 py-2 text-xs rounded-xl font-mono shadow-2xs transition-colors"
             >
               <Command className="w-3.5 h-3.5" /> <kbd className="text-[10px]">⌘K</kbd>
             </button>
@@ -608,7 +608,7 @@ export default function Portfolio() {
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                     projectFilter === tab.id
                       ? "bg-indigo-600 text-white font-semibold shadow-sm"
-                      : "border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900"
+                      : "border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs"
                   }`}
                 >
                   {tab.label}
