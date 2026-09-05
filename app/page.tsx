@@ -288,6 +288,17 @@ export default function Portfolio() {
     } catch {}
   }
 
+  // Listen for global UI variant switch events from Rail or header triggers
+  useEffect(() => {
+    const handleSwitchEvent = (e: any) => {
+      if (e?.detail?.variant === "v1" || e?.detail?.variant === "v2") {
+        handleSelectVariant(e.detail.variant)
+      }
+    }
+    window.addEventListener("switch-ui-variant", handleSwitchEvent)
+    return () => window.removeEventListener("switch-ui-variant", handleSwitchEvent)
+  }, [])
+
   // Initialize theme from localStorage if set, default to light
   useEffect(() => {
     try {
@@ -421,6 +432,20 @@ export default function Portfolio() {
     { id: "contact", label: "Contact" },
   ]
 
+  if (uiVariant === "v2") {
+    return (
+      <div className={isDarkMode ? "dark" : "light"}>
+        <PortfolioV2 />
+        <UiSwitcher
+          currentVariant="v2"
+          onSelectVariant={handleSelectVariant}
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode(!isDarkMode)}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 relative overflow-x-hidden font-sans">
       <div className="fixed inset-0 bg-dot-pattern pointer-events-none opacity-30 z-0" />
@@ -487,6 +512,16 @@ export default function Portfolio() {
             >
               <Download className="w-3.5 h-3.5" /> Resume
             </a>
+
+            {/* Quick Switch to v2 Blueprint */}
+            <button
+              onClick={() => handleSelectVariant("v2")}
+              className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-900/60 hover:border-amber-400 dark:hover:border-amber-500 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+              title="Switch to Cyber Blueprint UI (v2)"
+            >
+              <Layers className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              <span>Cyber UI (v2)</span>
+            </button>
 
             <Button
               variant="ghost"
@@ -556,6 +591,19 @@ export default function Portfolio() {
               >
                 <Download className="w-4 h-4" /> Download Resume
               </a>
+              <button
+                onClick={() => {
+                  handleSelectVariant("v2");
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex items-center justify-between w-full py-2.5 px-3 rounded-lg text-sm font-semibold border border-amber-300 dark:border-amber-700/60 bg-amber-50/60 dark:bg-amber-950/30 text-amber-800 dark:text-amber-200 mt-2 cursor-pointer"
+              >
+                <span className="flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                  <span>Switch to Cyber Blueprint (v2)</span>
+                </span>
+                <ChevronRight className="w-4 h-4 opacity-60" />
+              </button>
             </motion.div>
           )}
         </AnimatePresence>

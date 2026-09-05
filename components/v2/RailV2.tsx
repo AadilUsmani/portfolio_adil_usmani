@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Command, MessageSquareText, FileDown } from "lucide-react";
+import { Command, MessageSquareText, FileDown, Layers } from "lucide-react";
 import { useShell, type SectionId } from "@/components/v2/shell-context";
 import { profile } from "@/lib/dataV2";
 import { Dot } from "@/components/v2/ui";
@@ -134,6 +134,21 @@ export function RailV2() {
             </span>
             <span className="mono text-[10px]">PDF</span>
           </a>
+          <button
+            onClick={() => {
+              try {
+                localStorage.setItem("adil-ui-variant", "v1");
+                window.dispatchEvent(new CustomEvent("switch-ui-variant", { detail: { variant: "v1" } }));
+              } catch {}
+            }}
+            className="mt-2 flex w-full items-center justify-between rounded-md border border-line-2 bg-ink-3 px-3 py-2 text-[12px] text-paper-2 hover:text-paper hover:border-signal/50 transition-colors cursor-pointer"
+            title="Switch to Precision Engineering UI (v1)"
+          >
+            <span className="flex items-center gap-2">
+              <Layers className="h-3.5 w-3.5 text-signal" /> Precision UI (v1)
+            </span>
+            <span className="mono text-[10px] text-signal font-semibold">SWITCH</span>
+          </button>
           <div className="border-t border-line pt-4">
             <div className="flex items-center justify-between">
               <span className="mono text-[10px] tracking-widest text-mute">LHE · PKT</span>
@@ -159,6 +174,20 @@ export function RailV2() {
           <span className="text-[13px] font-semibold">Adil Usmani</span>
         </button>
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              try {
+                localStorage.setItem("adil-ui-variant", "v1");
+                window.dispatchEvent(new CustomEvent("switch-ui-variant", { detail: { variant: "v1" } }));
+              } catch {}
+            }}
+            aria-label="Switch to v1 Precision UI"
+            title="Switch to v1 Precision UI"
+            className="h-8 px-2.5 flex items-center gap-1.5 rounded-md border border-line-2 bg-ink-3 text-[11px] font-mono font-semibold text-signal hover:border-signal/50 cursor-pointer"
+          >
+            <Layers className="h-3 w-3" />
+            <span>v1 UI</span>
+          </button>
           <button
             onClick={() => setAssistantOpen(true)}
             aria-label="Open assistant"

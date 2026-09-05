@@ -21,13 +21,19 @@ export function UiSwitcher({
 
   return (
     <>
-      {/* Pinned Side Floating Button */}
-      <div className="fixed bottom-6 right-6 z-[80] flex items-center gap-2">
+      {/* Floating UI Switcher Dock Pill (Bottom-left in v1 to never block chatbot; bottom-right in v2) */}
+      <div
+        className={`fixed z-[70] flex items-center gap-2 transition-all duration-300 ${
+          currentVariant === "v1"
+            ? "bottom-6 left-4 sm:left-6"
+            : "bottom-6 right-4 sm:right-6"
+        }`}
+      >
         <motion.button
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center gap-2.5 rounded-full border border-slate-300/80 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 px-4 py-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.35)] backdrop-blur-md transition-all hover:border-indigo-500/80 dark:hover:border-indigo-400"
+          className="group relative flex items-center gap-2.5 rounded-full border border-slate-300/80 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 px-4 py-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.35)] backdrop-blur-md transition-all hover:border-indigo-500/80 dark:hover:border-indigo-400 cursor-pointer"
           title="Switch Portfolio UI Version"
           aria-label="Various UIs Switcher"
         >
