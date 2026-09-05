@@ -71,6 +71,17 @@ export function routeIntentNode(state: AgentGraphState): AgentGraphState {
   ) {
     intent = "GITHUB_CODEBASE"
   } else if (
+    q.includes("crypto") ||
+    q.includes("sems") ||
+    q.includes("examination") ||
+    q.includes("aes") ||
+    q.includes("rsa") ||
+    q.includes("encryption") ||
+    q.includes("cipher") ||
+    q.includes("argon2")
+  ) {
+    intent = "CRYPTO_SEMS"
+  } else if (
     q.includes("anarchist") ||
     q.includes("gpt-1900") ||
     q.includes("victorian") ||
@@ -82,7 +93,8 @@ export function routeIntentNode(state: AgentGraphState): AgentGraphState {
     q.includes("lexical") ||
     q.includes("neo4j") ||
     q.includes("10-k") ||
-    q.includes("sec")
+    q.includes("sec 10-k") ||
+    q.includes("sec filings")
   ) {
     intent = "GRAPH_RAG"
   } else if (
@@ -99,17 +111,6 @@ export function routeIntentNode(state: AgentGraphState): AgentGraphState {
     q.includes("engro")
   ) {
     intent = "TITAN_MEMORY"
-  } else if (
-    q.includes("crypto") ||
-    q.includes("sems") ||
-    q.includes("examination") ||
-    q.includes("aes") ||
-    q.includes("rsa") ||
-    q.includes("encryption") ||
-    q.includes("cipher") ||
-    q.includes("argon2")
-  ) {
-    intent = "CRYPTO_SEMS"
   } else if (
     q.includes("aerosphere") ||
     q.includes("air quality") ||
