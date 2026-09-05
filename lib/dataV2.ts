@@ -112,9 +112,8 @@ export const projects: Project[] = [
       { label: "Graph latency p95", value: "8 ms" },
     ],
     artifacts: [
-      { kind: "paper", label: "Read the paper", href: "/Lexical_Graph_RAG_paper.pdf", internal: true },
       { kind: "repo", label: "GitHub", href: "https://github.com/AadilUsmani/Lexical_Graph_RAG" },
-      { kind: "demo", label: "Live demo", href: "https://deepwiki.com/AadilUsmani/Lexical_Graph_RAG" },
+      { kind: "demo", label: "Live demo", href: "https://github.com/AadilUsmani/Lexical_Graph_RAG" },
     ],
     accent: "#ff8a3d",
     graph: {
@@ -339,24 +338,28 @@ export const projects: Project[] = [
 
 export const papers = [
   {
-    id: "paper-rag",
-    title: "Lexical-Graph Hybrid RAG: Fusing Dense Retrieval with Sparse Knowledge Graphs",
-    subtitle: "High-precision context assembly for LLMs via RRF and entropy-adaptive reranking",
-    href: "/Lexical_Graph_RAG_paper.pdf",
-    projectId: "rag",
-    abstract:
-      "Dense retrieval degrades on domain jargon and multi-hop questions. We fuse dense, BM25 and knowledge-graph channels with Reciprocal Rank Fusion and a dynamic cross-encoder reranker, improving Recall@10 by 21.4 points and cutting unsupported claims by 37%.",
-    tags: ["RAG", "Knowledge Graphs", "RRF", "Reranking"],
-  },
-  {
     id: "paper-fintech",
     title: "Deterministic Data Fusion for FinTech",
     subtitle: "Fault-tolerant state synchronisation across heterogeneous financial event streams",
     href: "/Deterministic_Data_Fusion_for_FinTech.pdf",
     projectId: "fintech",
+    isExternal: false,
+    status: "Published Paper · Peer Preprint",
     abstract:
       "A replay-equivalent ingestion and reconciliation pipeline using partitioned logs, hybrid logical clocks, idempotent folds and SERIALIZABLE isolation. Sustains 42k events/s per partition with zero ledger discrepancies under 14 days of fault injection.",
     tags: ["Distributed Systems", "Isolation", "Event Sourcing", "Determinism"],
+  },
+  {
+    id: "paper-anarchist",
+    title: "Anarchist LLM: Disguised Algorithmic Reasoning",
+    subtitle: "Pre-1900 Persona Constraint & Transformer Benchmarking on Serverless A100 Clusters",
+    href: "https://github.com/AadilUsmani/Anarchist-LLM",
+    projectId: "anarchist-llm",
+    isExternal: true,
+    status: "Working Paper · Preprint in Preparation",
+    abstract:
+      "Investigating emergent algorithmic problem-solving capabilities when modern transformers are constrained strictly to Victorian-era English without modern computing terminology. Distributed inference benchmarking across serverless NVIDIA A100 GPU workers on Modal using FlashAttention-3 kernels.",
+    tags: ["LLM Benchmarking", "FlashAttention-3", "Modal A100", "Working Paper"],
   },
 ];
 
@@ -437,7 +440,7 @@ export const knowledgeBase: KnowledgeChunk[] = [
   {
     id: "kb-rag-detail",
     topic: "Hybrid RAG internals",
-    source: "Lexical_Graph_RAG_paper.pdf",
+    source: "Project Documentation",
     text: "In the Lexical-Graph Hybrid RAG system, three retrievers run in parallel: a dense vector retriever (HNSW index), a BM25 lexical index, and a knowledge-graph walker doing bounded breadth-first expansion from extracted seed entities. Results are merged with Reciprocal Rank Fusion, score(d) = Σ w_c / (60 + rank_c(d)), with channel weights learned per intent class. A cross-encoder reranker's depth adapts to the entropy of the fused scores. Recall@10 rose from 0.66 (dense-only) to 0.87 and faithfulness from 0.74 to 0.86 at +41 ms p95.",
     keywords: ["rag", "retrieval", "rrf", "reciprocal", "rank", "fusion", "rerank", "reranker", "vector", "embedding", "bm25", "lexical", "knowledge", "graph", "hybrid", "recall", "faithfulness", "multi-hop", "langgraph", "langchain", "cross-encoder", "entropy"],
   },
@@ -473,8 +476,8 @@ export const knowledgeBase: KnowledgeChunk[] = [
     id: "kb-papers",
     topic: "Research papers",
     source: "Portfolio",
-    text: "Adil has authored two research papers: (1) 'Lexical-Graph Hybrid RAG' at /Lexical_Graph_RAG_paper.pdf and (2) 'Deterministic Data Fusion for FinTech' at /Deterministic_Data_Fusion_for_FinTech.pdf. Both can be opened in the in-browser reader from the Research section or via the command palette (⌘K).",
-    keywords: ["paper", "papers", "research", "publication", "publications", "published", "pdf", "read", "academic", "write", "wrote", "author"],
+    text: "Adil has authored one published research paper: 'Deterministic Data Fusion for FinTech' (viewable in the in-browser reader at /Deterministic_Data_Fusion_for_FinTech.pdf). He is currently actively working on his second research paper: 'Anarchist LLM: Disguised Algorithmic Reasoning' (evaluating persona constraints and transformer benchmarking on serverless Modal A100 GPU clusters). Lexical Graph RAG is an engineering architecture project, not a research paper.",
+    keywords: ["paper", "papers", "research", "publication", "publications", "published", "pdf", "read", "academic", "write", "wrote", "author", "anarchist", "deterministic"],
   },
   {
     id: "kb-principles",

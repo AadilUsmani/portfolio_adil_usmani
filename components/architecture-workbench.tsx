@@ -129,16 +129,6 @@ export function ArchitectureWorkbench() {
                         <Bot className="w-3.5 h-3.5 mr-1.5" /> Test Query in AI Agent
                       </Button>
                       <a
-                        href="/Deterministic_Data_Fusion_for_FinTech.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50 dark:bg-indigo-500/10 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 text-indigo-700 dark:text-cyan-300 text-xs font-semibold transition-colors"
-                        title="Read Research Paper (PDF)"
-                      >
-                        <FileText className="w-3.5 h-3.5" />
-                        <span>Research Paper (PDF)</span>
-                      </a>
-                      <a
                         href="https://github.com/AadilUsmani/Lexical_Graph_RAG"
                         target="_blank"
                         rel="noopener noreferrer"

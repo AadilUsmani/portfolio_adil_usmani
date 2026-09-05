@@ -67,7 +67,7 @@ export function HeroV2() {
   const { goTo, setAssistantOpen, openReader } = useShell();
   const stats = [
     { k: "systems shipped", v: String(projects.length).padStart(2, "0") },
-    { k: "research papers", v: "02" },
+    { k: "published paper", v: "01" },
     { k: "events / s / partition", v: "42k" },
     { k: "recall@10 uplift", v: "+21.4" },
   ];
@@ -151,10 +151,10 @@ export function HeroV2() {
               <Sparkles className="h-4 w-4" /> Ask the assistant
             </button>
             <button
-              onClick={() => openReader("/Lexical_Graph_RAG_paper.pdf")}
-              className="inline-flex items-center gap-2 rounded-md border border-line-2 px-5 py-3 text-sm text-paper-2 transition-colors hover:border-signal/50 hover:text-paper"
+              onClick={() => openReader("/Deterministic_Data_Fusion_for_FinTech.pdf")}
+              className="inline-flex items-center gap-2 rounded-md border border-line-2 px-5 py-3 text-sm text-paper-2 transition-colors hover:border-signal/50 hover:text-paper cursor-pointer"
             >
-              <FileText className="h-4 w-4" /> Latest paper
+              <FileText className="h-4 w-4" /> FinTech paper
             </button>
           </motion.div>
 

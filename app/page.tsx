@@ -89,6 +89,22 @@ const projectsData: CaseStudyProject[] = [
     highlight: "Featured Research",
   },
   {
+    title: "Deterministic Data Fusion for FinTech",
+    subtitle: "Fault-Tolerant State Synchronization Across Financial Event Streams",
+    category: "sec",
+    challenge:
+      "High-concurrency financial environments demand absolute determinism and fault-tolerant state synchronization across disparate event streams without race conditions, write skew, or ledger drift.",
+    architecturalDecision:
+      "Engineered a high-throughput ingestion and reconciliation pipeline using hybrid logical clocks, idempotent event folds under SERIALIZABLE isolation, and a transactional outbox daemon that continuously audits projected balances against ground-truth snapshots.",
+    outcome:
+      "Sustained 42k events/sec per partition with zero ledger discrepancies under 14-day continuous fault injection tests. Authored comprehensive research paper with formal proofs.",
+    tags: ["Distributed Systems", "SERIALIZABLE Isolation", "Event Sourcing", "Research Paper", "FinTech"],
+    github: "https://github.com/AadilUsmani",
+    paper: "/Deterministic_Data_Fusion_for_FinTech.pdf",
+    metrics: { Throughput: "42k ev/s", Reconciliation: "<120ms p99", Status: "Published Paper" },
+    highlight: "Published Paper",
+  },
+  {
     title: "Lexical Graph RAG — SEC 10-K Intelligence",
     subtitle: "Knowledge Graph Retrieval with Deduplication Workflows",
     category: "rag",
@@ -101,7 +117,6 @@ const projectsData: CaseStudyProject[] = [
     tags: ["Neo4j", "LangGraph", "Python", "Knowledge Graphs", "SEC 10-K"],
     github: "https://github.com/AadilUsmani/Lexical_Graph_RAG",
     demo: "https://deepwiki.com/AadilUsmani/Lexical_Graph_RAG",
-    paper: "/Deterministic_Data_Fusion_for_FinTech.pdf",
     metrics: { Hallucination: "< 2.0%", Domain: "SEC 10-K", Graph: "Neo4j" },
     highlight: "Graph RAG",
   },

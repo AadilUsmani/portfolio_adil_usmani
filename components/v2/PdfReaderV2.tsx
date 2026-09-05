@@ -49,7 +49,30 @@ export function PdfReaderV2() {
               </button>
             </div>
             <div className="relative flex-1 bg-[#26292f]">
-              <iframe title={title} src={`${readerHref}#view=FitH&toolbar=1`} className="absolute inset-0 h-full w-full" />
+              <object
+                data={`${readerHref}#view=FitH&toolbar=1`}
+                type="application/pdf"
+                className="absolute inset-0 h-full w-full"
+                title={title}
+              >
+                <iframe
+                  title={title}
+                  src={`${readerHref}#view=FitH&toolbar=1`}
+                  className="h-full w-full border-0"
+                >
+                  <div className="flex h-full w-full flex-col items-center justify-center p-8 text-center text-slate-300">
+                    <p className="text-sm font-medium mb-3">Your browser does not support inline PDF viewing.</p>
+                    <a
+                      href={readerHref}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-lg bg-teal px-4 py-2 text-xs font-semibold text-ink"
+                    >
+                      Open PDF in New Tab
+                    </a>
+                  </div>
+                </iframe>
+              </object>
               <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center pb-3 sm:hidden">
                 <a href={readerHref} target="_blank" rel="noreferrer" className="pointer-events-auto rounded-full border border-line-2 bg-ink-2 px-4 py-2 text-[12px] text-paper">
                   Open in new tab

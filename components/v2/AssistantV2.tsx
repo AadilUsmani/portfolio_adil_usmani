@@ -20,7 +20,7 @@ type Msg = {
 const welcome: Msg = {
   id: "welcome",
   role: "assistant",
-  content: `Hi, I'm Adil's portfolio assistant. I answer from his CV, project documentation and the two research papers. Ask me about any system, the stack, or how to reach him.`,
+  content: `Hi, I'm Adil's portfolio assistant. I answer from his verified CV, live GitHub codebases, research papers, and system architectures. Ask me about any system, the stack, or how to reach him.`,
 };
 
 type Store = { messages: Msg[]; sessionId: string | null; busy: boolean };

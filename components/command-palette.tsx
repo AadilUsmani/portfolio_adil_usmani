@@ -219,14 +219,14 @@ export function CommandPalette({
     {
       id: "act-read-paper",
       title: "Read Research Paper: Deterministic Data Fusion for FinTech",
-      subtitle: "Official Lexical Graph RAG paper on SEC 10-K deduplication",
+      subtitle: "Fault-tolerant state synchronisation across financial event streams",
       category: "Actions",
       icon: FileText,
       action: () => {
         window.open("/Deterministic_Data_Fusion_for_FinTech.pdf", "_blank")
         onClose()
       },
-      keywords: ["paper", "research", "fintech", "graph rag", "pdf"],
+      keywords: ["paper", "research", "fintech", "distributed", "pdf"],
     },
     {
       id: "act-crypto-repo",

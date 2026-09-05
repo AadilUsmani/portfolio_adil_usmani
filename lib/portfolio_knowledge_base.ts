@@ -175,9 +175,8 @@ export const PORTFOLIO_PROJECTS: ProjectData[] = [
     category: "rag",
     githubUrl: "https://github.com/AadilUsmani/Lexical_Graph_RAG",
     liveUrl: "https://deepwiki.com/AadilUsmani/Lexical_Graph_RAG",
-    paperUrl: "/Deterministic_Data_Fusion_for_FinTech.pdf",
     description:
-      "Graph-based Retrieval-Augmented Generation system using lexical graphs to enhance factual accuracy and contextual depth in AI query responses. Implemented knowledge graph deduplication workflows to synthesize structured insights from unstructured SEC 10-K financial filings.",
+      "Graph-based Retrieval-Augmented Generation system using lexical graphs to enhance factual accuracy and contextual depth in AI query responses. Implemented knowledge graph deduplication workflows to synthesize structured insights from unstructured SEC 10-K financial filings. This is an engineering architecture project.",
     techStack: ["Python", "Neo4j", "LangGraph", "Knowledge Graphs", "SEC Filings"],
     metricsAndBenchmarks: {
       "Signal-to-Noise": "Optimized via graph pruning",
@@ -188,6 +187,27 @@ export const PORTFOLIO_PROJECTS: ProjectData[] = [
       "Entity extraction and knowledge graph construction over financial 10-K documents.",
       "Deduplication workflows balancing hallucination reduction and retrieval recall.",
       "LangGraph-orchestrated multi-hop query routing.",
+    ],
+  },
+  {
+    id: "deterministic-data-fusion",
+    name: "Deterministic Data Fusion for FinTech",
+    subtitle: "Fault-Tolerant State Synchronization Across Financial Event Streams",
+    category: "sec",
+    githubUrl: "https://github.com/AadilUsmani",
+    paperUrl: "/Deterministic_Data_Fusion_for_FinTech.pdf",
+    description:
+      "Adil Usmani's published research paper on high-throughput, low-latency ingestion and reconciliation for distributed financial event streams. Implements hybrid logical clocks, idempotent event folds under SERIALIZABLE isolation, and a transactional outbox daemon that continuously diffs projected balances against source-of-truth snapshots.",
+    techStack: ["Distributed Systems", "SERIALIZABLE Isolation", "Hybrid Logical Clocks", "Event Sourcing", "PostgreSQL"],
+    metricsAndBenchmarks: {
+      Throughput: "42k ev/s per partition",
+      Reconciliation: "<120ms p99",
+      Status: "Published Paper (PDF Available)",
+    },
+    keyFeatures: [
+      "Replay-equivalent ledger state across heterogeneous event streams.",
+      "Formal proof and empirical evaluation under 14 days of fault injection.",
+      "Zero ledger discrepancies achieved via SERIALIZABLE isolation level.",
     ],
   },
   {
