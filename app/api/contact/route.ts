@@ -41,10 +41,20 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, email, subject, message } = body
+    const { name, email, subject, message, channel, honey } = body
+
+    // Silent drop for automated spam bots triggering the hidden honeypot
+    if (honey) {
+      return NextResponse.json(
+        { ok: true, success: true, message: "Message received.", receipt: { id: Date.now(), at: new Date().toISOString() } },
+        { status: 200 },
+      )
+    }
+
+    const effectiveSubject = (subject || (channel ? `[Portfolio] Inquiry: ${channel}` : "Portfolio Inquiry")).trim()
 
     // Validate required fields
-    if (!name || !email || !subject || !message) {
+    if (!name || !email || !effectiveSubject || !message) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 })
     }
 
@@ -55,12 +65,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate field lengths
-    if (name.length > 100 || email.length > 254 || subject.length > 200 || message.length > 5000) {
+    if (name.length > 100 || email.length > 254 || effectiveSubject.length > 200 || message.length > 5000) {
       return NextResponse.json({ error: "Input exceeds maximum allowed length" }, { status: 400 })
     }
 
     const safeName = escapeHtml(name.trim())
-    const safeSubject = escapeHtml(subject.trim())
+    const safeSubject = escapeHtml(effectiveSubject)
     const safeMessage = escapeHtml(message.trim())
 
     const smtpUser = process.env.SMTP_USER || "muhammadaadilusmani@gmail.com"

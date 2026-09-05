@@ -29,6 +29,8 @@ interface Message {
 
 const INITIAL_SUGGESTIONS = [
   "🌟 Tell me about Anarchist LLM",
+  "📑 What research papers has Adil written?",
+  "🛡️ How is encryption built in Crypto_secure_system?",
   "🕸️ What is Adil's Graph RAG experience?",
   "⚡ How does Corrective RAG (CRAG) work?",
   "💼 Summarize Adil's work at ML1",

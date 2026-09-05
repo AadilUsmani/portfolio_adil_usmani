@@ -253,6 +253,21 @@ export function CommandPalette({
       keywords: ["theme", "mode", "dark", "light", "color"],
     },
     {
+      id: "act-switch-v2",
+      title: "Switch to Cyber Blueprint UI (v2)",
+      subtitle: "Technical console with live topology visualizer and CyberBug mascot",
+      category: "Actions",
+      icon: Layers,
+      action: () => {
+        try {
+          localStorage.setItem("adil-ui-variant", "v2")
+          window.dispatchEvent(new CustomEvent("switch-ui-variant", { detail: { variant: "v2" } }))
+        } catch {}
+        onClose()
+      },
+      keywords: ["ui", "v2", "blueprint", "cyber", "variant", "switch"],
+    },
+    {
       id: "act-github",
       title: "Open GitHub Profile",
       subtitle: "github.com/AadilUsmani (10+ repositories)",

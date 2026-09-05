@@ -237,7 +237,7 @@ export function AssistantSectionV2() {
               Interrogate the portfolio. It answers from the <span className="text-teal">source material</span>.
             </>
           }
-          blurb="A retrieval-backed agent grounded in Adil's CV, project documentation and both papers. Each answer cites the chunks it was composed from."
+          blurb="A retrieval-backed agent grounded in Adil's verified CV, live GitHub codebases, research papers, and system architectures. Each answer cites the sources it was composed from."
         />
         <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
           <div className="relative overflow-hidden rounded-xl border border-line bg-ink-2">
@@ -315,7 +315,7 @@ export function AssistantDrawerV2() {
                 </span>
                 <div>
                   <div className="text-[13px] font-semibold text-paper">Knowledge assistant</div>
-                  <div className="mono text-[9.5px] tracking-widest text-mute">GROUNDED · CV + DOCS + PAPERS</div>
+                  <div className="mono text-[9.5px] tracking-widest text-mute">GROUNDED · CV + GITHUB + PAPERS</div>
                 </div>
               </div>
               <button onClick={() => setAssistantOpen(false)} className="rounded-md border border-line-2 p-1.5 text-mute hover:text-paper" aria-label="Close assistant">

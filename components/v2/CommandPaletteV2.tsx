@@ -15,6 +15,7 @@ import {
   GitBranch,
   Link2,
   CornerDownLeft,
+  Layers,
 } from "lucide-react";
 import { papers, profile, projects } from "@/lib/dataV2";
 import { useShell, type SectionId } from "@/components/v2/shell-context";
@@ -71,15 +72,34 @@ export function CommandPaletteV2() {
       ...papers.map<Item>((pp) => ({
         id: `paper-${pp.id}`,
         group: "Papers",
-        label: `Read: ${pp.title}`,
-        hint: "reader",
-        keywords: `${pp.title} ${pp.tags.join(" ")} paper pdf read`,
+        label: pp.isExternal ? `View: ${pp.title}` : `Read: ${pp.title}`,
+        hint: pp.isExternal ? "github" : "reader",
+        keywords: `${pp.title} ${pp.tags.join(" ")} paper pdf read preprint`,
         Icon: FileText,
         run: () => {
           close();
-          openReader(pp.href);
+          if (pp.isExternal) {
+            window.open(pp.href, "_blank", "noopener,noreferrer");
+          } else {
+            openReader(pp.href);
+          }
         },
       })),
+      {
+        id: "switch-ui-v1",
+        group: "Preferences",
+        label: "Switch to Precision UI (v1)",
+        hint: "ui",
+        keywords: "switch ui variant version 1 classic precision",
+        Icon: Layers,
+        run: () => {
+          close();
+          try {
+            localStorage.setItem("adil-ui-variant", "v1");
+            window.dispatchEvent(new CustomEvent("switch-ui-variant", { detail: { variant: "v1" } }));
+          } catch {}
+        },
+      },
       {
         id: "cv",
         group: "Actions",

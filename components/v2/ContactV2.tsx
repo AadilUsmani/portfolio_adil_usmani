@@ -50,7 +50,10 @@ export function ContactV2() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          subject: `[Portfolio v2] Inquiry: ${form.channel}`,
+        }),
       });
       const json = await res.json();
       if (!res.ok || (!json.ok && !json.success)) {
@@ -59,7 +62,10 @@ export function ContactV2() {
         setStatus("error");
         return;
       }
-      setReceipt({ id: json.id, at: json.receivedAt });
+      setReceipt({
+        id: json.receipt?.id || json.id || Date.now(),
+        at: json.receipt?.at || json.receivedAt || new Date().toISOString(),
+      });
       setStatus("sent");
       setForm({ name: "", email: "", message: "", channel: "hiring", honey: "" });
     } catch {
