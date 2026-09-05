@@ -150,8 +150,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "Your message has been sent successfully! I'll get back to you shortly.",
+        ok: true,
         success: true,
+        message: "Your message has been sent successfully! I'll get back to you shortly.",
+        receipt: { id: Date.now(), at: new Date().toISOString() },
       },
       { status: 200 },
     )

@@ -52,6 +52,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { PortfolioAssistant } from "@/components/portfolio-assistant"
 import { CommandPalette } from "@/components/command-palette"
 import { ArchitectureWorkbench } from "@/components/architecture-workbench"
+import { PortfolioV2 } from "@/components/v2/PortfolioV2"
+import { UiSwitcher } from "@/components/ui-switcher"
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -267,6 +269,24 @@ export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("about")
   const [projectFilter, setProjectFilter] = useState<"all" | "rag" | "llm" | "sec" | "ml">("all")
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [uiVariant, setUiVariant] = useState<"v1" | "v2">("v1")
+
+  // Sync UI variant preference
+  useEffect(() => {
+    try {
+      const savedUi = localStorage.getItem("adil-ui-variant")
+      if (savedUi === "v2" || savedUi === "v1") {
+        setUiVariant(savedUi)
+      }
+    } catch {}
+  }, [])
+
+  const handleSelectVariant = (v: "v1" | "v2") => {
+    setUiVariant(v)
+    try {
+      localStorage.setItem("adil-ui-variant", v)
+    } catch {}
+  }
 
   // Initialize theme from localStorage if set, default to light
   useEffect(() => {
@@ -1066,6 +1086,12 @@ export default function Portfolio() {
         isDarkMode={isDarkMode}
         setIsDarkMode={setIsDarkMode}
         scrollToSection={scrollToSection}
+      />
+      <UiSwitcher
+        currentVariant="v1"
+        onSelectVariant={handleSelectVariant}
+        isDarkMode={isDarkMode}
+        onToggleTheme={() => setIsDarkMode(!isDarkMode)}
       />
     </div>
   )

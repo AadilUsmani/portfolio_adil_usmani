@@ -206,3 +206,93 @@ kbd {
 
 
 
+
+
+/* ─── UI v2 Blueprint Architecture Design System ─────────────────── */
+:root, .light {
+  --color-ink: #f8fafc;
+  --color-ink-2: #ffffff;
+  --color-ink-3: #f1f5f9;
+  --color-ink-4: #e2e8f0;
+  --color-line: #e2e8f0;
+  --color-line-2: #cbd5e1;
+  --color-paper: #0f172a;
+  --color-paper-2: #334155;
+  --color-mute: #64748b;
+  --color-signal: #ea580c;
+  --color-signal-2: #f97316;
+  --color-teal: #0d9488;
+  --color-violet: #7c3aed;
+  --color-rose: #e11d48;
+  --color-lime: #16a34a;
+  --grid-line-color: rgba(15, 23, 42, 0.045);
+}
+
+.dark {
+  --color-ink: #07080c;
+  --color-ink-2: #0c0e14;
+  --color-ink-3: #12151d;
+  --color-ink-4: #1a1e28;
+  --color-line: #232836;
+  --color-line-2: #2f3648;
+  --color-paper: #ece7dd;
+  --color-paper-2: #b8b3a8;
+  --color-mute: #7a8092;
+  --color-signal: #ff8a3d;
+  --color-signal-2: #ffb47a;
+  --color-teal: #4fd1c5;
+  --color-violet: #b794f4;
+  --color-rose: #f687b3;
+  --color-lime: #68d391;
+  --grid-line-color: rgba(255, 255, 255, 0.035);
+}
+
+.blueprint {
+  background-color: var(--color-ink);
+  background-image:
+    linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.mono {
+  font-family: var(--font-mono, ui-monospace, Menlo, Monaco, Consolas, monospace);
+  font-feature-settings: "ss01", "cv11", "zero";
+}
+
+.text-outline {
+  -webkit-text-stroke: 1px var(--color-line-2);
+  color: transparent;
+}
+
+.edge-flow {
+  stroke-dasharray: 6 8;
+  animation: dash 1.4s linear infinite;
+}
+
+.card-glow {
+  position: relative;
+}
+.card-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.5), transparent 40%, transparent 60%, rgba(79, 209, 197, 0.35));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.card-glow:hover::before { opacity: 1; }
+
+.section-label {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-mute);
+}

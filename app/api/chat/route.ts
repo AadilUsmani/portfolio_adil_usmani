@@ -49,8 +49,11 @@ export async function POST(req: Request) {
     const state = await runPortfolioChatAgent(message.trim(), history, apiKey)
 
     return NextResponse.json({
+      ok: true,
       success: true,
       reply: state.generatedResponse,
+      answer: state.generatedResponse,
+      sources: (state.relevantProjects || []).map((p) => ({ id: p.id, topic: p.name, source: p.githubUrl })),
       intent: state.intent,
       suggestedQuestions: state.suggestedQuestions,
       relevantProjects: state.relevantProjects,
