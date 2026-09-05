@@ -132,4 +132,28 @@ Invoke-RestMethod -Uri "https://v0-muhammadaadilusmani.vercel.app/api/contact" -
 
 ---
 
+### Phase 5: Client-Side Crash Elimination, Console Sanitization & Error Boundaries
+* **The Problem:** Intermittent crashes occurred when switching system architectures, along with console errors (404 on `/favicon.ico`, SSR hydration timestamp mismatches, and `crypto.randomUUID` failures in non-secure or older mobile browsers).
+* **Root Causes & Solutions:**
+  1. **SVG Topology Flow Out-of-Bounds Exception (`ArchitectureVisualizerV2.tsx`)**:
+     - *Cause:* When switching between systems with differing flow step counts (e.g., FinTech 10 steps → Battery 7 steps), React re-rendered with `step = 8` before the reset effect ran, causing `nodeMap[flow[step][0]].label` to throw an unhandled `TypeError`.
+     - *Fix:* Added null-safe chaining `activePair && fromNode && toNode`, protected `visitedNodes` array slicing, and guarded SVG scale computations against zero-width containers (`Number.isFinite`).
+  2. **Safe UUID Fallback (`AssistantV2.tsx`)**:
+     - *Cause:* `crypto.randomUUID()` is strictly scoped to Secure Contexts (HTTPS/localhost) and fails in some webviews and older mobile browsers.
+     - *Fix:* Built `safeUUID()` utility providing a resilient fallback generator.
+  3. **Hydration Mismatch Fix (`portfolio-assistant.tsx`)**:
+     - *Cause:* Evaluating `new Date().toLocaleTimeString()` during initial `useState` generated differing server/client timestamps during SSR.
+     - *Fix:* Initialized welcome message timestamp to empty string and populated it on client mount in `useEffect`.
+  4. **Favicon 404 Resolution**:
+     - *Cause:* Missing `favicon.ico` triggered automatic 404 console errors on every session.
+     - *Fix:* Generated `public/favicon.ico` and `app/favicon.ico` with explicit metadata link definitions in `app/layout.tsx`.
+  5. **Clipboard & Storage Resilience (`app/page.tsx`, `command-palette.tsx`, `RailV2.tsx`)**:
+     - *Cause:* Unprotected `navigator.clipboard.writeText()` rejected in non-focused documents, and `localStorage.setItem()` threw in private browsing modes.
+     - *Fix:* Wrapped clipboard copies with textarea fallback and protected all `localStorage` writes with `try/catch`.
+  6. **Next.js App Router Error Boundaries (`app/error.tsx` & `app/global-error.tsx`)**:
+     - *Fix:* Implemented fault-tolerant client boundaries so any unexpected child exception isolates state gracefully without blanking the screen.
+
+---
+
 *This document serves as the permanent engineering log for Muhammad Adil Usmani's portfolio systems.*
+

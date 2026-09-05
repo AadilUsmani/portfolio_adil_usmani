@@ -282,6 +282,7 @@ export function CyberBug({ size = 260 }: { size?: number }) {
             r="16"
             fill="url(#bugCoreGrad)"
             filter="url(#coreGlow)"
+            style={{ transformOrigin: "100px 124px" }}
             animate={{
               scale: [0.95, 1.14, 0.95],
               opacity: [0.75, 1, 0.75],
@@ -291,6 +292,7 @@ export function CyberBug({ size = 260 }: { size?: number }) {
           <motion.polygon
             points="100,116 106,124 100,132 94,124"
             fill="#ffffff"
+            style={{ transformOrigin: "100px 124px" }}
             animate={{ rotate: [0, 180, 360] }}
             transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
           />

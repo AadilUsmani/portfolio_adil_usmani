@@ -47,9 +47,20 @@ export function PortfolioAssistant() {
       role: "assistant",
       text: "👋 Hi! I'm **Adil's AI Portfolio Assistant**.\n\nI'm grounded in Muhammad Adil Usmani's **verified CV** and **GitHub repositories**. Ask me anything about his research on **Anarchist LLM**, **Graph RAG**, **Titan Memory**, work experience at **ML1**, or skills!",
       suggestions: INITIAL_SUGGESTIONS,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: "",
     },
   ])
+
+  // Mount timestamp on client to guarantee 0 SSR hydration mismatch
+  useEffect(() => {
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === "welcome" && !m.timestamp
+          ? { ...m, timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) }
+          : m
+      )
+    )
+  }, [])
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)

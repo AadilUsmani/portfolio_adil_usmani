@@ -84,7 +84,20 @@ export function CommandPalette({
   }, [isOpen])
 
   const copyEmail = () => {
-    navigator.clipboard.writeText("muhammadaadilusmani@gmail.com")
+    try {
+      if (typeof navigator !== "undefined" && navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+        navigator.clipboard.writeText("muhammadaadilusmani@gmail.com").catch(() => {})
+      } else {
+        const textarea = document.createElement("textarea")
+        textarea.value = "muhammadaadilusmani@gmail.com"
+        textarea.style.position = "fixed"
+        textarea.style.opacity = "0"
+        document.body.appendChild(textarea)
+        textarea.select()
+        document.execCommand("copy")
+        document.body.removeChild(textarea)
+      }
+    } catch {}
     setCopiedEmail(true)
     setTimeout(() => {
       setCopiedEmail(false)

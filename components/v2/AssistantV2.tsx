@@ -35,6 +35,15 @@ function subscribe(l: () => void) {
   return () => listeners.delete(l);
 }
 const serverSnapshot: Store = { messages: [welcome], sessionId: null, busy: false };
+function safeUUID(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    try {
+      return crypto.randomUUID();
+    } catch {}
+  }
+  return `id-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+}
+
 let lastSeedHandled: string | null = null;
 
 function useChat() {
@@ -43,8 +52,8 @@ function useChat() {
   const send = useCallback(async (text: string) => {
     const q = text.trim();
     if (!q || store.busy) return;
-    const userMsg: Msg = { id: crypto.randomUUID(), role: "user", content: q };
-    const pendingId = crypto.randomUUID();
+    const userMsg: Msg = { id: safeUUID(), role: "user", content: q };
+    const pendingId = safeUUID();
     setStore({
       messages: [...store.messages, userMsg, { id: pendingId, role: "assistant", content: "", pending: true }],
       busy: true,

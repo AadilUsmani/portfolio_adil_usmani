@@ -33,7 +33,8 @@ const kindMeta: Record<NodeKind, { label: string; color: string; Icon: typeof Bo
   output: { label: "Output", color: "#68d391", Icon: ArrowRightToLine },
 };
 
-function edgePath(a: ArchNode, b: ArchNode) {
+function edgePath(a?: ArchNode, b?: ArchNode) {
+  if (!a || !b) return "";
   const x1 = a.x + NODE_W / 2;
   const y1 = a.y;
   const x2 = b.x - NODE_W / 2;
@@ -69,17 +70,22 @@ export function ArchitectureVisualizerV2({ project }: { project: Project }) {
   }, [project.id]);
 
   useEffect(() => {
-    if (!playing) return;
+    if (!playing || !flow || flow.length === 0) return;
     const id = setInterval(() => setStep((s) => (s + 1) % (flow.length + 2)), 900 / speed);
     return () => clearInterval(id);
-  }, [playing, speed, flow.length]);
+  }, [playing, speed, flow]);
 
-  const activeEdge = flow[step] ? `${flow[step][0]}->${flow[step][1]}` : null;
+  const activePair = flow && flow[step] ? flow[step] : null;
+  const fromNode = activePair && activePair[0] ? nodeMap[activePair[0]] : null;
+  const toNode = activePair && activePair[1] ? nodeMap[activePair[1]] : null;
+  const activeEdge = activePair && fromNode && toNode ? `${activePair[0]}->${activePair[1]}` : null;
+
   const visitedNodes = useMemo(() => {
     const s = new Set<string>();
-    flow.slice(0, Math.min(step + 1, flow.length)).forEach(([a, b]) => {
-      s.add(a);
-      s.add(b);
+    if (!flow) return s;
+    flow.slice(0, Math.min(step + 1, flow.length)).forEach((pair) => {
+      if (pair && pair[0]) s.add(pair[0]);
+      if (pair && pair[1]) s.add(pair[1]);
     });
     return s;
   }, [flow, step]);
@@ -111,10 +117,12 @@ export function ArchitectureVisualizerV2({ project }: { project: Project }) {
   const onPointerMove = useCallback((e: React.PointerEvent) => {
     if (!dragRef.current) return;
     const svg = svgRef.current;
-    const scale = svg ? 1000 / svg.clientWidth : 1;
+    const scale = svg && svg.clientWidth > 0 ? 1000 / svg.clientWidth : 1;
     const dx = (e.clientX - dragRef.current.x) * scale;
     const dy = (e.clientY - dragRef.current.y) * scale;
-    setView((v) => ({ ...v, x: dragRef.current!.vx + dx, y: dragRef.current!.vy + dy }));
+    if (Number.isFinite(dx) && Number.isFinite(dy)) {
+      setView((v) => ({ ...v, x: dragRef.current!.vx + dx, y: dragRef.current!.vy + dy }));
+    }
   }, []);
   const onPointerUp = useCallback(() => {
     dragRef.current = null;
@@ -161,11 +169,11 @@ export function ArchitectureVisualizerV2({ project }: { project: Project }) {
             </div>
             <span className="mono ml-2 hidden text-[10px] tracking-widest text-mute sm:inline">
               STEP {String(Math.min(step + 1, flow.length)).padStart(2, "0")}/{String(flow.length).padStart(2, "0")}
-              {activeEdge ? (
+              {activeEdge && fromNode && toNode ? (
                 <>
                   {" "}
-                  · <span className="text-signal">{nodeMap[flow[step][0]].label}</span> →{" "}
-                  <span className="text-teal">{nodeMap[flow[step][1]].label}</span>
+                  · <span className="text-signal">{fromNode.label}</span> →{" "}
+                  <span className="text-teal">{toNode.label}</span>
                 </>
               ) : (
                 <span className="text-lime"> · CYCLE COMPLETE</span>
@@ -270,7 +278,7 @@ export function ArchitectureVisualizerV2({ project }: { project: Project }) {
               const isSel = selected === n.id;
               const isHov = hovered === n.id;
               const visited = visitedNodes.has(n.id);
-              const isActiveNode = activeEdge ? flow[step].includes(n.id) : false;
+              const isActiveNode = activePair ? activePair.includes(n.id) : false;
               const dimmed = connected && !(focusId === n.id || edges.some((e) => connected.has(edgeKey(e)) && (e.from === n.id || e.to === n.id)));
               return (
                 <g
