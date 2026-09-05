@@ -155,5 +155,25 @@ Invoke-RestMethod -Uri "https://v0-muhammadaadilusmani.vercel.app/api/contact" -
 
 ---
 
+### Phase 6: Mobile Virtual Keyboard & Timezone Exception Elimination
+* **The Problem:** Mobile devices running Android Chrome / ColorOS / WebViews were triggering the newly introduced error boundary (`app/error.tsx`), appearing persistently on user mobile screens.
+* **Root Causes & Solutions:**
+  1. **Virtual Keyboard Event Anomaly (`command-palette.tsx`, `shell-context.tsx`)**:
+     - *Cause:* On mobile virtual keyboards (Gboard, SwiftKey, ColorOS IME), touch typing or autocomplete fires `keydown` events where `e.key` is `undefined` or `"Unidentified"`. Executing `e.key.toLowerCase()` threw `TypeError: Cannot read properties of undefined (reading 'toLowerCase')`, immediately tripping the React error boundary.
+     - *Fix:* Added `if (!e.key) return;` guards in all global and local keydown listeners before checking key names.
+  2. **IANA Timezone Compatibility on Mobile (`RailV2.tsx`)**:
+     - *Cause:* `new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Karachi" })` threw `RangeError: Invalid time zone specified: Asia/Karachi` on mobile devices with trimmed IANA timezone databases.
+     - *Fix:* Wrapped `Intl.DateTimeFormat` in a `try/catch` with a mathematical UTC+5 (Pakistan Standard Time) offset calculation fallback.
+  3. **Pointer Capture DOMException (`ArchitectureVisualizerV2.tsx`)**:
+     - *Cause:* Calling `(e.currentTarget as Element).setPointerCapture(e.pointerId)` on touch screen drag gestures threw `DOMException: InvalidPointerId` when touch events completed rapidly.
+     - *Fix:* Wrapped `setPointerCapture` in a `try/catch` block and provided fallback `kindMeta` node lookups.
+  4. **Typewriter String Safety (`AssistantV2.tsx`)**:
+     - *Cause:* Calling `.length` or `.slice()` on empty/undefined typewriter strings threw exceptions during dynamic streaming.
+     - *Fix:* Coerced inputs with safe string fallbacks (`safeText = text || ""`).
+  5. **Transparent Diagnostic Telemetry & Reset Session (`app/error.tsx`, `app/global-error.tsx`, `app/api/client-error`)**:
+     - *Fix:* Updated error boundaries to expose exact exception names, messages, digests, and stack traces on screen with a single-tap "Copy Diagnostic" tool and automated background reporting to `/api/client-error`. Provided a "Clean Reset Session" button that clears storage and performs a hard refresh back to the clean root state.
+
+---
+
 *This document serves as the permanent engineering log for Muhammad Adil Usmani's portfolio systems.*
 
