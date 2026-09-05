@@ -5,7 +5,7 @@ import { ArrowUpRight, FileText, GitBranch, Play, Database, MessageSquareText } 
 import { projects } from "@/lib/dataV2";
 import { useShell } from "@/components/v2/shell-context";
 import { SectionHeader, Tag, Corner } from "@/components/v2/ui";
-import { ArchitectureVisualizer } from "@/components/v2/ArchitectureVisualizerV2";
+import { ArchitectureVisualizerV2 } from "@/components/v2/ArchitectureVisualizerV2";
 
 const artifactIcon = {
   paper: FileText,

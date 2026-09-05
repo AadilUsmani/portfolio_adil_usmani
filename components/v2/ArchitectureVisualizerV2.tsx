@@ -430,3 +430,5 @@ export function ArchitectureVisualizerV2({ project }: { project: Project }) {
     </div>
   );
 }
+
+export const ArchitectureVisualizer = ArchitectureVisualizerV2;
