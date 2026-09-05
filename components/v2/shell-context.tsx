@@ -88,7 +88,10 @@ export function ShellProvider({ children }: { children: ReactNode }) {
       const typing =
         target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
 
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      if (!e.key) return;
+      const k = e.key.toLowerCase();
+
+      if ((e.metaKey || e.ctrlKey) && k === "k") {
         e.preventDefault();
         setPaletteOpen((v) => !v);
         return;
@@ -111,12 +114,13 @@ export function ShellProvider({ children }: { children: ReactNode }) {
         if (p) focusProject(p.id);
         return;
       }
-      if (e.key.toLowerCase() === "g") {
+      if (k === "g") {
         const next = (ev: KeyboardEvent) => {
+          window.removeEventListener("keydown", next);
+          if (!ev.key) return;
           const map: Record<string, SectionId> = { h: "top", s: "systems", r: "research", a: "approach", c: "contact" };
           const s = map[ev.key.toLowerCase()];
           if (s) goTo(s);
-          window.removeEventListener("keydown", next);
         };
         window.addEventListener("keydown", next, { once: true });
       }

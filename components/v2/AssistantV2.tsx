@@ -92,19 +92,20 @@ function useChat() {
   return { ...state, send, clear };
 }
 
-function Typewriter({ text }: { text: string }) {
+function Typewriter({ text }: { text?: string }) {
   const [shown, setShown] = useState(0);
+  const safeText = text || "";
   useEffect(() => {
     setShown(0);
     let i = 0;
     const id = setInterval(() => {
       i += 3;
       setShown(i);
-      if (i >= text.length) clearInterval(id);
+      if (i >= safeText.length) clearInterval(id);
     }, 12);
     return () => clearInterval(id);
-  }, [text]);
-  return <>{text.slice(0, shown)}</>;
+  }, [safeText]);
+  return <>{safeText.slice(0, shown)}</>;
 }
 
 export function ChatConsole({ compact = false }: { compact?: boolean }) {

@@ -110,7 +110,9 @@ export function ArchitectureVisualizerV2({ project }: { project: Project }) {
     (e: React.PointerEvent) => {
       if ((e.target as Element).closest("[data-node]")) return;
       dragRef.current = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
-      (e.currentTarget as Element).setPointerCapture(e.pointerId);
+      try {
+        (e.currentTarget as Element).setPointerCapture(e.pointerId);
+      } catch {}
     },
     [view.x, view.y],
   );
@@ -274,7 +276,7 @@ export function ArchitectureVisualizerV2({ project }: { project: Project }) {
 
             {/* nodes */}
             {nodes.map((n) => {
-              const meta = kindMeta[n.kind];
+              const meta = kindMeta[n.kind] || kindMeta.service;
               const isSel = selected === n.id;
               const isHov = hovered === n.id;
               const visited = visitedNodes.has(n.id);

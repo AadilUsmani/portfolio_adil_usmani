@@ -61,6 +61,7 @@ export function CommandPalette({
   // Listen for global open event
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!e.key) return
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault()
         if (isOpen) onClose()
@@ -320,7 +321,7 @@ export function CommandPalette({
   // Keyboard navigation within list
   useEffect(() => {
     const handleListNav = (e: KeyboardEvent) => {
-      if (!isOpen) return
+      if (!isOpen || !e.key) return
       if (e.key === "ArrowDown") {
         e.preventDefault()
         setSelectedIndex((prev) => (prev + 1) % Math.max(filteredActions.length, 1))

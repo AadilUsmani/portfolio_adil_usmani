@@ -19,17 +19,30 @@ const sections: { id: SectionId; label: string; key: string }[] = [
 function useLahoreClock() {
   const [time, setTime] = useState("");
   useEffect(() => {
-    const fmt = new Intl.DateTimeFormat("en-GB", {
-      timeZone: profile.timezone,
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-    });
-    const tick = () => setTime(fmt.format(new Date()));
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
+    let tick: () => void;
+    try {
+      const fmt = new Intl.DateTimeFormat("en-GB", {
+        timeZone: profile.timezone,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      });
+      tick = () => setTime(fmt.format(new Date()));
+    } catch {
+      // Manual UTC+5 (PKT) fallback for mobile browsers lacking full IANA timezone tables
+      tick = () => {
+        const d = new Date();
+        const utc = d.getTime() + d.getTimezoneOffset() * 60000;
+        const pkt = new Date(utc + 3600000 * 5);
+        setTime(pkt.toTimeString().split(" ")[0]);
+      };
+    }
+    try {
+      tick();
+      const id = setInterval(tick, 1000);
+      return () => clearInterval(id);
+    } catch {}
   }, []);
   return time;
 }
