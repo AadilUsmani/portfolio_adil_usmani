@@ -218,6 +218,33 @@ Invoke-RestMethod -Uri "https://v0-muhammadaadilusmani.vercel.app/api/contact" -
      - Replaced fragile SVG `animate={{ d: [...] }}` and `animate={{ cx: [...] }}` string interpolations in `CyberBug.tsx` and `NeuralNetworkViz.tsx` with hardware-accelerated CSS transforms (`rotate`, `scale`, `x`, `y`).
      - Achieved a **0 console error / 0 exception** benchmark across both Mobile (375x812) and PC (1920x1080) viewports in automated CDP tests.
 
+
+### Phase 9: Cyber Blueprint Alignment for v2.1, Native Switcher Harmonization & Dynamic Code-Splitting Optimization
+* **The Problem:** 
+  1. The user clarified that `v2.1` must retain the **exact same Cyber Blueprint UI theme look and layout** as `v2` (blueprint background, sidebar rail, typography, colors, CyberBug mascot, terminal assistant), but with **just less text** (executive summaries, progressive disclosure accordions, scannable impact badges). The previous draft had prematurely introduced an entirely separate minimal slate theme.
+  2. The previous floating switcher button (`components/ui-switcher.tsx`) was redundant and created a duplicate widget over the UI; version switching should be appended natively to where the switcher already existed (in `RailV2`, mobile header, and navbar).
+  3. With multiple versions accumulating, bundling all variants statically into `app/page.tsx` bloated the root route to 122 kB (209 kB First Load JS), causing potential slow load times.
+* **Architectural Solutions & Implementations:**
+  1. **Cyber Blueprint v2.1 Alignment**:
+     - Built `components/v2_1/` (`HeroV2_1`, `SystemsV2_1`, `ResearchV2_1`, `ApproachV2_1`, and `PortfolioV2_1`) reusing the authentic Cyber Blueprint shell (`blueprint min-h-screen relative text-paper`, `RailV2`, `AssistantDrawerV2`, `PdfReaderV2`, `CommandPaletteV2`).
+     - Kept text crisp and scannable: 1–2 sentence executive summaries, 3 bold outcome metrics per system/paper, and animated **"Technical Deep Dive & Proofs"** accordions that expand in-depth challenges, solutions, mathematical proofs, and live interactive topologies on demand.
+     - Fully featured all 3 research papers (EEG Confound with Hassan Siddiqui, FinTech Fusion, and Anarchist LLM) with in-browser PDF reader triggers and repo links.
+  2. **Elimination of Duplicate Floating Switcher & Native Harmonization**:
+     - Removed `components/ui-switcher.tsx` and its floating pill at `bottom-5 left-4`.
+     - Appended `v2.1` natively to the existing switcher button location inside `RailV2` (a sleek 3-button segmented selector `v2.1 Focus | v2 Blueprint | v1 Classic` in the desktop sidebar rail and a compact mobile toggle in the top bar).
+     - Added native switching in the `v1` navbar and mobile drawer.
+  3. **Dynamic Code-Splitting (`next/dynamic`)**:
+     - Decoupled `PortfolioV1` into `components/v1/PortfolioV1.tsx`.
+     - In `app/page.tsx`, loaded `PortfolioV2_1`, `PortfolioV2`, and `PortfolioV1` dynamically with `next/dynamic({ ssr: false })`.
+     - **Performance Results**:
+       - `Route (app)` size slashed from **122 kB down to 1.66 kB** (**98.6% reduction**).
+       - `First Load JS` dropped from **209 kB down to 89.1 kB** (**57.4% reduction**).
+       - Initial page loads are protected from future version bloat.
+  4. **Automated Verification**:
+     - `npx tsc --noEmit`: 0 type errors.
+     - `npm run build`: 0 build errors across all static and dynamic routes.
+     - Automated CDP browser test: Verified Cyber Blueprint theme rendering, absence of duplicate floating switcher, native rail switcher functionality, accordion expansion, and multi-version switching across Phone (375x812) and PC (1920x1080) with **0 console errors and 0 runtime exceptions**.
+
 ---
 
 *This document serves as the permanent engineering log for Muhammad Adil Usmani's portfolio systems.*

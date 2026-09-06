@@ -47,10 +47,35 @@ function useLahoreClock() {
   return time;
 }
 
-export function RailV2() {
+export function RailV2({ currentVariant = "v2" }: { currentVariant?: "v1" | "v2" | "v2.1" }) {
   const { activeSection, setActiveSection, goTo, setPaletteOpen, setAssistantOpen } = useShell();
   const time = useLahoreClock();
   const [progress, setProgress] = useState(0);
+  const [variant, setVariant] = useState<"v1" | "v2" | "v2.1">(currentVariant);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("adil-ui-variant");
+      if (saved === "v1" || saved === "v2" || saved === "v2.1") {
+        setVariant(saved as "v1" | "v2" | "v2.1");
+      }
+    } catch {}
+    const handleSwitch = (e: any) => {
+      if (e?.detail?.variant) {
+        setVariant(e.detail.variant);
+      }
+    };
+    window.addEventListener("switch-ui-variant", handleSwitch);
+    return () => window.removeEventListener("switch-ui-variant", handleSwitch);
+  }, []);
+
+  const handleSwitchVariant = (next: "v1" | "v2" | "v2.1") => {
+    setVariant(next);
+    try {
+      localStorage.setItem("adil-ui-variant", next);
+      window.dispatchEvent(new CustomEvent("switch-ui-variant", { detail: { variant: next } }));
+    } catch {}
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -147,21 +172,52 @@ export function RailV2() {
             </span>
             <span className="mono text-[10px]">PDF</span>
           </a>
-          <button
-            onClick={() => {
-              try {
-                localStorage.setItem("adil-ui-variant", "v1");
-                window.dispatchEvent(new CustomEvent("switch-ui-variant", { detail: { variant: "v1" } }));
-              } catch {}
-            }}
-            className="mt-2 flex w-full items-center justify-between rounded-md border border-line-2 bg-ink-3 px-3 py-2 text-[12px] text-paper-2 hover:text-paper hover:border-signal/50 transition-colors cursor-pointer"
-            title="Switch to Precision Engineering UI (v1)"
-          >
-            <span className="flex items-center gap-2">
-              <Layers className="h-3.5 w-3.5 text-signal" /> Precision UI (v1)
-            </span>
-            <span className="mono text-[10px] text-signal font-semibold">SWITCH</span>
-          </button>
+          {/* UI Version Selector (Integrated directly in Rail) */}
+          <div className="mt-2 rounded-md border border-line-2 bg-ink-3 p-1.5">
+            <div className="flex items-center justify-between px-1 mb-1.5">
+              <span className="mono text-[9px] uppercase tracking-wider text-mute flex items-center gap-1">
+                <Layers className="h-3 w-3 text-signal" /> UI VERSION
+              </span>
+              <span className="mono text-[9px] text-signal font-bold">
+                {variant === "v2.1" ? "v2.1 Focus" : variant === "v2" ? "v2 Blueprint" : "v1 Classic"}
+              </span>
+            </div>
+            <div className="grid grid-cols-3 gap-1">
+              <button
+                onClick={() => handleSwitchVariant("v2.1")}
+                className={`mono rounded px-1 py-1 text-center text-[10px] font-semibold transition-all cursor-pointer ${
+                  variant === "v2.1"
+                    ? "bg-signal text-ink shadow-sm font-bold"
+                    : "text-paper-2 hover:bg-ink-4 hover:text-paper"
+                }`}
+                title="v2.1 Focus (Streamlined Cyber Blueprint, low text density)"
+              >
+                v2.1
+              </button>
+              <button
+                onClick={() => handleSwitchVariant("v2")}
+                className={`mono rounded px-1 py-1 text-center text-[10px] font-semibold transition-all cursor-pointer ${
+                  variant === "v2"
+                    ? "bg-signal text-ink shadow-sm font-bold"
+                    : "text-paper-2 hover:bg-ink-4 hover:text-paper"
+                }`}
+                title="v2 Blueprint (Full Cyber Blueprint, complete architecture specs)"
+              >
+                v2
+              </button>
+              <button
+                onClick={() => handleSwitchVariant("v1")}
+                className={`mono rounded px-1 py-1 text-center text-[10px] font-semibold transition-all cursor-pointer ${
+                  variant === "v1"
+                    ? "bg-signal text-ink shadow-sm font-bold"
+                    : "text-paper-2 hover:bg-ink-4 hover:text-paper"
+                }`}
+                title="v1 Classic (Precision Engineering light/dark UI)"
+              >
+                v1
+              </button>
+            </div>
+          </div>
           <div className="border-t border-line pt-4">
             <div className="flex items-center justify-between">
               <span className="mono text-[10px] tracking-widest text-mute">LHE · PKT</span>
@@ -187,20 +243,36 @@ export function RailV2() {
           <span className="text-[13px] font-semibold">Adil Usmani</span>
         </button>
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => {
-              try {
-                localStorage.setItem("adil-ui-variant", "v1");
-                window.dispatchEvent(new CustomEvent("switch-ui-variant", { detail: { variant: "v1" } }));
-              } catch {}
-            }}
-            aria-label="Switch to v1 Precision UI"
-            title="Switch to v1 Precision UI"
-            className="h-8 px-2.5 flex items-center gap-1.5 rounded-md border border-line-2 bg-ink-3 text-[11px] font-mono font-semibold text-signal hover:border-signal/50 cursor-pointer"
-          >
-            <Layers className="h-3 w-3" />
-            <span>v1 UI</span>
-          </button>
+          {/* Mobile UI switcher */}
+          <div className="flex items-center gap-0.5 rounded-md border border-line-2 bg-ink-3 p-0.5">
+            <button
+              onClick={() => handleSwitchVariant("v2.1")}
+              className={`mono px-1.5 py-1 rounded text-[10px] font-semibold transition-colors ${
+                variant === "v2.1" ? "bg-signal text-ink" : "text-paper-2"
+              }`}
+              title="v2.1 Focus UI"
+            >
+              v2.1
+            </button>
+            <button
+              onClick={() => handleSwitchVariant("v2")}
+              className={`mono px-1.5 py-1 rounded text-[10px] font-semibold transition-colors ${
+                variant === "v2" ? "bg-signal text-ink" : "text-paper-2"
+              }`}
+              title="v2 Blueprint UI"
+            >
+              v2
+            </button>
+            <button
+              onClick={() => handleSwitchVariant("v1")}
+              className={`mono px-1.5 py-1 rounded text-[10px] font-semibold transition-colors ${
+                variant === "v1" ? "bg-signal text-ink" : "text-paper-2"
+              }`}
+              title="v1 Classic UI"
+            >
+              v1
+            </button>
+          </div>
           <button
             onClick={() => setAssistantOpen(true)}
             aria-label="Open assistant"
