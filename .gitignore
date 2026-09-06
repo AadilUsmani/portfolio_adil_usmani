@@ -30,3 +30,6 @@ next-env.d.ts
 __pycache__/
 *.pyc
 *.pyo
+
+# Scratch test files
+scratch/

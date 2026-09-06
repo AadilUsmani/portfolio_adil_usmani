@@ -231,6 +231,18 @@ export function CommandPalette({
       keywords: ["cv", "resume", "pdf", "download"],
     },
     {
+      id: "act-read-eeg-paper",
+      title: "Read Co-Authored Paper: Blocked EEG Decoding Confound",
+      subtitle: "Diagnosing & correcting encode/test confound (ds005189, Hassan Siddiqui & Adil Usmani)",
+      category: "Actions",
+      icon: FileText,
+      action: () => {
+        window.open("/A_Mislabeled_Contrast_Recovered_EEG.pdf", "_blank")
+        onClose()
+      },
+      keywords: ["paper", "eeg", "decoding", "confound", "siddiqui", "riemannian", "pdf", "research"],
+    },
+    {
       id: "act-read-paper",
       title: "Read Research Paper: Deterministic Data Fusion for FinTech",
       subtitle: "Fault-tolerant state synchronisation across financial event streams",
@@ -265,6 +277,21 @@ export function CommandPalette({
         onClose()
       },
       keywords: ["theme", "mode", "dark", "light", "color"],
+    },
+    {
+      id: "act-switch-v2_1",
+      title: "Switch to Zenith Focus UI (v2.1)",
+      subtitle: "Low cognitive load layout with executive summaries & progressive disclosure",
+      category: "Actions",
+      icon: Layers,
+      action: () => {
+        try {
+          localStorage.setItem("adil-ui-variant", "v2.1")
+          window.dispatchEvent(new CustomEvent("switch-ui-variant", { detail: { variant: "v2.1" } }))
+        } catch {}
+        onClose()
+      },
+      keywords: ["ui", "v2.1", "focus", "progressive", "disclosure", "calm", "switch"],
     },
     {
       id: "act-switch-v2",

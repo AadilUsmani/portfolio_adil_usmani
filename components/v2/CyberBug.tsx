@@ -97,13 +97,8 @@ export function CyberBug({ size = 260 }: { size?: number }) {
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            animate={{
-              d: [
-                "M 82 82 L 48 64 L 28 72",
-                "M 82 82 L 46 60 L 26 66",
-                "M 82 82 L 48 64 L 28 72",
-              ],
-            }}
+            style={{ transformOrigin: "82px 82px" }}
+            animate={{ rotate: [-4, 4, -4] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.path
@@ -112,13 +107,8 @@ export function CyberBug({ size = 260 }: { size?: number }) {
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            animate={{
-              d: [
-                "M 80 102 L 42 102 L 22 114",
-                "M 80 102 L 44 106 L 24 120",
-                "M 80 102 L 42 102 L 22 114",
-              ],
-            }}
+            style={{ transformOrigin: "80px 102px" }}
+            animate={{ rotate: [-5, 5, -5] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
           />
           <motion.path
@@ -127,13 +117,8 @@ export function CyberBug({ size = 260 }: { size?: number }) {
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            animate={{
-              d: [
-                "M 82 122 L 46 138 L 32 156",
-                "M 82 122 L 44 134 L 30 150",
-                "M 82 122 L 46 138 L 32 156",
-              ],
-            }}
+            style={{ transformOrigin: "82px 122px" }}
+            animate={{ rotate: [-4, 4, -4] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
           />
 
@@ -144,13 +129,8 @@ export function CyberBug({ size = 260 }: { size?: number }) {
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            animate={{
-              d: [
-                "M 118 82 L 152 64 L 172 72",
-                "M 118 82 L 154 60 L 174 66",
-                "M 118 82 L 152 64 L 172 72",
-              ],
-            }}
+            style={{ transformOrigin: "118px 82px" }}
+            animate={{ rotate: [4, -4, 4] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: 0.1 }}
           />
           <motion.path
@@ -159,13 +139,8 @@ export function CyberBug({ size = 260 }: { size?: number }) {
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            animate={{
-              d: [
-                "M 120 102 L 158 102 L 178 114",
-                "M 120 102 L 156 106 L 176 120",
-                "M 120 102 L 158 102 L 178 114",
-              ],
-            }}
+            style={{ transformOrigin: "120px 102px" }}
+            animate={{ rotate: [5, -5, 5] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
           />
           <motion.path
@@ -174,62 +149,39 @@ export function CyberBug({ size = 260 }: { size?: number }) {
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            animate={{
-              d: [
-                "M 118 122 L 154 138 L 168 156",
-                "M 118 122 L 156 134 L 170 150",
-                "M 118 122 L 154 138 L 168 156",
-              ],
-            }}
+            style={{ transformOrigin: "118px 122px" }}
+            animate={{ rotate: [4, -4, 4] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.7 }}
           />
 
           {/* ── Twitching Antennae ── */}
-          <motion.path
-            d="M 92 60 C 86 46, 74 34, 58 26"
-            stroke="var(--color-signal)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            animate={{
-              d: [
-                "M 92 60 C 86 46, 74 34, 58 26",
-                "M 92 60 C 88 43, 78 30, 62 20",
-                "M 92 60 C 86 46, 74 34, 58 26",
-              ],
-            }}
+          <motion.g
+            style={{ transformOrigin: "92px 60px" }}
+            animate={{ rotate: [-4, 4, -4] }}
             transition={{ duration: 2.1, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.circle
-            cx="58"
-            cy="26"
-            r="3.5"
-            fill="var(--color-teal)"
-            animate={{ cx: [58, 62, 58], cy: [26, 20, 26] }}
-            transition={{ duration: 2.1, repeat: Infinity, ease: "easeInOut" }}
-          />
+          >
+            <path
+              d="M 92 60 C 86 46, 74 34, 58 26"
+              stroke="var(--color-signal)"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <circle cx="58" cy="26" r="3.5" fill="var(--color-teal)" />
+          </motion.g>
 
-          <motion.path
-            d="M 108 60 C 114 46, 126 34, 142 26"
-            stroke="var(--color-signal)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            animate={{
-              d: [
-                "M 108 60 C 114 46, 126 34, 142 26",
-                "M 108 60 C 112 43, 122 30, 138 20",
-                "M 108 60 C 114 46, 126 34, 142 26",
-              ],
-            }}
+          <motion.g
+            style={{ transformOrigin: "108px 60px" }}
+            animate={{ rotate: [4, -4, 4] }}
             transition={{ duration: 2.1, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-          />
-          <motion.circle
-            cx="142"
-            cy="26"
-            r="3.5"
-            fill="var(--color-teal)"
-            animate={{ cx: [142, 138, 142], cy: [26, 20, 26] }}
-            transition={{ duration: 2.1, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-          />
+          >
+            <path
+              d="M 108 60 C 114 46, 126 34, 142 26"
+              stroke="var(--color-signal)"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <circle cx="142" cy="26" r="3.5" fill="var(--color-teal)" />
+          </motion.g>
 
           {/* ── Head Segment ── */}
           <polygon
@@ -242,34 +194,24 @@ export function CyberBug({ size = 260 }: { size?: number }) {
           <circle cx="108" cy="68" r="2.8" fill="var(--color-teal)" />
 
           {/* ── Main Thorax & Shell ── */}
-          <motion.path
-            d="M 98 84 C 74 84, 66 106, 68 138 C 70 158, 86 168, 98 170 Z"
-            fill="var(--color-ink-3)"
-            stroke="var(--color-line-2)"
-            strokeWidth="2"
-            animate={{
-              d: [
-                "M 98 84 C 74 84, 66 106, 68 138 C 70 158, 86 168, 98 170 Z",
-                "M 97 84 C 71 85, 63 108, 65 140 C 68 160, 85 169, 97 170 Z",
-                "M 98 84 C 74 84, 66 106, 68 138 C 70 158, 86 168, 98 170 Z",
-              ],
-            }}
+          <motion.g
+            style={{ transformOrigin: "100px 128px" }}
+            animate={{ scale: [1, 1.015, 1] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.path
-            d="M 102 84 C 126 84, 134 106, 132 138 C 130 158, 114 168, 102 170 Z"
-            fill="var(--color-ink-3)"
-            stroke="var(--color-line-2)"
-            strokeWidth="2"
-            animate={{
-              d: [
-                "M 102 84 C 126 84, 134 106, 132 138 C 130 158, 114 168, 102 170 Z",
-                "M 103 84 C 129 85, 137 108, 135 140 C 132 160, 115 169, 103 170 Z",
-                "M 102 84 C 126 84, 134 106, 132 138 C 130 158, 114 168, 102 170 Z",
-              ],
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
+          >
+            <path
+              d="M 98 84 C 74 84, 66 106, 68 138 C 70 158, 86 168, 98 170 Z"
+              fill="var(--color-ink-3)"
+              stroke="var(--color-line-2)"
+              strokeWidth="2"
+            />
+            <path
+              d="M 102 84 C 126 84, 134 106, 132 138 C 130 158, 114 168, 102 170 Z"
+              fill="var(--color-ink-3)"
+              stroke="var(--color-line-2)"
+              strokeWidth="2"
+            />
+          </motion.g>
 
           {/* Circuit Inlays on Shell */}
           <path d="M 80 110 L 92 118 L 92 142" stroke="var(--color-signal)" strokeWidth="1.2" strokeOpacity="0.8" />

@@ -53,6 +53,7 @@ import { PortfolioAssistant } from "@/components/portfolio-assistant"
 import { CommandPalette } from "@/components/command-palette"
 import { ArchitectureWorkbench } from "@/components/architecture-workbench"
 import { PortfolioV2 } from "@/components/v2/PortfolioV2"
+import { PortfolioV2_1 } from "@/components/v2_1/PortfolioV2_1"
 import { UiSwitcher } from "@/components/ui-switcher"
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -103,6 +104,22 @@ const projectsData: CaseStudyProject[] = [
     paper: "/Deterministic_Data_Fusion_for_FinTech.pdf",
     metrics: { Throughput: "42k ev/s", Reconciliation: "<120ms p99", Status: "Published Paper" },
     highlight: "Published Paper",
+  },
+  {
+    title: "A Mislabeled Contrast, Recovered: Blocked EEG Decoding Confound",
+    subtitle: "Diagnosing and Correcting an Encode/Test-Phase Confound in Blocked EEG Decoding",
+    category: "ml",
+    challenge:
+      "A label-dictionary error in an analysis pipeline collapsed four distinct marker types into one index, leaking test-phase recognition trials into the encoding class and creating a spurious 70.78% headline decoding accuracy.",
+    architecturalDecision:
+      "Formulated a composition-arithmetic diagnostic that mathematically accounted for all 13 reported mappings without ambiguity. Implemented a pre-registered Riemannian tangent space covariance classifier (MNE-Python) to decode the joint criterion directly and isolate genuine encode-phase neural signals.",
+    outcome:
+      "Diagnosed the 70.78% confound, confirmed test-phase leakage via 86.57% joint-criterion decode, and recovered genuine 57.73% (+7.73% above chance) signal validated across 4 independent statistical controls (30-shuffle null, 29-fold LOSO jackknife, 500-shuffle null, and parity-split counterbalancing).",
+    tags: ["EEG Decoding", "Riemannian Geometry", "Pre-registration", "OpenNeuro ds005189", "Co-Authored"],
+    github: "https://github.com/HassanSidd0946/Search-vs-Memorize-Correction",
+    paper: "/A_Mislabeled_Contrast_Recovered_EEG.pdf",
+    metrics: { Diagnosed: "70.78% artifact", "Joint Criterion": "86.57%", Recovered: "57.73% ± 0.05%" },
+    highlight: "Co-Authored Paper",
   },
   {
     title: "Lexical Graph RAG — SEC 10-K Intelligence",
@@ -283,7 +300,7 @@ function FocusRotator() {
 interface PortfolioV1Props {
   isDarkMode: boolean
   setIsDarkMode: (val: boolean | ((prev: boolean) => boolean)) => void
-  onSelectVariant: (v: "v1" | "v2") => void
+  onSelectVariant: (v: "v1" | "v2" | "v2.1") => void
 }
 
 function PortfolioV1({ isDarkMode, setIsDarkMode, onSelectVariant }: PortfolioV1Props) {
@@ -1121,13 +1138,13 @@ function PortfolioV1({ isDarkMode, setIsDarkMode, onSelectVariant }: PortfolioV1
 
 export default function Portfolio() {
   const [isDarkMode, setIsDarkMode] = useState(false)
-  const [uiVariant, setUiVariant] = useState<"v1" | "v2">("v1")
+  const [uiVariant, setUiVariant] = useState<"v1" | "v2" | "v2.1">("v2.1")
 
   // Sync UI variant preference
   useEffect(() => {
     try {
       const savedUi = localStorage.getItem("adil-ui-variant")
-      if (savedUi === "v2" || savedUi === "v1") {
+      if (savedUi === "v2.1" || savedUi === "v2" || savedUi === "v1") {
         setUiVariant(savedUi)
       }
       const savedTheme = localStorage.getItem("adil-theme")
@@ -1137,7 +1154,7 @@ export default function Portfolio() {
     } catch {}
   }, [])
 
-  const handleSelectVariant = (v: "v1" | "v2") => {
+  const handleSelectVariant = (v: "v1" | "v2" | "v2.1") => {
     setUiVariant(v)
     try {
       localStorage.setItem("adil-ui-variant", v)
@@ -1147,7 +1164,11 @@ export default function Portfolio() {
   // Listen for global UI variant switch events from Rail or header triggers
   useEffect(() => {
     const handleSwitchEvent = (e: any) => {
-      if (e?.detail?.variant === "v1" || e?.detail?.variant === "v2") {
+      if (
+        e?.detail?.variant === "v1" ||
+        e?.detail?.variant === "v2" ||
+        e?.detail?.variant === "v2.1"
+      ) {
         handleSelectVariant(e.detail.variant)
       }
     }
@@ -1186,7 +1207,9 @@ export default function Portfolio() {
 
   return (
     <div className={isDarkMode ? "dark" : "light"}>
-      {uiVariant === "v2" ? (
+      {uiVariant === "v2.1" ? (
+        <PortfolioV2_1 />
+      ) : uiVariant === "v2" ? (
         <PortfolioV2 />
       ) : (
         <PortfolioV1

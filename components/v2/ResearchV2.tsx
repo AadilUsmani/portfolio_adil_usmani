@@ -18,16 +18,28 @@ export function ResearchV2() {
           label="Research"
           title={
             <>
-              Published paper &amp; <span className="text-teal">working research</span> in preparation.
+              Published &amp; <span className="text-teal">co-authored research</span>, plus working paper.
             </>
           }
-          blurb="Deterministic state fusion (01 published PDF in reader) and Anarchist LLM (working paper & GPU benchmarks in preparation)."
+          blurb="Two formal research papers with in-browser PDF readers (Blocked EEG decoding confound recovery & FinTech deterministic fusion) plus Anarchist LLM working paper."
         />
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {papers.map((paper, i) => {
             const project = projects.find((p) => p.id === paper.projectId);
-            const accent = project?.accent || (paper.id === "paper-anarchist" ? "#38bdf8" : "#2dd4bf");
+            const accent =
+              paper.id === "paper-eeg-confound"
+                ? "#a78bfa"
+                : paper.id === "paper-anarchist"
+                ? "#38bdf8"
+                : "#2dd4bf";
+
+            const paperCategory =
+              paper.id === "paper-eeg-confound"
+                ? "CO-AUTHORED PAPER · CS.NEURO · 2026"
+                : paper.isExternal
+                ? "WORKING PAPER · CS.AI · 2026"
+                : "PUBLISHED PAPER · CS.DC · 2025";
 
             return (
               <motion.article
@@ -45,15 +57,15 @@ export function ResearchV2() {
                     href={paper.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="relative block overflow-hidden border-b border-line bg-ink-3 px-8 pt-8 text-left cursor-pointer"
+                    className="relative block overflow-hidden border-b border-line bg-ink-3 px-6 pt-6 text-left cursor-pointer"
                     aria-label={`View ${paper.title} repository`}
                   >
-                    <div className="relative mx-auto aspect-[1.6/1] w-full max-w-md translate-y-3 rounded-t-md border border-line-2 border-b-0 bg-[#f3efe6] p-6 text-ink shadow-[0_-20px_60px_rgba(0,0,0,0.4)] transition-transform duration-500 group-hover:-translate-y-0">
+                    <div className="relative mx-auto aspect-[1.6/1] w-full max-w-md translate-y-3 rounded-t-md border border-line-2 border-b-0 bg-[#f3efe6] p-5 text-ink shadow-[0_-20px_60px_rgba(0,0,0,0.4)] transition-transform duration-500 group-hover:-translate-y-0">
                       <div className="mono text-[8px] tracking-[0.2em] text-ink/60">
-                        WORKING PAPER · CS.AI · 2026
+                        {paperCategory}
                       </div>
-                      <div className="mt-2 text-[13px] font-semibold leading-tight text-ink">{paper.title}</div>
-                      <div className="mt-1 text-[9px] italic text-ink/70">Muhammad Adil Usmani — Lahore, Pakistan</div>
+                      <div className="mt-2 text-[12px] font-semibold leading-tight text-ink">{paper.title}</div>
+                      <div className="mt-1 text-[9px] italic text-ink/70">{paper.authors || "Muhammad Adil Usmani"}</div>
                       <div className="mt-3 space-y-1">
                         {[98, 92, 95, 84, 90, 65].map((w, k) => (
                           <div key={k} className="h-[3px] rounded bg-ink/15" style={{ width: `${w}%` }} />
@@ -66,21 +78,21 @@ export function ResearchV2() {
                       className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] mono tracking-wider"
                       style={{ borderColor: `${accent}66`, color: accent, background: `${accent}14` }}
                     >
-                      <FileCode2 className="h-3 w-3" /> GITHUB RESEARCH REPO
+                      <FileCode2 className="h-3 w-3" /> GITHUB REPO
                     </span>
                   </a>
                 ) : (
                   <button
                     onClick={() => openReader(paper.href)}
-                    className="relative block overflow-hidden border-b border-line bg-ink-3 px-8 pt-8 text-left cursor-pointer"
+                    className="relative block overflow-hidden border-b border-line bg-ink-3 px-6 pt-6 text-left cursor-pointer w-full"
                     aria-label={`Open ${paper.title}`}
                   >
-                    <div className="relative mx-auto aspect-[1.6/1] w-full max-w-md translate-y-3 rounded-t-md border border-line-2 border-b-0 bg-[#f3efe6] p-6 text-ink shadow-[0_-20px_60px_rgba(0,0,0,0.4)] transition-transform duration-500 group-hover:-translate-y-0">
+                    <div className="relative mx-auto aspect-[1.6/1] w-full max-w-md translate-y-3 rounded-t-md border border-line-2 border-b-0 bg-[#f3efe6] p-5 text-ink shadow-[0_-20px_60px_rgba(0,0,0,0.4)] transition-transform duration-500 group-hover:-translate-y-0">
                       <div className="mono text-[8px] tracking-[0.2em] text-ink/60">
-                        PUBLISHED PAPER · CS.DC · 2025
+                        {paperCategory}
                       </div>
-                      <div className="mt-2 text-[13px] font-semibold leading-tight text-ink">{paper.title}</div>
-                      <div className="mt-1 text-[9px] italic text-ink/70">Muhammad Adil Usmani — Lahore, Pakistan</div>
+                      <div className="mt-2 text-[12px] font-semibold leading-tight text-ink">{paper.title}</div>
+                      <div className="mt-1 text-[9px] italic text-ink/70">{paper.authors || "Muhammad Adil Usmani"}</div>
                       <div className="mt-3 space-y-1">
                         {[100, 96, 98, 88, 94, 70].map((w, k) => (
                           <div key={k} className="h-[3px] rounded bg-ink/15" style={{ width: `${w}%` }} />
@@ -98,22 +110,27 @@ export function ResearchV2() {
                   </button>
                 )}
 
-                <div className="flex flex-1 flex-col p-6">
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
                   <div className="flex items-center justify-between">
                     <div className="mono text-[10px] tracking-[0.2em] text-mute">
-                      {paper.isExternal ? "WORKING PAPER 02" : "PUBLISHED PAPER 01"}
+                      {paper.id === "paper-eeg-confound"
+                        ? "CO-AUTHORED PAPER"
+                        : paper.isExternal
+                        ? "WORKING PAPER"
+                        : "PUBLISHED PAPER"}
                     </div>
                     <span
-                      className="mono rounded px-2 py-0.5 text-[9.5px] font-semibold"
+                      className="mono rounded px-2 py-0.5 text-[9.5px] font-semibold truncate max-w-[170px]"
                       style={{ color: accent, background: `${accent}18` }}
                     >
                       {paper.status}
                     </span>
                   </div>
 
-                  <h3 className="mt-2 text-xl font-semibold leading-snug tracking-tight text-paper">{paper.title}</h3>
-                  <p className="mt-1 text-[13px] text-paper-2">{paper.subtitle}</p>
-                  <p className="mt-4 text-[14px] leading-relaxed text-paper-2">{paper.abstract}</p>
+                  <h3 className="mt-2 text-lg font-semibold leading-snug tracking-tight text-paper">{paper.title}</h3>
+                  <p className="mt-1 text-[11.5px] font-mono text-teal/90">{paper.authors}</p>
+                  <p className="mt-1 text-[12.5px] text-paper-2 line-clamp-2">{paper.subtitle}</p>
+                  <p className="mt-3 text-[13px] leading-relaxed text-paper-2/90">{paper.abstract}</p>
 
                   <div className="mt-4 flex flex-wrap gap-1.5">
                     {paper.tags.map((t) => (
@@ -128,20 +145,20 @@ export function ResearchV2() {
                           href={paper.href}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-2 rounded-md px-3.5 py-2 text-[13px] font-medium text-ink transition-opacity hover:opacity-90"
+                          className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[12px] font-medium text-ink transition-opacity hover:opacity-90"
                           style={{ background: accent }}
                         >
-                          <ExternalLink className="h-3.5 w-3.5" /> View Research Repo
+                          <ExternalLink className="h-3.5 w-3.5" /> View Repo
                         </a>
-                        <span className="mono inline-flex items-center gap-1.5 rounded-md border border-line-2 px-3 py-2 text-[11px] text-mute">
-                          Preprint in Preparation
+                        <span className="mono inline-flex items-center gap-1 rounded-md border border-line-2 px-2.5 py-1.5 text-[10.5px] text-mute">
+                          Preprint in Prep
                         </span>
                       </>
                     ) : (
                       <>
                         <button
                           onClick={() => openReader(paper.href)}
-                          className="inline-flex items-center gap-2 rounded-md px-3.5 py-2 text-[13px] font-medium text-ink transition-opacity hover:opacity-90 cursor-pointer"
+                          className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[12px] font-medium text-ink transition-opacity hover:opacity-90 cursor-pointer"
                           style={{ background: accent }}
                         >
                           <BookOpen className="h-3.5 w-3.5" /> Read
@@ -149,27 +166,29 @@ export function ResearchV2() {
                         <a
                           href={paper.href}
                           download
-                          className="inline-flex items-center gap-2 rounded-md border border-line-2 px-3.5 py-2 text-[13px] text-paper-2 hover:text-paper"
+                          className="inline-flex items-center gap-1.5 rounded-md border border-line-2 px-2.5 py-1.5 text-[12px] text-paper-2 hover:text-paper"
                         >
                           <Download className="h-3.5 w-3.5" /> PDF
                         </a>
-                        <a
-                          href={paper.href}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 rounded-md border border-line-2 px-3.5 py-2 text-[13px] text-paper-2 hover:text-paper"
-                        >
-                          <ExternalLink className="h-3.5 w-3.5" /> New tab
-                        </a>
+                        {"repoUrl" in paper && paper.repoUrl ? (
+                          <a
+                            href={paper.repoUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 rounded-md border border-line-2 px-2.5 py-1.5 text-[12px] text-paper-2 hover:text-paper"
+                          >
+                            <ExternalLink className="h-3.5 w-3.5" /> Repo
+                          </a>
+                        ) : null}
                       </>
                     )}
 
                     {project ? (
                       <button
                         onClick={() => focusProject(project.id)}
-                        className="ml-auto inline-flex items-center gap-1.5 text-[12px] text-mute hover:text-paper cursor-pointer"
+                        className="ml-auto inline-flex items-center gap-1 text-[11px] text-mute hover:text-paper cursor-pointer"
                       >
-                        <Network className="h-3.5 w-3.5" /> View system {project.index}
+                        <Network className="h-3.5 w-3.5" /> Sys {project.index}
                       </button>
                     ) : null}
                   </div>

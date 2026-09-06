@@ -63,7 +63,7 @@ export const PORTFOLIO_CV_DATA: CVData = {
     website: "https://v0-muhammadaadilusmani.vercel.app",
   },
   summary:
-    "Software Engineer specializing in Applicational AI, Retrieval-Augmented Generation (RAG) pipelines, and LLM workflow orchestration. Builds and integrates ML models served through FastAPI across unstructured text and structured JSON data flows, applying prompt and context engineering to optimize LLM outputs across varied retrieval architectures.",
+    "Software Engineer specializing in Applicational AI, Retrieval-Augmented Generation (RAG) pipelines, and LLM workflow orchestration. Builds and integrates ML models served through FastAPI across unstructured text and structured JSON data flows. Co-authored formal research in EEG neural decoding (confound diagnosis & recovery on OpenNeuro ds005189) and published research in distributed financial event fusion under SERIALIZABLE isolation.",
   technicalSkills: {
     languages: ["Python", "SQL", "TypeScript", "JavaScript"],
     backend: ["FastAPI", "Async Python", "REST APIs", "Redis Caching"],
@@ -208,6 +208,30 @@ export const PORTFOLIO_PROJECTS: ProjectData[] = [
       "Replay-equivalent ledger state across heterogeneous event streams.",
       "Formal proof and empirical evaluation under 14 days of fault injection.",
       "Zero ledger discrepancies achieved via SERIALIZABLE isolation level.",
+    ],
+  },
+  {
+    id: "eeg-confound-recovery",
+    name: "A Mislabeled Contrast, Recovered: Blocked EEG Decoding Confound",
+    subtitle: "Diagnosing and Correcting an Encode/Test-Phase Confound in Blocked EEG Decoding",
+    category: "ml",
+    githubUrl: "https://github.com/HassanSidd0946/Search-vs-Memorize-Correction",
+    paperUrl: "/A_Mislabeled_Contrast_Recovered_EEG.pdf",
+    description:
+      "Co-authored research paper with Muhammad Hassan Siddiqui investigating blocked EEG decoding on OpenNeuro ds005189. Discovered that 75% of class epochs were recognition-test responses rather than encoding events, driving a spurious 70.78% headline accuracy. Formulated a composition-arithmetic diagnostic matching 13/13 prior mappings and confirmed via a pre-registered joint-criterion decode (86.57% balanced accuracy). Correcting to encode-only trials recovered a genuine pre-calibration signal of 57.73% ± 0.05% (7.73% above chance), verified by four independent robustness checks: 30-shuffle null, 29-fold LOSO jackknife, 500-shuffle null, and parity-split counterbalancing.",
+    techStack: ["Riemannian Geometry", "Tangent Space", "Pre-registration", "OpenNeuro ds005189", "Python", "MNE-Python"],
+    metricsAndBenchmarks: {
+      "Confound Diagnosed": "70.78% headline artifact",
+      "Joint Criterion": "86.57% balanced accuracy",
+      "Recovered Signal": "57.73% ± 0.05% (7.73% above chance)",
+      "Statistical Controls": "4 independent validation checks",
+    },
+    keyFeatures: [
+      "Co-authored by Muhammad Hassan Siddiqui and Muhammad Adil Usmani.",
+      "Discovered an analysis pipeline label conflation error across four distinct marker types in OpenNeuro ds005189.",
+      "Formulated a composition-arithmetic diagnostic that accounted for all 13 reported mappings.",
+      "Pre-registered joint-criterion Riemannian tangent space classifier confirming test-phase leakage (86.57%).",
+      "Recovered authentic 57.73% pre-calibration encoding signal validated across 4 independent statistical controls.",
     ],
   },
   {

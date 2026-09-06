@@ -86,6 +86,21 @@ export function CommandPaletteV2() {
         },
       })),
       {
+        id: "switch-ui-v2_1",
+        group: "Preferences",
+        label: "Switch to Zenith Focus UI (v2.1)",
+        hint: "ui",
+        keywords: "switch ui variant version 2.1 focus low cognitive load progressive disclosure",
+        Icon: Layers,
+        run: () => {
+          close();
+          try {
+            localStorage.setItem("adil-ui-variant", "v2.1");
+            window.dispatchEvent(new CustomEvent("switch-ui-variant", { detail: { variant: "v2.1" } }));
+          } catch {}
+        },
+      },
+      {
         id: "switch-ui-v1",
         group: "Preferences",
         label: "Switch to Precision UI (v1)",

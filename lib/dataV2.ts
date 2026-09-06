@@ -338,10 +338,25 @@ export const projects: Project[] = [
 
 export const papers = [
   {
+    id: "paper-eeg-confound",
+    title: "A Mislabeled Contrast, Recovered: Blocked EEG Decoding Confound",
+    subtitle: "Diagnosing and Correcting an Encode/Test-Phase Confound in Blocked EEG Decoding",
+    href: "/A_Mislabeled_Contrast_Recovered_EEG.pdf",
+    repoUrl: "https://github.com/HassanSidd0946/Search-vs-Memorize-Correction",
+    authors: "Muhammad Hassan Siddiqui & Muhammad Adil Usmani",
+    projectId: "eeg-confound",
+    isExternal: false,
+    status: "Co-Authored Paper · Reanalysis of ds005189",
+    abstract:
+      "A label-dictionary error in an analysis pipeline conflated four distinct marker types, reporting a 70.78% headline accuracy for Search-vs-Memorize EEG decoding. We diagnosed the confound with a composition-arithmetic technique (13/13 mappings fit), confirmed it via a direct joint-criterion decode (86.57% balanced accuracy), and recovered the genuine pre-calibration signal (57.73% ± 0.05%, 7.73% above chance), validated across four independent checks (30-shuffle null, 29-fold LOSO jackknife, 500-shuffle null, and parity-split counterbalancing).",
+    tags: ["EEG Decoding", "Riemannian Geometry", "Pre-registration", "Confound Correction"],
+  },
+  {
     id: "paper-fintech",
     title: "Deterministic Data Fusion for FinTech",
     subtitle: "Fault-tolerant state synchronisation across heterogeneous financial event streams",
     href: "/Deterministic_Data_Fusion_for_FinTech.pdf",
+    authors: "Muhammad Adil Usmani",
     projectId: "fintech",
     isExternal: false,
     status: "Published Paper · Peer Preprint",
@@ -354,6 +369,7 @@ export const papers = [
     title: "Anarchist LLM: Disguised Algorithmic Reasoning",
     subtitle: "Pre-1900 Persona Constraint & Transformer Benchmarking on Serverless A100 Clusters",
     href: "https://github.com/AadilUsmani/Anarchist-LLM",
+    authors: "Muhammad Adil Usmani",
     projectId: "anarchist-llm",
     isExternal: true,
     status: "Working Paper · Preprint in Preparation",
@@ -473,11 +489,18 @@ export const knowledgeBase: KnowledgeChunk[] = [
     keywords: ["battery", "nasa", "lithium", "li-ion", "degradation", "state", "health", "soh", "lstm", "tcn", "temporal", "convolutional", "time-series", "timeseries", "forecast", "forecasting", "capacity", "cycle", "cycles", "rmse", "knee", "end-of-life"],
   },
   {
+    id: "kb-eeg-detail",
+    topic: "Blocked EEG decoding confound internals",
+    source: "A_Mislabeled_Contrast_Recovered_EEG.pdf",
+    text: "Co-authored by Muhammad Hassan Siddiqui and Muhammad Adil Usmani. Investigates blocked EEG decoding on OpenNeuro ds005189. Discovered an analysis pipeline error where 75% of class epochs were recognition-test responses rather than encoding events, creating a false 70.78% headline accuracy. Formulated a composition-arithmetic diagnostic matching 13/13 prior mappings and confirmed via a pre-registered joint-criterion decode (86.57% balanced accuracy). Correcting to encode-only trials recovered a genuine pre-calibration signal of 57.73% ± 0.05% (7.73% above chance), verified by four independent robustness checks: 30-shuffle null, 29-fold LOSO jackknife, 500-shuffle null, and parity-split counterbalancing.",
+    keywords: ["eeg", "decoding", "confound", "bci", "mislabeled", "contrast", "riemannian", "tangent space", "composition", "arithmetic", "pre-registration", "jackknife", "parity", "hassan", "siddiqui", "ds005189", "openneuro"],
+  },
+  {
     id: "kb-papers",
     topic: "Research papers",
     source: "Portfolio",
-    text: "Adil has authored one published research paper: 'Deterministic Data Fusion for FinTech' (viewable in the in-browser reader at /Deterministic_Data_Fusion_for_FinTech.pdf). He is currently actively working on his second research paper: 'Anarchist LLM: Disguised Algorithmic Reasoning' (evaluating persona constraints and transformer benchmarking on serverless Modal A100 GPU clusters). Lexical Graph RAG is an engineering architecture project, not a research paper.",
-    keywords: ["paper", "papers", "research", "publication", "publications", "published", "pdf", "read", "academic", "write", "wrote", "author", "anarchist", "deterministic"],
+    text: "Adil has co-authored and published two formal research papers and has one working paper in preparation: 1) 'A Mislabeled Contrast, Recovered: Diagnosing and Correcting an Encode/Test-Phase Confound in Blocked EEG Decoding' (with Hassan Siddiqui; Riemannian geometry, pre-registration, ds005189, PDF viewable in reader). 2) 'Deterministic Data Fusion for FinTech' (reconciliation pipeline, SERIALIZABLE isolation, hybrid logical clocks, PDF viewable in reader). 3) Working paper in preparation: 'Anarchist LLM: Disguised Algorithmic Reasoning' (transformer benchmarking on Modal serverless A100 GPUs with FlashAttention-3). Lexical Graph RAG is an engineering architecture project, not a research paper.",
+    keywords: ["paper", "papers", "research", "publication", "publications", "published", "pdf", "read", "academic", "write", "wrote", "author", "co-author", "anarchist", "deterministic", "eeg", "siddiqui"],
   },
   {
     id: "kb-principles",

@@ -57,7 +57,16 @@ export function routeIntentNode(state: AgentGraphState): AgentGraphState {
     q.includes("deterministic data fusion") ||
     q.includes("how many papers") ||
     q.includes("wrote") ||
-    q.includes("author")
+    q.includes("author") ||
+    q.includes("co-author") ||
+    q.includes("eeg") ||
+    q.includes("confound") ||
+    q.includes("decoding") ||
+    q.includes("siddiqui") ||
+    q.includes("openneuro") ||
+    q.includes("contrast") ||
+    q.includes("riemannian") ||
+    q.includes("mislabeled")
   ) {
     intent = "RESEARCH_PAPERS"
   } else if (
@@ -178,30 +187,43 @@ Website: ${PORTFOLIO_CV_DATA.contact.website}`)
   // Intent-targeted context injection & Live GitHub retrieval
   switch (intent) {
     case "RESEARCH_PAPERS": {
+      const eegPaper = PORTFOLIO_PROJECTS.find((p) => p.id === "eeg-confound-recovery")
       const fintech = PORTFOLIO_PROJECTS.find((p) => p.id === "deterministic-data-fusion")
       const anarchist = PORTFOLIO_PROJECTS.find((p) => p.id === "anarchist-llm")
+      if (eegPaper) matchedProjects.push(eegPaper)
       if (fintech) matchedProjects.push(fintech)
       if (anarchist) matchedProjects.push(anarchist)
 
       contextParts.push(`### Research Papers & Scholarly Publications by Muhammad Adil Usmani:
-1. ONLY PUBLISHED RESEARCH PAPER:
+1. CO-AUTHORED FORMAL RESEARCH PAPER:
+- Title: "A Mislabeled Contrast, Recovered: Diagnosing and Correcting an Encode/Test-Phase Confound in Blocked EEG Decoding"
+- Authors: Muhammad Hassan Siddiqui and Muhammad Adil Usmani
+- Publication Status: Co-Authored Research Paper / Reanalysis of OpenNeuro ds005189
+- Official In-Browser PDF Reader: /A_Mislabeled_Contrast_Recovered_EEG.pdf
+- GitHub Repository: https://github.com/HassanSidd0946/Search-vs-Memorize-Correction
+- Research Focus: Discovered an analysis pipeline label-dictionary conflation error on OpenNeuro ds005189 where 75% of class epochs were recognition-test responses rather than encoding events, driving a spurious 70.78% headline accuracy. Formulated a composition-arithmetic diagnostic matching 13/13 prior mappings and confirmed via a pre-registered joint-criterion decode (86.57% balanced accuracy). Correcting to encode-only trials recovered an authentic pre-calibration signal of 57.73% ± 0.05% (7.73% above chance), verified across four independent statistical controls: 30-shuffle null, 29-fold LOSO jackknife, 500-shuffle null, and parity-split counterbalancing.
+
+2. PUBLISHED FORMAL RESEARCH PAPER:
 - Title: "Deterministic Data Fusion for FinTech: Fault-Tolerant State Synchronization Across Heterogeneous Financial Event Streams"
+- Author: Muhammad Adil Usmani
 - Publication Status: Published Research Paper / Peer Preprint
 - Official In-Browser PDF Reader: /Deterministic_Data_Fusion_for_FinTech.pdf
 - Research Focus: Replay-equivalent state synchronization across distributed financial event streams under high concurrency (42k events/s per partition). Employs hybrid logical clocks, idempotent event folds, and SERIALIZABLE transaction isolation to eliminate race conditions and write skew. Verified with 0 ledger discrepancies over a 14-day continuous soak test.
 
-2. WORKING PAPER / PREPRINT IN PREPARATION (SECOND PAPER):
+3. WORKING PAPER / PREPRINT IN PREPARATION (THIRD PAPER):
 - Title: "Anarchist LLM: Disguised Algorithmic Reasoning (Pre-1900 Persona Constraint & Transformer Benchmarking on Modal A100 Clusters)"
+- Author: Muhammad Adil Usmani
 - Publication Status: Working Paper / Preprint Currently in Preparation (Adil is actively authoring this)
 - Research Repository: https://github.com/AadilUsmani/Anarchist-LLM
 - Research Focus: Probes whether modern LLMs can exhibit emergent algorithmic problem-solving when strictly constrained to pre-1900 Victorian-era English (strictly forbidding modern terms like 'array', 'pointer', 'RAM', 'binary', 'function'). Benchmarks distributed inference across serverless NVIDIA A100 GPU workers on Modal using FlashAttention-3 kernels.
 
 CRITICAL CLARIFICATIONS:
-- Adil has written exactly ONE published research paper ('Deterministic Data Fusion for FinTech').
-- He is currently authoring his SECOND research paper ('Anarchist LLM').
+- Adil has co-authored/published TWO formal research papers: the Blocked EEG Decoding paper (co-authored with Hassan Siddiqui) and the FinTech paper (authored by Adil). Both have full PDFs readable in-browser.
+- He is currently authoring his THIRD paper in preparation ('Anarchist LLM').
 - 'Lexical Graph RAG' is an engineering architecture project / production prototype over SEC 10-K filings, NOT a research paper. Do NOT refer to Lexical Graph RAG as a research paper.`)
 
       suggestions.push(
+        "Open in-browser reader for EEG Decoding paper",
         "Open in-browser reader for FinTech paper",
         "Tell me about the Anarchist LLM working paper",
         "How does the chatbot know Adil's codebases?",
@@ -385,8 +407,10 @@ Resume Download: /Muhammad_Adil_Usmani_cv.pdf`)
       // General overview: include skills and top project highlights
       contextParts.push(`### Core Skills & Research Highlights:
 - Experience: Data Science Intern at ML1 (building end-to-end AI automation products for internal ticketing, customer support, and hiring pipelines).
-- Published Research: 'Deterministic Data Fusion for FinTech' (/Deterministic_Data_Fusion_for_FinTech.pdf).
-- Working Paper in Progress: 'Anarchist LLM: Disguised Algorithmic Reasoning' (https://github.com/AadilUsmani/Anarchist-LLM).
+- Research Papers:
+  1. 'A Mislabeled Contrast, Recovered: Blocked EEG Decoding Confound' (Co-authored with Hassan Siddiqui; OpenNeuro ds005189, /A_Mislabeled_Contrast_Recovered_EEG.pdf).
+  2. 'Deterministic Data Fusion for FinTech' (/Deterministic_Data_Fusion_for_FinTech.pdf).
+  3. Working Paper in Progress: 'Anarchist LLM: Disguised Algorithmic Reasoning' (https://github.com/AadilUsmani/Anarchist-LLM).
 - Engineering Systems:
   1. Secure Examination Management System (SEMS) (https://github.com/AadilUsmani/Crypto_secure_system): Hybrid AES-256-GCM + RSA-3072 cryptosystem with RBAC.
   2. Lexical Graph RAG (https://github.com/AadilUsmani/Lexical_Graph_RAG): Neo4j knowledge graph deduplication over SEC 10-K filings.
@@ -423,8 +447,10 @@ You have dynamic access to Adil's verified CV, live GitHub codebases, system arc
 Strict Grounding Rules:
 1. ONLY answer using the verified facts provided in the "VERIFIED PORTFOLIO & CODEBASE CONTEXT" section below.
 2. Note on Research Papers:
-   - Adil has authored ONE published research paper: 'Deterministic Data Fusion for FinTech' (accessible via in-browser PDF reader at /Deterministic_Data_Fusion_for_FinTech.pdf).
-   - He is currently actively working on his SECOND research paper: 'Anarchist LLM: Disguised Algorithmic Reasoning' (working paper / preprint in preparation on serverless Modal A100 GPU clusters).
+   - Adil has co-authored/published TWO formal research papers:
+     a) 'A Mislabeled Contrast, Recovered: Diagnosing and Correcting an Encode/Test-Phase Confound in Blocked EEG Decoding' (Co-authored with Muhammad Hassan Siddiqui; Riemannian geometry, ds005189 reanalysis; PDF reader at /A_Mislabeled_Contrast_Recovered_EEG.pdf, repo at https://github.com/HassanSidd0946/Search-vs-Memorize-Correction).
+     b) 'Deterministic Data Fusion for FinTech' (Authored by Adil Usmani; SERIALIZABLE isolation, hybrid logical clocks; PDF reader at /Deterministic_Data_Fusion_for_FinTech.pdf).
+   - He is currently actively working on his THIRD research paper: 'Anarchist LLM: Disguised Algorithmic Reasoning' (working paper / preprint in preparation on serverless Modal A100 GPU clusters with FlashAttention-3; repo at https://github.com/AadilUsmani/Anarchist-LLM).
    - 'Lexical Graph RAG' is an engineering architecture project and production prototype over SEC 10-K filings, NOT a research paper. NEVER call Lexical Graph RAG a research paper.
 3. Note on GitHub Codebase Access:
    - When asked if you use Adil's GitHub access to have knowledge of codebases, confirm YES: you use live GitHub retrieval and deeply indexed repository architectures (including file hierarchies, cryptographic formulas, schemas, and test suites) to explain exactly how his codebases work under the hood.
@@ -491,16 +517,25 @@ function generateDeterministicFallback(state: AgentGraphState): string {
     case "RESEARCH_PAPERS":
       return `### Research Papers by Muhammad Adil Usmani
 
-Adil has authored **one published research paper** and is currently authoring his **second paper in progress**:
+Adil has **co-authored and published two formal research papers** and is currently authoring his **third paper in progress**:
 
-1. **Published Paper:** [Deterministic Data Fusion for FinTech](/Deterministic_Data_Fusion_for_FinTech.pdf)
+1. **Co-Authored Paper:** [A Mislabeled Contrast, Recovered: Blocked EEG Decoding Confound](/A_Mislabeled_Contrast_Recovered_EEG.pdf)
+   - **Authors:** Muhammad Hassan Siddiqui & Muhammad Adil Usmani.
+   - **Repository:** [HassanSidd0946/Search-vs-Memorize-Correction](https://github.com/HassanSidd0946/Search-vs-Memorize-Correction)
+   - **Topic:** Diagnosing and Correcting an Encode/Test-Phase Confound in Blocked EEG Decoding on OpenNeuro ds005189.
+   - **Key Finding:** Discovered label dictionary conflation error driving spurious 70.78% headline accuracy; confirmed via joint-criterion decode (86.57% balanced accuracy); recovered genuine 57.73% (7.73% above chance) pre-calibration signal verified across 4 independent statistical controls.
+   - **Access:** In-browser PDF reader available at \`/A_Mislabeled_Contrast_Recovered_EEG.pdf\`.
+
+2. **Published Paper:** [Deterministic Data Fusion for FinTech](/Deterministic_Data_Fusion_for_FinTech.pdf)
+   - **Author:** Muhammad Adil Usmani.
    - **Topic:** Fault-Tolerant State Synchronization Across Heterogeneous Financial Event Streams.
    - **Key Finding:** Sustained 42k events/s per partition under SERIALIZABLE isolation with hybrid logical clocks, achieving zero ledger discrepancies over 14-day continuous fault injection tests.
-   - **Access:** Available directly in the portfolio's in-browser reader or as a downloadable PDF.
+   - **Access:** In-browser PDF reader available at \`/Deterministic_Data_Fusion_for_FinTech.pdf\`.
 
-2. **Working Paper in Progress (Second Paper):** [Anarchist LLM: Disguised Algorithmic Reasoning](https://github.com/AadilUsmani/Anarchist-LLM)
+3. **Working Paper in Progress (Third Paper):** [Anarchist LLM: Disguised Algorithmic Reasoning](https://github.com/AadilUsmani/Anarchist-LLM)
+   - **Author:** Muhammad Adil Usmani.
    - **Topic:** Pre-1900 Persona Constraint & Transformer Benchmarking on Serverless A100 Clusters.
-   - **Key Finding:** Evaluates emergent algorithmic reasoning in transformers when strictly forbidden from using modern computing jargon. Benchmarked with FlashAttention-3 on Modal serverless A100 GPUs.
+   - **Key Finding:** Evaluates emergent algorithmic reasoning in transformers when strictly forbidden from using modern computing jargon. Benchmarked with FlashAttention-3 on Modal serverless A100 GPUs (4.38x speedup).
 
 *Note:* **Lexical Graph RAG** is an engineering architecture project and production prototype over SEC 10-K filings, not a research paper.`
 
@@ -574,7 +609,7 @@ Adil currently works as a **Data Science Intern at ML1** (Jul 2026 – Present),
 **Software Engineer** specializing in Applicational AI, Retrieval-Augmented Generation (RAG) pipelines, and LLM workflow orchestration.
 
 - **Core Specializations:** Knowledge Graph RAG (Neo4j, LangGraph), Transformer Inference (FlashAttention-3, Modal A100), Cryptosystems (AES-256-GCM, RSA-3072), and Time-Series Forecasting.
-- **Publications:** 1 Published Paper (*Deterministic Data Fusion for FinTech*), 1 Working Paper in Progress (*Anarchist LLM*).
+- **Publications:** 2 Formal Research Papers (*Blocked EEG Decoding Confound* [Co-authored] & *Deterministic Data Fusion for FinTech*), 1 Working Paper in Prep (*Anarchist LLM*).
 - **Current Role:** Data Science Intern at ML1.
 - **Education:** BS Computer Science at University of Central Punjab (UCP).
 - **Contact:** [muhammadaadilusmani@gmail.com](mailto:muhammadaadilusmani@gmail.com) | [GitHub Profile](https://github.com/AadilUsmani)`

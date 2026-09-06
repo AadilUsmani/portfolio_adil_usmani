@@ -87,14 +87,29 @@ export function NeuralNetworkViz() {
         )
       })}
       {[0, 1, 2, 3].map((i) => (
-        <motion.circle key={`pulse-${i}`} r={3} fill="#06b6d4" opacity={0.7}
-          initial={{ cx: LAYERS[0][1].cx, cy: LAYERS[0][1].cy }}
+        <motion.circle
+          key={`pulse-${i}`}
+          cx={0}
+          cy={0}
+          r={3}
+          fill="#06b6d4"
+          initial={{
+            x: LAYERS[0][1].cx,
+            y: LAYERS[0][1].cy,
+            opacity: 0,
+          }}
           animate={{
-            cx: [LAYERS[0][1].cx, LAYERS[1][1].cx, LAYERS[2][1].cx, LAYERS[3][0].cx],
-            cy: [LAYERS[0][1].cy, LAYERS[1][1].cy, LAYERS[2][1].cy, LAYERS[3][0].cy],
+            x: [LAYERS[0][1].cx, LAYERS[1][1].cx, LAYERS[2][1].cx, LAYERS[3][0].cx],
+            y: [LAYERS[0][1].cy, LAYERS[1][1].cy, LAYERS[2][1].cy, LAYERS[3][0].cy],
             opacity: [0, 0.8, 0.8, 0],
           }}
-          transition={{ duration: 2.8, delay: i * 0.9, repeat: Infinity, ease: "easeInOut", times: [0, 0.33, 0.66, 1] }}
+          transition={{
+            duration: 2.8,
+            delay: i * 0.9,
+            repeat: Infinity,
+            ease: "easeInOut",
+            times: [0, 0.33, 0.66, 1],
+          }}
         />
       ))}
     </svg>

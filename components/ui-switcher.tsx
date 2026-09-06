@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LayoutGrid, Layers, Check, Sun, Moon, Sparkles, X, ChevronRight, Compass } from "lucide-react";
 
 interface UiSwitcherProps {
-  currentVariant: "v1" | "v2";
-  onSelectVariant: (v: "v1" | "v2") => void;
+  currentVariant: "v1" | "v2" | "v2.1";
+  onSelectVariant: (v: "v1" | "v2" | "v2.1") => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
 }
@@ -42,7 +42,11 @@ export function UiSwitcher({
           </span>
 
           <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[10px] font-mono font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-            {currentVariant === "v1" ? "v1 Precision" : "v2 Blueprint"}
+            {currentVariant === "v2.1"
+              ? "v2.1 Focus"
+              : currentVariant === "v2"
+              ? "v2 Blueprint"
+              : "v1 Precision"}
           </span>
         </motion.button>
       </div>
@@ -63,7 +67,7 @@ export function UiSwitcher({
               exit={{ opacity: 0, scale: 0.96, y: 12 }}
               transition={{ duration: 0.18 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-md overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl"
+              className="relative w-full max-w-md overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl max-h-[90vh] overflow-y-auto"
               role="dialog"
               aria-label="Select Interface Design"
             >
@@ -75,10 +79,10 @@ export function UiSwitcher({
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
-                      Various UI Designs
+                      Interface Versions
                     </h3>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Choose between Muhammad Adil Usmani's interface versions
+                      Choose your preferred layout & cognitive density
                     </p>
                   </div>
                 </div>
@@ -93,7 +97,81 @@ export function UiSwitcher({
 
               {/* Options List */}
               <div className="mt-4 space-y-3">
-                {/* Option 1: v1 Precision */}
+                {/* Option 1: v2.1 Zenith Focus (Recommended / Low Cognitive Load) */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelectVariant("v2.1");
+                    setIsOpen(false);
+                  }}
+                  className={`group relative flex w-full items-start gap-3.5 rounded-xl border p-4 text-left transition-all ${
+                    currentVariant === "v2.1"
+                      ? "border-emerald-500 bg-emerald-50/40 dark:border-emerald-500/80 dark:bg-emerald-500/10 shadow-sm"
+                      : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 hover:border-slate-300 dark:hover:border-slate-700"
+                  }`}
+                >
+                  <div
+                    className={`mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full border ${
+                      currentVariant === "v2.1"
+                        ? "border-emerald-600 bg-emerald-600 text-white"
+                        : "border-slate-300 dark:border-slate-700 text-transparent"
+                    }`}
+                  >
+                    <Check className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-slate-900 dark:text-slate-100">
+                        Zenith Focus (v2.1)
+                      </span>
+                      <span className="rounded bg-emerald-100 dark:bg-emerald-950/60 px-1.5 py-0.5 text-[10px] font-mono font-medium text-emerald-700 dark:text-emerald-300 border border-emerald-300/40 dark:border-emerald-700/40">
+                        Low Cognitive Load
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                      Executive summaries first. Low cognitive load, scannable impact stats, expandable technical proofs, and in-browser PDF readers for both papers.
+                    </p>
+                  </div>
+                </button>
+
+                {/* Option 2: v2 Cyber Blueprint */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelectVariant("v2");
+                    setIsOpen(false);
+                  }}
+                  className={`group relative flex w-full items-start gap-3.5 rounded-xl border p-4 text-left transition-all ${
+                    currentVariant === "v2"
+                      ? "border-amber-500 bg-amber-50/40 dark:border-amber-500/80 dark:bg-amber-500/10 shadow-sm"
+                      : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 hover:border-slate-300 dark:hover:border-slate-700"
+                  }`}
+                >
+                  <div
+                    className={`mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full border ${
+                      currentVariant === "v2"
+                        ? "border-amber-500 bg-amber-500 text-white"
+                        : "border-slate-300 dark:border-slate-700 text-transparent"
+                    }`}
+                  >
+                    <Check className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-slate-900 dark:text-slate-100">
+                        Cyber Blueprint Console (v2)
+                      </span>
+                      <span className="rounded bg-amber-100 dark:bg-amber-900/50 px-1.5 py-0.5 text-[10px] font-mono font-medium text-amber-700 dark:text-amber-300">
+                        Blueprint
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                      Technical side-rail console with live topology visualizer, animated cyber-bug mascot, boot log, and dual paper PDF reader.
+                    </p>
+                  </div>
+                </button>
+
+                {/* Option 3: v1 Precision */}
                 <button
                   type="button"
                   onClick={() => {
@@ -125,44 +203,7 @@ export function UiSwitcher({
                       </span>
                     </div>
                     <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                      Linear-inspired high-taste layout. Features the 4-tab Interactive Architecture Workbench, verified case studies, and floating Graph AI Agent.
-                    </p>
-                  </div>
-                </button>
-
-                {/* Option 2: v2 Blueprint */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    onSelectVariant("v2");
-                    setIsOpen(false);
-                  }}
-                  className={`group relative flex w-full items-start gap-3.5 rounded-xl border p-4 text-left transition-all ${
-                    currentVariant === "v2"
-                      ? "border-amber-500 bg-amber-50/40 dark:border-amber-500/80 dark:bg-amber-500/10 shadow-sm"
-                      : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 hover:border-slate-300 dark:hover:border-slate-700"
-                  }`}
-                >
-                  <div
-                    className={`mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full border ${
-                      currentVariant === "v2"
-                        ? "border-amber-500 bg-amber-500 text-white"
-                        : "border-slate-300 dark:border-slate-700 text-transparent"
-                    }`}
-                  >
-                    <Check className="h-3.5 w-3.5" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-slate-900 dark:text-slate-100">
-                        Cyber Blueprint Console (v2)
-                      </span>
-                      <span className="rounded bg-amber-100 dark:bg-amber-900/50 px-1.5 py-0.5 text-[10px] font-mono font-medium text-amber-700 dark:text-amber-300">
-                        New Design
-                      </span>
-                    </div>
-                    <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                      Technical side-rail console with live topology data flow visualizer, animated cyber-bug mascot, boot log, and in-browser research paper reader.
+                      Linear-inspired high-taste layout. Features the 4-tab Interactive Architecture Workbench, dense case studies, and floating Graph AI Agent.
                     </p>
                   </div>
                 </button>
