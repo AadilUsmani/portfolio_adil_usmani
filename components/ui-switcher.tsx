@@ -21,14 +21,8 @@ export function UiSwitcher({
 
   return (
     <>
-      {/* Floating UI Switcher Dock Pill (Bottom-left in v1 to never block chatbot; bottom-right in v2) */}
-      <div
-        className={`fixed z-[70] flex items-center gap-2 transition-all duration-300 ${
-          currentVariant === "v1"
-            ? "bottom-6 left-4 sm:left-6"
-            : "bottom-6 right-4 sm:right-6"
-        }`}
-      >
+      {/* Floating UI Switcher Dock Pill (Bottom-left across both views to guarantee 0 collision with chatbot or assistant drawer) */}
+      <div className="fixed bottom-5 left-4 sm:left-6 z-[70] flex items-center gap-2 transition-all duration-300">
         <motion.button
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}

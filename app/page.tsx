@@ -278,53 +278,17 @@ function FocusRotator() {
   )
 }
 
-// ─── Main Component ──────────────────────────────────────────────────────────
+// ─── Precision Engineering View (v1) ──────────────────────────────────────────
 
-export default function Portfolio() {
+interface PortfolioV1Props {
+  isDarkMode: boolean
+  setIsDarkMode: (val: boolean | ((prev: boolean) => boolean)) => void
+  onSelectVariant: (v: "v1" | "v2") => void
+}
+
+function PortfolioV1({ isDarkMode, setIsDarkMode, onSelectVariant }: PortfolioV1Props) {
   const [activeSection, setActiveSection] = useState("about")
   const [projectFilter, setProjectFilter] = useState<"all" | "rag" | "llm" | "sec" | "ml">("all")
-  const [isDarkMode, setIsDarkMode] = useState(false)
-  const [uiVariant, setUiVariant] = useState<"v1" | "v2">("v1")
-
-  // Sync UI variant preference
-  useEffect(() => {
-    try {
-      const savedUi = localStorage.getItem("adil-ui-variant")
-      if (savedUi === "v2" || savedUi === "v1") {
-        setUiVariant(savedUi)
-      }
-    } catch {}
-  }, [])
-
-  const handleSelectVariant = (v: "v1" | "v2") => {
-    setUiVariant(v)
-    try {
-      localStorage.setItem("adil-ui-variant", v)
-    } catch {}
-  }
-
-  // Listen for global UI variant switch events from Rail or header triggers
-  useEffect(() => {
-    const handleSwitchEvent = (e: any) => {
-      if (e?.detail?.variant === "v1" || e?.detail?.variant === "v2") {
-        handleSelectVariant(e.detail.variant)
-      }
-    }
-    window.addEventListener("switch-ui-variant", handleSwitchEvent)
-    return () => window.removeEventListener("switch-ui-variant", handleSwitchEvent)
-  }, [])
-
-  // Initialize theme from localStorage if set, default to light
-  useEffect(() => {
-    try {
-      const savedTheme = localStorage.getItem("adil-theme")
-      if (savedTheme === "dark") {
-        setIsDarkMode(true)
-      } else {
-        setIsDarkMode(false)
-      }
-    } catch {}
-  }, [])
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false)
   const [showBackToTop, setShowBackToTop] = useState(false)
@@ -460,20 +424,6 @@ export default function Portfolio() {
     { id: "contact", label: "Contact" },
   ]
 
-  if (uiVariant === "v2") {
-    return (
-      <div className={isDarkMode ? "dark" : "light"}>
-        <PortfolioV2 />
-        <UiSwitcher
-          currentVariant="v2"
-          onSelectVariant={handleSelectVariant}
-          isDarkMode={isDarkMode}
-          onToggleTheme={() => setIsDarkMode(!isDarkMode)}
-        />
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 relative overflow-x-hidden font-sans">
       <div className="fixed inset-0 bg-dot-pattern pointer-events-none opacity-30 z-0" />
@@ -543,7 +493,7 @@ export default function Portfolio() {
 
             {/* Quick Switch to v2 Blueprint */}
             <button
-              onClick={() => handleSelectVariant("v2")}
+              onClick={() => onSelectVariant("v2")}
               className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-900/60 hover:border-amber-400 dark:hover:border-amber-500 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
               title="Switch to Cyber Blueprint UI (v2)"
             >
@@ -621,7 +571,7 @@ export default function Portfolio() {
               </a>
               <button
                 onClick={() => {
-                  handleSelectVariant("v2");
+                  onSelectVariant("v2");
                   setIsMobileMenuOpen(false);
                 }}
                 className="flex items-center justify-between w-full py-2.5 px-3 rounded-lg text-sm font-semibold border border-amber-300 dark:border-amber-700/60 bg-amber-50/60 dark:bg-amber-950/30 text-amber-800 dark:text-amber-200 mt-2 cursor-pointer"
@@ -1163,8 +1113,90 @@ export default function Portfolio() {
         setIsDarkMode={setIsDarkMode}
         scrollToSection={scrollToSection}
       />
+    </div>
+  )
+}
+
+// ─── Main Root Component ───────────────────────────────────────────────────────
+
+export default function Portfolio() {
+  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [uiVariant, setUiVariant] = useState<"v1" | "v2">("v1")
+
+  // Sync UI variant preference
+  useEffect(() => {
+    try {
+      const savedUi = localStorage.getItem("adil-ui-variant")
+      if (savedUi === "v2" || savedUi === "v1") {
+        setUiVariant(savedUi)
+      }
+      const savedTheme = localStorage.getItem("adil-theme")
+      if (savedTheme === "dark") {
+        setIsDarkMode(true)
+      }
+    } catch {}
+  }, [])
+
+  const handleSelectVariant = (v: "v1" | "v2") => {
+    setUiVariant(v)
+    try {
+      localStorage.setItem("adil-ui-variant", v)
+    } catch {}
+  }
+
+  // Listen for global UI variant switch events from Rail or header triggers
+  useEffect(() => {
+    const handleSwitchEvent = (e: any) => {
+      if (e?.detail?.variant === "v1" || e?.detail?.variant === "v2") {
+        handleSelectVariant(e.detail.variant)
+      }
+    }
+    window.addEventListener("switch-ui-variant", handleSwitchEvent)
+    return () => window.removeEventListener("switch-ui-variant", handleSwitchEvent)
+  }, [])
+
+  // Cross-tab theme sync
+  useEffect(() => {
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "adil-theme") {
+        setIsDarkMode(e.newValue === "dark")
+      }
+    }
+    window.addEventListener("storage", handleStorage)
+    return () => window.removeEventListener("storage", handleStorage)
+  }, [])
+
+  // Manage html class for theme
+  useEffect(() => {
+    const root = document.documentElement
+    if (isDarkMode) {
+      root.classList.add("dark")
+      root.classList.remove("light")
+      try {
+        localStorage.setItem("adil-theme", "dark")
+      } catch {}
+    } else {
+      root.classList.remove("dark")
+      root.classList.add("light")
+      try {
+        localStorage.setItem("adil-theme", "light")
+      } catch {}
+    }
+  }, [isDarkMode])
+
+  return (
+    <div className={isDarkMode ? "dark" : "light"}>
+      {uiVariant === "v2" ? (
+        <PortfolioV2 />
+      ) : (
+        <PortfolioV1
+          isDarkMode={isDarkMode}
+          setIsDarkMode={setIsDarkMode}
+          onSelectVariant={handleSelectVariant}
+        />
+      )}
       <UiSwitcher
-        currentVariant="v1"
+        currentVariant={uiVariant}
         onSelectVariant={handleSelectVariant}
         isDarkMode={isDarkMode}
         onToggleTheme={() => setIsDarkMode(!isDarkMode)}
