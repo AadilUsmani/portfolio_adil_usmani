@@ -175,5 +175,23 @@ Invoke-RestMethod -Uri "https://v0-muhammadaadilusmani.vercel.app/api/contact" -
 
 ---
 
+### Phase 7: Dual-UI Component Decoupling & Cross-Device Stabilization
+* **The Problem:** The root `Portfolio` component in `app/page.tsx` contained lifecycle hooks (`useScroll`, `window.addEventListener("scroll")`, form states) for both v1 and v2 simultaneously, with an early return when `uiVariant === "v2"`. This kept v1 scroll event handlers active on `window` while v2 was displayed, querying v1 DOM elements that were unmounted. Furthermore, the floating `UiSwitcher` button at `bottom-6 right-4` in v2 collided with mobile touch controls and assistant drawers.
+* **Root Causes & Solutions:**
+  1. **Encapsulated `PortfolioV1` Subcomponent**:
+     - Extracted v1 markup and hooks into an isolated `PortfolioV1` component.
+     - When `uiVariant === "v2"`, `PortfolioV1` is cleanly unmounted, guaranteeing that v1 scroll observers and DOM queries never execute in v2.
+     - Root `Portfolio` component remains the lightweight state coordinator managing variant persistence, theme tokens, and cross-tab synchronization.
+  2. **Harmonized Floating Dock Positioning (`ui-switcher.tsx`)**:
+     - Placed the floating `UiSwitcher` button consistently at `bottom-5 left-4` on mobile across both variants.
+     - Guarantees 0 overlap with the floating chatbot or assistant drawer situated on the bottom right.
+  3. **Automated Dual-Viewport Verification Matrix**:
+     - Implemented automated Chrome DevTools Protocol (CDP) test script (`cdp_dual_view_test.mjs`) simulating:
+       - **Phone View (375x812, touch enabled, Android 14 User-Agent)**: Tests menu toggling, smooth scrolling, dynamic variant switching, visualizer node clicks, and drawer interaction.
+       - **PC Desktop View (1920x1080, desktop User-Agent)**: Tests navigation header, Command Palette (`⌘K`), and full-width topology visualizer.
+     - **Verification Result:** Zero console errors, zero uncaught exceptions, and zero fault trips across all viewports.
+
+---
+
 *This document serves as the permanent engineering log for Muhammad Adil Usmani's portfolio systems.*
 
