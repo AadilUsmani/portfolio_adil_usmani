@@ -297,5 +297,24 @@ Invoke-RestMethod -Uri "https://v0-muhammadaadilusmani.vercel.app/api/contact" -
 
 ---
 
+### Phase 12: Visualizer Pointer Drag Race Condition Elimination (`Cannot read properties of null (reading 'vx')`)
+* **The Problem:** When interacting with the interactive SVG topology visualizer (`ArchitectureVisualizerV2.tsx`) on mobile touchscreens or during rapid swipe gestures, the fault-tolerant circuit boundary (`app/error.tsx`) was tripped displaying:
+  ```
+  TypeError: Cannot read properties of null (reading 'vx')
+  ```
+* **Root Cause:**
+  - In `ArchitectureVisualizerV2.tsx`, `dragRef` stores the drag anchor `{ x, y, vx, vy }`.
+  - In `onPointerMove`, the state updater `setView((v) => ({ ...v, x: dragRef.current!.vx + dx, y: dragRef.current!.vy + dy }))` evaluated `dragRef.current!.vx` asynchronously inside the deferred callback.
+  - When a user on a mobile device scrolled past or performed a rapid touch gesture, `onPointerUp`, `onPointerLeave`, or touch cancellation executed before React evaluated the queued state updater, setting `dragRef.current = null`.
+  - When React executed the deferred updater, `dragRef.current` was `null`, causing the non-null assertion `dragRef.current!.vx` to throw `TypeError: Cannot read properties of null (reading 'vx')`.
+* **Fix & Hardening:**
+  1. **Synchronous Coordinate Resolution:** Pre-extracted `dragRef.current` into a local scope constant `const drag = dragRef.current; if (!drag) return;`, and computed `const nextX = drag.vx + dx; const nextY = drag.vy + dy;` synchronously before scheduling `setView((v) => ({ ...v, x: nextX, y: nextY }))`. The state updater closure now receives immutable primitive numbers, completely isolating it from `dragRef` lifecycle mutations.
+  2. **Touch-Pan-Y & Pointer Cancellation:** Replaced `touch-none` with `touch-pan-y` on the visualizer SVG so vertical page scrolling is never blocked on mobile screens, and bound `onPointerCancel={onPointerUp}` to safely handle interrupted mobile touch gestures.
+  3. **Node Label Safe Navigation:** Guarded inbound/outbound topology inspector buttons with `nodeMap[e.from]?.label || e.from` to prevent any missing node metadata lookups from throwing.
+* **Automated Verification:**
+  - Automated mobile stress testing via headless Edge CDP (Pixel 7 emulation, touch gestures, rapid drag, interrupted touch cancels on `/projects/deterministic-data-fusion-fintech` and `v2 Full`) verified **0 errors, 0 tripped boundaries**.
+
+---
+
 *This document serves as the permanent engineering log for Muhammad Adil Usmani's portfolio systems.*
 

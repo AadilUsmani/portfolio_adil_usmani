@@ -111,23 +111,31 @@ export function ArchitectureVisualizerV2({ project }: { project: Project }) {
       if ((e.target as Element).closest("[data-node]")) return;
       dragRef.current = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
       try {
-        (e.currentTarget as Element).setPointerCapture(e.pointerId);
+        (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
       } catch {}
     },
     [view.x, view.y],
   );
   const onPointerMove = useCallback((e: React.PointerEvent) => {
-    if (!dragRef.current) return;
+    const drag = dragRef.current;
+    if (!drag) return;
     const svg = svgRef.current;
     const scale = svg && svg.clientWidth > 0 ? 1000 / svg.clientWidth : 1;
-    const dx = (e.clientX - dragRef.current.x) * scale;
-    const dy = (e.clientY - dragRef.current.y) * scale;
+    const dx = (e.clientX - drag.x) * scale;
+    const dy = (e.clientY - drag.y) * scale;
     if (Number.isFinite(dx) && Number.isFinite(dy)) {
-      setView((v) => ({ ...v, x: dragRef.current!.vx + dx, y: dragRef.current!.vy + dy }));
+      const nextX = drag.vx + dx;
+      const nextY = drag.vy + dy;
+      setView((v) => ({ ...v, x: nextX, y: nextY }));
     }
   }, []);
-  const onPointerUp = useCallback(() => {
+  const onPointerUp = useCallback((e: React.PointerEvent) => {
     dragRef.current = null;
+    try {
+      if ((e.currentTarget as Element).hasPointerCapture?.(e.pointerId)) {
+        (e.currentTarget as Element).releasePointerCapture?.(e.pointerId);
+      }
+    } catch {}
   }, []);
 
   const zoom = (dir: 1 | -1) => setView((v) => ({ ...v, k: Math.min(2.2, Math.max(0.6, v.k + dir * 0.2)) }));
@@ -198,11 +206,12 @@ export function ArchitectureVisualizerV2({ project }: { project: Project }) {
         <svg
           ref={svgRef}
           viewBox="0 0 1000 520"
-          className="block h-auto w-full cursor-grab touch-none select-none active:cursor-grabbing"
+          className="block h-auto w-full cursor-grab touch-pan-y select-none active:cursor-grabbing"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerLeave={onPointerUp}
+          onPointerCancel={onPointerUp}
           onClick={(e) => {
             if (!(e.target as Element).closest("[data-node]")) setSelected(null);
           }}
@@ -389,7 +398,7 @@ export function ArchitectureVisualizerV2({ project }: { project: Project }) {
                     <div className="mt-1 flex flex-wrap gap-1">
                       {inbound.map((e) => (
                         <button key={edgeKey(e)} onClick={() => setSelected(e.from)} className="mono rounded border border-line-2 px-1.5 py-0.5 text-[10px] text-paper-2 hover:border-teal/50 hover:text-teal">
-                          ← {nodeMap[e.from].label}
+                          ← {nodeMap[e.from]?.label || e.from}
                         </button>
                       ))}
                     </div>
@@ -401,7 +410,7 @@ export function ArchitectureVisualizerV2({ project }: { project: Project }) {
                     <div className="mt-1 flex flex-wrap gap-1">
                       {outbound.map((e) => (
                         <button key={edgeKey(e)} onClick={() => setSelected(e.to)} className="mono rounded border border-line-2 px-1.5 py-0.5 text-[10px] text-paper-2 hover:border-signal/50 hover:text-signal">
-                          {nodeMap[e.to].label} →
+                          {nodeMap[e.to]?.label || e.to} →
                         </button>
                       ))}
                     </div>
