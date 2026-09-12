@@ -9,6 +9,8 @@ import { profile, papers } from "@/lib/dataV2";
 import { useShell } from "@/components/v2/shell-context";
 import { Corner } from "@/components/v2/ui";
 
+import { mechanicalSound } from "@/lib/mechanicalSound";
+
 const bootLines = [
   { t: "boot", s: "control-plane v3.1 · lahore-1" },
   { t: "mount", s: "retrieval plane · dense + lexical + graph" },
@@ -17,41 +19,207 @@ const bootLines = [
   { t: "ready", s: "portfolio online · press ⌘K" },
 ];
 
-function BootLog() {
-  const [count, setCount] = useState(0);
+function VisualSoundIndicator() {
+  const [enabled, setEnabled] = useState(true);
+  const [pulseLevel, setPulseLevel] = useState(0);
+
   useEffect(() => {
-    if (count >= bootLines.length) return;
-    const id = setTimeout(() => setCount((c) => c + 1), count === 0 ? 300 : 420);
-    return () => clearTimeout(id);
-  }, [count]);
+    setEnabled(mechanicalSound.isEnabled());
+    const unsub = mechanicalSound.subscribe((intensity) => {
+      setPulseLevel(Math.min(1, intensity + Math.random() * 0.4));
+      setTimeout(() => setPulseLevel((p) => Math.max(0, p - 0.3)), 70);
+      setTimeout(() => setPulseLevel(0), 150);
+    });
+
+    const handleToggle = (e: any) => {
+      if (typeof e?.detail?.enabled === "boolean") {
+        setEnabled(e.detail.enabled);
+      }
+    };
+    window.addEventListener("mechanical-sound-toggle", handleToggle);
+    return () => {
+      unsub();
+      window.removeEventListener("mechanical-sound-toggle", handleToggle);
+    };
+  }, []);
+
+  const toggleSound = () => {
+    const next = mechanicalSound.toggle();
+    setEnabled(next);
+    if (next) {
+      mechanicalSound.playKeyClick("enter");
+    }
+  };
+
+  return (
+    <button
+      onClick={toggleSound}
+      title={enabled ? "Mechanical keyboard audio enabled. Click to mute." : "Mechanical keyboard audio muted. Click to enable."}
+      className={`mono ml-auto inline-flex items-center gap-2 rounded-md border px-2 py-0.5 text-[10px] tracking-wider transition-all cursor-pointer ${
+        enabled
+          ? "border-signal/40 bg-signal/10 text-signal hover:bg-signal/20"
+          : "border-line bg-ink-3 text-mute hover:text-paper hover:border-line-2"
+      }`}
+    >
+      <span className="flex items-end gap-0.5 h-3">
+        {[0.45, 0.9, 0.65, 1.0, 0.5].map((h, i) => {
+          const activeH = pulseLevel > 0 ? Math.min(100, Math.max(25, h * pulseLevel * 100)) : (enabled ? 35 : 15);
+          return (
+            <span
+              key={i}
+              className={`w-0.5 rounded-full transition-all duration-75 ${
+                enabled ? (pulseLevel > 0 ? "bg-signal" : "bg-signal/60") : "bg-mute"
+              }`}
+              style={{ height: `${activeH}%` }}
+            />
+          );
+        })}
+      </span>
+      <span className="font-semibold">{enabled ? "SFX: ON" : "MUTED"}</span>
+      <span className="opacity-60 hidden sm:inline">· MX-CLICKY</span>
+    </button>
+  );
+}
+
+function BootLog() {
+  const [currentLine, setCurrentLine] = useState(0);
+  const [typedChars, setTypedChars] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    if (isFinished) return;
+
+    if (currentLine >= bootLines.length) {
+      setIsFinished(true);
+      return;
+    }
+
+    const targetStr = bootLines[currentLine].s;
+    if (typedChars < targetStr.length) {
+      const nextChar = targetStr[typedChars];
+      const delay = nextChar === " " ? 20 : nextChar === "·" ? 65 : 24 + Math.floor(Math.random() * 16);
+
+      const timer = setTimeout(() => {
+        setTypedChars((c) => c + 1);
+        mechanicalSound.playKeyClick(nextChar === " " ? "space" : "key");
+      }, delay);
+      return () => clearTimeout(timer);
+    } else {
+      // Completed current line, simulate carriage return / enter
+      const linePause = setTimeout(() => {
+        mechanicalSound.playKeyClick("enter");
+        setCurrentLine((l) => l + 1);
+        setTypedChars(0);
+      }, 160);
+      return () => clearTimeout(linePause);
+    }
+  }, [currentLine, typedChars, isFinished]);
+
   return (
     <div className="mono relative overflow-hidden rounded-lg border border-line bg-ink-2/80 p-4 text-[11.5px] leading-relaxed">
       <Corner />
-      <div className="mb-2 flex items-center gap-2 text-mute">
+      <div className="mb-2.5 flex items-center gap-2 text-mute border-b border-line/60 pb-2">
         <span className="h-2 w-2 rounded-full bg-rose/70" />
         <span className="h-2 w-2 rounded-full bg-signal/70" />
         <span className="h-2 w-2 rounded-full bg-lime/70" />
-        <span className="ml-2 tracking-widest">init.log</span>
+        <span className="ml-1 tracking-widest text-paper font-semibold">init.log</span>
+        <VisualSoundIndicator />
       </div>
-      {bootLines.slice(0, count).map((l, i) => (
-        <motion.div key={l.t} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} className="flex gap-3">
-          <span className="text-mute">{String(i + 1).padStart(2, "0")}</span>
-          <span className={l.t === "ready" ? "text-lime" : "text-signal"}>[{l.t}]</span>
-          <span className="text-paper-2">{l.s}</span>
-        </motion.div>
-      ))}
-      {count < bootLines.length ? (
-        <div className="flex gap-3">
-          <span className="text-mute">{String(count + 1).padStart(2, "0")}</span>
-          <span className="animate-blink text-paper">▍</span>
-        </div>
-      ) : (
-        <div className="flex gap-3">
-          <span className="text-mute">$</span>
-          <span className="animate-blink text-paper">▍</span>
-        </div>
-      )}
+
+      <div className="space-y-1">
+        {bootLines.map((l, i) => {
+          if (i > currentLine) return null;
+          const isThisLineTyping = i === currentLine && !isFinished;
+          const displayedText = isThisLineTyping ? l.s.slice(0, typedChars) : l.s;
+
+          return (
+            <div key={l.t} className="flex gap-3 items-baseline">
+              <span className="text-mute select-none">{String(i + 1).padStart(2, "0")}</span>
+              <span className={l.t === "ready" ? "text-lime font-semibold" : "text-signal"}>[{l.t}]</span>
+              <span className="text-paper-2">
+                {displayedText}
+                {isThisLineTyping && <span className="animate-blink text-signal font-bold ml-0.5">▍</span>}
+              </span>
+            </div>
+          );
+        })}
+
+        {isFinished && (
+          <div className="flex gap-3 pt-1">
+            <span className="text-mute select-none">$</span>
+            <span className="animate-blink text-paper">▍</span>
+          </div>
+        )}
+      </div>
     </div>
+  );
+}
+
+const TAGLINE_CHUNKS = [
+  { text: "One impossible problem at a time. ", highlight: false },
+  { text: "Problema solutum, negotium factum", highlight: true },
+  { text: " — isolate the bottleneck, prove the math, job well done.", highlight: false },
+];
+
+function TypewriterTagline() {
+  const [charCount, setCharCount] = useState(0);
+  const totalLength = TAGLINE_CHUNKS.reduce((acc, c) => acc + c.text.length, 0);
+
+  useEffect(() => {
+    if (charCount >= totalLength) return;
+
+    // Determine current character to tune timing and mechanical acoustics
+    let accum = 0;
+    let currentChar = "";
+    for (const chunk of TAGLINE_CHUNKS) {
+      if (charCount < accum + chunk.text.length) {
+        currentChar = chunk.text[charCount - accum];
+        break;
+      }
+      accum += chunk.text.length;
+    }
+
+    const isPunctuation = currentChar === "." || currentChar === "—" || currentChar === ",";
+    const delay = isPunctuation ? 140 : currentChar === " " ? 22 : 24 + Math.floor(Math.random() * 18);
+
+    const timer = setTimeout(() => {
+      setCharCount((c) => c + 1);
+      mechanicalSound.playKeyClick(currentChar === " " ? "space" : isPunctuation ? "enter" : "key");
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [charCount, totalLength]);
+
+  // Render sliced chunks up to charCount
+  let remaining = charCount;
+  return (
+    <motion.p
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.2 }}
+      className="mt-6 max-w-xl text-lg leading-relaxed text-paper-2 font-normal min-h-[5rem]"
+    >
+      {TAGLINE_CHUNKS.map((chunk, idx) => {
+        if (remaining <= 0) return null;
+        const take = Math.min(remaining, chunk.text.length);
+        const slice = chunk.text.slice(0, take);
+        remaining -= take;
+
+        if (chunk.highlight) {
+          return (
+            <span key={idx} className="text-signal font-medium italic">
+              {slice}
+            </span>
+          );
+        }
+        return <span key={idx}>{slice}</span>;
+      })}
+      {charCount < totalLength ? (
+        <span className="animate-blink text-signal font-bold ml-0.5">▍</span>
+      ) : (
+        <span className="animate-pulse text-signal/60 font-bold ml-0.5">▍</span>
+      )}
+    </motion.p>
   );
 }
 
@@ -93,14 +261,7 @@ export function HeroV2_1() {
               </span>
             </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.25 }}
-              className="mt-6 max-w-xl text-lg leading-relaxed text-paper-2 font-normal"
-            >
-              One impossible problem at a time. <span className="text-signal font-medium italic">Problema solutum, negotium factum</span> — isolate the bottleneck, prove the math, job well done.
-            </motion.p>
+            <TypewriterTagline />
 
             {/* Primary Actions: Prominent CV & Navigation */}
             <motion.div

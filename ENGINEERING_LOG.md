@@ -316,5 +316,36 @@ Invoke-RestMethod -Uri "https://v0-muhammadaadilusmani.vercel.app/api/contact" -
 
 ---
 
+### Phase 13: Hero Typewriter Animations, Mechanical Keyboard Acoustics & Projects Area Deduplication
+* **User Directives:**
+  1. **Tagline & Terminal Typewriter:** Add authentic character-by-character typewriter animations with procedural mechanical keyboard acoustics for both the Hero tagline and the terminal `init.log`.
+  2. **Papers Area Intact:** Retain the prominent 3-paper starting fold showcase.
+  3. **Projects Area Deduplication:** Remove duplicate paper projects from the Systems Catalog to prevent cross-section redundancy.
+* **Architectural Implementation:**
+  1. **Web Audio Mechanical Sound Synthesizer (`lib/mechanicalSound.ts`):**
+     - Procedurally synthesizes Cherry MX Blue tactile switch clicks using native Web Audio API (high-frequency transient bandpass burst + resonant triangle bottom-out thud + organic pitch micro-jitter).
+     - 0 KB external audio asset dependencies; instantaneous offline response.
+     - Persistent mute/unmute state (`localStorage` + `mechanical-sound-toggle` custom event).
+  2. **Visual Sound Equalizer (`HeroV2_1.tsx`):**
+     - Interactive tactile audio pill (`[⌗ MX-CLICKY · SFX: ON/MUTED]`) integrated into the terminal toolbar.
+     - Dynamic 5-bar visual equalizer dancing in real-time with typed keystrokes.
+  3. **Hero Tagline Typewriter (`TypewriterTagline` in `HeroV2_1.tsx`):**
+     - Smooth character-by-character typewriter animation for *"One impossible problem at a time. Problema solutum, negotium factum — isolate the bottleneck, prove the math, job well done."*
+     - Natural human cadences with pauses at punctuation and active cyan cursor (`▍`).
+  4. **Terminal BootLog Typewriter (`BootLog` in `HeroV2_1.tsx`):**
+     - Character-by-character command output across lines 1–5, carriage return audio on line completions, and blinking `$ ▍` prompt.
+  5. **Systems Catalog Deduplication (`SystemsV2_1.tsx`):**
+     - Filtered out paper slugs (`blocked-eeg-decoding-confound`, `deterministic-data-fusion-fintech`, `anarchist-llm-reasoning`), eliminating cross-section repetition.
+     - Re-indexed production systems cleanly (`SYS-01` through `SYS-04`):
+       - `SYS-01`: Lexical-Graph Hybrid RAG
+       - `SYS-02`: Autonomous Multi-Agent Workflow Engine
+       - `SYS-03`: Multi-Modal AI Avatar Synthesis Platform
+       - `SYS-04`: NASA Battery Degradation & State-of-Health Forecaster
+* **Automated Verification:**
+  - `npm run build`: 16/16 routes compiled with 0 errors.
+  - Headless Edge CDP automated test verified active character streaming in both tagline and terminal, audio equalizer pulsing, SFX mute toggle, zero paper items in `#systems`, all 3 papers preserved in Hero, and 0 console errors.
+
+---
+
 *This document serves as the permanent engineering log for Muhammad Adil Usmani's portfolio systems.*
 

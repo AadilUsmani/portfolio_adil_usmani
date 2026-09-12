@@ -6,7 +6,15 @@ import { ArrowRight, ExternalLink, GitBranch, Layers } from "lucide-react";
 import { projects } from "@/lib/dataV2";
 import { SectionHeader, Tag, Corner } from "@/components/v2/ui";
 
+const PAPER_SLUGS = new Set([
+  "blocked-eeg-decoding-confound",
+  "deterministic-data-fusion-fintech",
+  "anarchist-llm-reasoning",
+]);
+
 export function SystemsV2_1() {
+  const productionSystems = projects.filter((p) => !PAPER_SLUGS.has(p.slug));
+
   return (
     <section id="systems" className="relative scroll-mt-20 border-t border-line px-5 py-20 sm:px-8 lg:px-14">
       <div className="mx-auto max-w-7xl">
@@ -21,8 +29,8 @@ export function SystemsV2_1() {
           blurb="Concise 1–2 line summaries. Click any system to open its dedicated page with the complete architectural challenge, GitHub repository, deployed demo, and interactive live topology."
         />
 
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((p, i) => (
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-2">
+          {productionSystems.map((p, i) => (
             <motion.div
               key={p.id}
               initial={{ opacity: 0, y: 16 }}
@@ -38,7 +46,7 @@ export function SystemsV2_1() {
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <div className="mono text-[10px] tracking-[0.2em] font-semibold" style={{ color: p.accent }}>
-                      SYS-{p.index}
+                      SYS-{String(i + 1).padStart(2, "0")}
                     </div>
                     <span className="mono text-[9px] text-mute uppercase px-2 py-0.5 rounded bg-ink-3 border border-line truncate max-w-[140px]">
                       {p.category.split("/")[0].trim()}
