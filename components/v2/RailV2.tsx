@@ -81,8 +81,8 @@ export function RailV2({ sections = defaultSections }: { sections?: { id: Sectio
 
   return (
     <>
-      {/* Desktop rail */}
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col justify-between border-r border-line bg-ink/80 px-6 py-7 backdrop-blur-md lg:flex">
+      {/* Desktop rail - permanently attached to viewport */}
+      <aside className="fixed inset-y-0 left-0 z-40 hidden h-screen max-h-screen w-[232px] flex-col justify-between border-r border-line bg-ink/85 px-5 py-5 sm:px-6 sm:py-6 backdrop-blur-md overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden lg:flex">
         <div>
           <button onClick={() => goTo("top")} className="group flex items-center gap-3 text-left">
             <span className="relative grid h-9 w-9 place-items-center rounded-lg border border-line-2 bg-ink-3">
@@ -97,14 +97,14 @@ export function RailV2({ sections = defaultSections }: { sections?: { id: Sectio
             </span>
           </button>
 
-          <nav className="mt-12 space-y-1">
+          <nav className="mt-6 sm:mt-8 space-y-1">
             {sections.map((s, i) => {
               const active = activeSection === s.id;
               return (
                 <button
                   key={s.id}
                   onClick={() => goTo(s.id)}
-                  className="group relative flex w-full items-center justify-between rounded-md px-2 py-2 text-left transition-colors hover:bg-ink-3"
+                  className="group relative flex w-full items-center justify-between rounded-md px-2 py-1.5 sm:py-2 text-left transition-colors hover:bg-ink-3"
                 >
                   <span className="flex items-center gap-3">
                     <span className={`mono text-[10px] ${active ? "text-signal" : "text-mute"}`}>0{i + 1}</span>
@@ -112,7 +112,7 @@ export function RailV2({ sections = defaultSections }: { sections?: { id: Sectio
                   </span>
                   <span className="mono text-[10px] text-mute opacity-0 transition-opacity group-hover:opacity-100">{s.key}</span>
                   {active ? (
-                    <motion.span layoutId="rail-active" className="absolute -left-6 top-1/2 h-4 w-[2px] -translate-y-1/2 bg-signal" />
+                    <motion.span layoutId="rail-active" className="absolute -left-5 sm:-left-6 top-1/2 h-4 w-[2px] -translate-y-1/2 bg-signal" />
                   ) : null}
                 </button>
               );
@@ -120,7 +120,7 @@ export function RailV2({ sections = defaultSections }: { sections?: { id: Sectio
           </nav>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 pt-2">
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => setPaletteOpen(true)}
@@ -146,15 +146,15 @@ export function RailV2({ sections = defaultSections }: { sections?: { id: Sectio
             </span>
             <span className="mono text-[10px]">PDF</span>
           </a>
-          <div className="border-t border-line pt-4">
+          <div className="border-t border-line pt-3">
             <div className="flex items-center justify-between">
               <span className="mono text-[10px] tracking-widest text-mute">LHE · PKT</span>
               <span className="mono text-[12px] tabular-nums text-paper-2">{time || "--:--:--"}</span>
             </div>
-            <div className="mt-3 h-[2px] w-full overflow-hidden rounded bg-ink-4">
+            <div className="mt-2.5 h-[2px] w-full overflow-hidden rounded bg-ink-4">
               <div className="h-full bg-gradient-to-r from-signal to-teal" style={{ width: `${Math.round(progress * 100)}%` }} />
             </div>
-            <div className="mt-2 flex items-center justify-between">
+            <div className="mt-1.5 flex items-center justify-between">
               <span className="mono text-[10px] text-mute">scroll</span>
               <span className="mono text-[10px] tabular-nums text-mute">{Math.round(progress * 100)}%</span>
             </div>

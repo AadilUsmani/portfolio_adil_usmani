@@ -347,5 +347,31 @@ Invoke-RestMethod -Uri "https://v0-muhammadaadilusmani.vercel.app/api/contact" -
 
 ---
 
+### Phase 14: Permanent Viewport Attachment for Navigation Rail (`RailV2.tsx`) & Containing-Block Fix (`template.tsx`)
+* **User Directive:**
+  - The left sidebar (`RailV2` with Index, Systems, Skills, Assistant, Contact, Download CV, ⌘K, /, and Lahore clock) must stay permanently attached and fixed in position.
+  - The left sidebar should never scroll with the page when scrolling down through content on the right.
+* **Root Cause:**
+  - In `app/template.tsx`, `perspective: 1200`, `willChange: "transform, opacity, filter"`, and `rotateY` transforms were applied to the root container wrapping `{children}`.
+  - Per CSS W3C specifications, any non-none value for `transform`, `perspective`, `filter`, or `will-change: transform` creates a new containing block for `position: fixed` descendants.
+  - Consequently, `<aside className="fixed inset-y-0 left-0">` in `RailV2.tsx` was trapped inside the scrolling page element instead of being attached to the browser viewport, causing the sidebar to scroll away when the user scrolled.
+* **Architectural Fix:**
+  1. **Template Container Sanitization (`app/template.tsx`):**
+     - Replaced CSS transforms with pure opacity cross-fade transitions (`initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.22 }}`) on the root template.
+     - Removed all `transform`, `perspective`, and `will-change` properties from the page wrapper.
+     - `position: fixed` now adheres strictly to the browser viewport as intended.
+  2. **Sidebar Height & Spacing Optimization (`RailV2.tsx`):**
+     - Configured `h-screen max-h-screen overflow-y-auto` with hidden scrollbars.
+     - Optimized internal spacing (`px-5 py-5 sm:px-6 sm:py-6`, `mt-6 sm:mt-8`, `space-y-3`) so all elements (Name header, navigation items 01–05, ⌘K, /, Download CV, and Lahore clock) fit comfortably in the viewport on any screen height $\ge 500$px with zero scrolling required.
+* **Automated Verification:**
+  - Built with `npm run build` (16/16 routes passed with 0 errors).
+  - Automated CDP test suite measured `<aside>` bounding box at `scrollY = 0` and `scrollY = 2370px` on a 1366x768 laptop viewport:
+    - `asideTop`: strictly `0px` throughout entire page scroll.
+    - `cvVisibleInViewport`: `true` at all times.
+    - `clockVisible`: `true` at all times.
+    - Relative viewport movement: `0px` (100% permanently fixed and attached).
+
+---
+
 *This document serves as the permanent engineering log for Muhammad Adil Usmani's portfolio systems.*
 
