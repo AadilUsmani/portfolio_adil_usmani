@@ -334,6 +334,87 @@ export const projects: Project[] = [
       flow: [["raw", "feat"], ["feat", "win"], ["win", "lstm"], ["win", "tcn"], ["lstm", "eval"], ["tcn", "eval"], ["eval", "soh"]],
     },
   },
+  {
+    id: "eeg-confound",
+    index: "06",
+    slug: "blocked-eeg-decoding-confound",
+    title: "A Mislabeled Contrast, Recovered: Blocked EEG Decoding Confound",
+    shortTitle: "EEG Decoding",
+    category: "Computational Neuroscience / Riemannian ML",
+    tagline: "Diagnosing and correcting an encode/test-phase label confound in OpenNeuro ds005189.",
+    problem:
+      "A label-dictionary indexing error in OpenNeuro ds005189 collapsed four distinct event types into one index, leaking recognition-test trials into the encoding class and producing a spurious 70.78% headline decoding accuracy.",
+    solution:
+      "Formulated a composition-arithmetic diagnostic proving that 75% of class epochs were test-phase retrieval responses. Implemented a pre-registered Riemannian tangent space covariance classifier (MNE-Python) to decode the joint criterion directly, isolating authentic encode-phase neural signals and recovering a genuine 57.73% (+7.73% above chance) effect across 4 independent statistical controls.",
+    stack: ["Riemannian Tangent Space", "Covariance Geometry", "MNE-Python", "OpenNeuro ds005189", "PyTorch"],
+    outcomes: [
+      { label: "Diagnosed Artifact", value: "70.78%" },
+      { label: "Joint Criterion", value: "86.57%" },
+      { label: "Recovered Signal", value: "57.73%" },
+    ],
+    artifacts: [
+      { kind: "paper", label: "Read the paper", href: "/A_Mislabeled_Contrast_Recovered_EEG.pdf", internal: true },
+      { kind: "repo", label: "GitHub repository", href: "https://github.com/HassanSidd0946/Search-vs-Memorize-Correction" },
+    ],
+    accent: "#a78bfa",
+    graph: {
+      nodes: [
+        { id: "eeg", label: "EEG Raw Feed", kind: "input", x: 70, y: 260, detail: "OpenNeuro ds005189 64-channel 500Hz EEG recordings.", metrics: [{ k: "channels", v: "64" }, { k: "rate", v: "500Hz" }] },
+        { id: "diag", label: "Label Diagnostic", kind: "gate", x: 260, y: 260, detail: "Composition arithmetic detecting 4:1 marker collision leaking test trials into encoding class.", metrics: [{ k: "artifact", v: "70.78%" }] },
+        { id: "cov", label: "Covariance Matrix", kind: "service", x: 450, y: 260, detail: "Bandpass filtering (0.1–40Hz) and epoch covariance estimation on SPD manifold.", metrics: [{ k: "dim", v: "64x64" }] },
+        { id: "riem", label: "Riemannian Projection", kind: "model", x: 650, y: 260, detail: "Affine-invariant Riemannian tangent space projection mapping SPD matrices to Euclidean space.", metrics: [{ k: "metric", v: "AIRM" }] },
+        { id: "loso", label: "LOSO Jackknife", kind: "service", x: 820, y: 260, detail: "29-fold Leave-One-Subject-Out cross-validation and 500-shuffle null hypothesis test.", metrics: [{ k: "folds", v: "29" }] },
+        { id: "recov", label: "True Neural Signal", kind: "output", x: 960, y: 260, detail: "57.73% true encode-phase classification accuracy (+7.73% above chance level).", metrics: [{ k: "accuracy", v: "57.73%" }] },
+      ],
+      edges: [
+        { from: "eeg", to: "diag" },
+        { from: "diag", to: "cov" },
+        { from: "cov", to: "riem" },
+        { from: "riem", to: "loso" },
+        { from: "loso", to: "recov" },
+      ],
+      flow: [["eeg", "diag"], ["diag", "cov"], ["cov", "riem"], ["riem", "loso"], ["loso", "recov"]],
+    },
+  },
+  {
+    id: "anarchist",
+    index: "07",
+    slug: "anarchist-llm-reasoning",
+    title: "Anarchist LLM: Disguised Algorithmic Reasoning",
+    shortTitle: "Anarchist LLM",
+    category: "LLM Reasoning / Accelerated Transformer Kernels",
+    tagline: "Evaluating algorithmic problem-solving under strict historical persona constraints.",
+    problem:
+      "Evaluating whether modern LLMs can solve complex algorithmic problems (dynamic programming, sorting, graph traversal) when forced to speak strictly in Victorian-era English without modern computing terminology.",
+    solution:
+      "Autonomous research pipeline running distributed inference across serverless NVIDIA A100 GPU workers on Modal. Implemented FlashAttention-3 kernels with custom Byte Pair Encoding and automated SQLite experiment telemetry with Streamlit analytics.",
+    stack: ["FlashAttention-3", "Modal A100", "PyTorch", "Custom BPE", "Streamlit", "SQLite"],
+    outcomes: [
+      { label: "Acceleration", value: "4.38x" },
+      { label: "Per-token latency", value: "42 ms" },
+      { label: "Persona adherence", value: "98.2%" },
+    ],
+    artifacts: [
+      { kind: "repo", label: "GitHub repository", href: "https://github.com/AadilUsmani/Anarchist-LLM" },
+    ],
+    accent: "#38bdf8",
+    graph: {
+      nodes: [
+        { id: "prompt", label: "Victorian Prompt", kind: "input", x: 70, y: 260, detail: "Algorithm problems framed in 19th-century mechanical/philosophical English.", metrics: [{ k: "benchmarks", v: "140" }] },
+        { id: "modal", label: "Modal Serverless", kind: "service", x: 280, y: 260, detail: "Distributed worker orchestration spinning up A100 SXM4 instances in <2s.", metrics: [{ k: "gpu", v: "A100" }] },
+        { id: "flash", label: "FlashAttention-3", kind: "model", x: 500, y: 260, detail: "Hardware-fused attention kernels cutting per-token latency from 184ms to 42ms.", metrics: [{ k: "speedup", v: "4.38x" }] },
+        { id: "eval", label: "Judge & Telemetry", kind: "agent", x: 720, y: 260, detail: "Automated verification checking algorithmic correctness and persona constraint violations.", metrics: [{ k: "accuracy", v: "98.2%" }] },
+        { id: "dash", label: "Telemetry Stream", kind: "output", x: 940, y: 260, detail: "Live SQLite experiment telemetry visualized through Streamlit.", metrics: [{ k: "records", v: "10k+" }] },
+      ],
+      edges: [
+        { from: "prompt", to: "modal" },
+        { from: "modal", to: "flash" },
+        { from: "flash", to: "eval" },
+        { from: "eval", to: "dash" },
+      ],
+      flow: [["prompt", "modal"], ["modal", "flash"], ["flash", "eval"], ["eval", "dash"]],
+    },
+  },
 ];
 
 export const papers = [

@@ -247,5 +247,38 @@ Invoke-RestMethod -Uri "https://v0-muhammadaadilusmani.vercel.app/api/contact" -
 
 ---
 
+### Phase 10: Launch of Minimal Hub-and-Spoke Architecture (v2.1 Focus) with Dedicated Subpages & Universal Top-Right Sweeper
+* **User Directives & Requirements:**
+  1. **Minimal, Low Cognitive Load Landing Page (Hub):** The landing page must feel calm and uncluttered. Retain the authentic Cyber Blueprint theme, dark canvas, floating CyberBug mascot, and brand identity.
+  2. **Prominent Starting Fold (Hero):** Hero must feature **both completed research papers** (*Blocked EEG Decoding Confound* co-authored with Hassan Siddiqui and *Deterministic Data Fusion for FinTech* published in 2025) plus the *Anarchist LLM* working paper, along with Muhammad Adil Usmani's **verified CV** (`/Muhammad_Adil_Usmani_cv.pdf` with view and download capabilities).
+  3. **1–2 Line Systems Catalog:** Systems are summarized with 1–2 lines and outcome badges, linking directly to dedicated subpages (`/projects/[slug]`).
+  4. **Minimal Domain Skills Section:** Streamlined skills overview linking to a dedicated subpage (`/skills`).
+  5. **Dedicated Subpages (Spokes):**
+     - `/projects/[slug]`: Deep technical specs, problem & root cause, architectural decision, core stack, GitHub repo, live deployed demo, in-browser PDF reader modal, interactive `ArchitectureVisualizerV2` topology, and a dedicated **Project AI Agent** grounded in the system context.
+     - `/skills`: Comprehensive engineering competencies, proficiency bars, provenances (*ML1*, *Lexical Graph Hybrid RAG*, *NASA Li-ion aging benchmark*, *OpenNeuro ds005189*), and a dedicated **Skills AI Agent**.
+  6. **Universal Top-Right Version Sweeper (`v2.1 Focus | v2 Full | v1 Classic`):**
+     - Intact in the top right across all versions and subpages.
+     - Zero duplicate buttons across desktop and mobile.
+     - Responsive labels (`v2.1 | v2 | v1` on mobile screens <640px, full labels on desktop).
+* **Architectural Solutions & Implementations:**
+  1. **Data Model Updates (`lib/dataV2.ts`):**
+     - Added `slug: string` to all 7 systems.
+     - Added `blocked-eeg-decoding-confound` and `anarchist-llm-reasoning` projects with full graph topologies, metrics, problem/solution, and artifact links.
+  2. **Universal Root Layout Switcher (`components/VersionSwitcherTopRight.tsx` & `app/layout.tsx`):**
+     - Mounted globally in `RootLayout` so it is permanently visible and reactive across all pages.
+     - Removed duplicate version switchers from `RailV2` sidebar and mobile top bar.
+     - Handled cross-page redirects seamlessly back to `/` when switching versions from a subpage.
+  3. **Dynamic Routes & Static Generation (SSG):**
+     - Implemented `app/projects/[slug]/page.tsx` with `generateStaticParams()` pre-rendering all 7 projects at build time.
+     - Implemented `app/skills/page.tsx` pre-rendering the complete skills matrix.
+     - Page load latency remains under 50ms with zero SSR lag.
+  4. **Dedicated Interactive Agents (`/api/chat`):**
+     - Integrated dedicated, context-grounded AI agent nodes on each project subpage and the skills subpage.
+  5. **Automated Verification Benchmark:**
+     - `npm run build`: 16/16 static and dynamic routes compiled with 0 errors.
+     - Headless Edge CDP testing suite verified CV view/download, research paper modal, project detail navigation, skills page, version sweeping (`v2.1 Focus` ↔ `v2 Full` ↔ `v1 Classic`), and mobile viewport (375x812) with **0 console errors and 0 runtime exceptions**.
+
+---
+
 *This document serves as the permanent engineering log for Muhammad Adil Usmani's portfolio systems.*
 

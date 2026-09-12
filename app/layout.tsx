@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { VersionSwitcherTopRight } from '@/components/VersionSwitcherTopRight'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://v0-muhammadaadilusmani.vercel.app'),
@@ -65,6 +66,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
       </head>
       <body className="font-sans bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden transition-colors duration-300">
+        <VersionSwitcherTopRight />
         {children}
       </body>
     </html>

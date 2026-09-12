@@ -4,7 +4,7 @@ import { ShellProvider } from "@/components/v2/shell-context";
 import { RailV2 } from "@/components/v2/RailV2";
 import { HeroV2_1 } from "@/components/v2_1/HeroV2_1";
 import { SystemsV2_1 } from "@/components/v2_1/SystemsV2_1";
-import { ResearchV2_1 } from "@/components/v2_1/ResearchV2_1";
+import { SkillsV2_1 } from "@/components/v2_1/SkillsV2_1";
 import { ApproachV2_1 } from "@/components/v2_1/ApproachV2_1";
 import { AssistantSectionV2, AssistantDrawerV2 } from "@/components/v2/AssistantV2";
 import { ContactV2 } from "@/components/v2/ContactV2";
@@ -16,11 +16,11 @@ export function PortfolioV2_1() {
   return (
     <ShellProvider>
       <div className="blueprint min-h-screen relative text-paper">
-        <RailV2 currentVariant="v2.1" />
+        <RailV2 />
         <main className="relative z-[2] lg:pl-[232px]">
           <HeroV2_1 />
           <SystemsV2_1 />
-          <ResearchV2_1 />
+          <SkillsV2_1 />
           <ApproachV2_1 />
           <AssistantSectionV2 />
           <ContactV2 />

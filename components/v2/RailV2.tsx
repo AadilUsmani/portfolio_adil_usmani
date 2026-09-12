@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Command, MessageSquareText, FileDown, Layers } from "lucide-react";
+import { Command, MessageSquareText, FileDown } from "lucide-react";
 import { useShell, type SectionId } from "@/components/v2/shell-context";
 import { profile } from "@/lib/dataV2";
 import { Dot } from "@/components/v2/ui";
@@ -47,35 +47,10 @@ function useLahoreClock() {
   return time;
 }
 
-export function RailV2({ currentVariant = "v2" }: { currentVariant?: "v1" | "v2" | "v2.1" }) {
+export function RailV2() {
   const { activeSection, setActiveSection, goTo, setPaletteOpen, setAssistantOpen } = useShell();
   const time = useLahoreClock();
   const [progress, setProgress] = useState(0);
-  const [variant, setVariant] = useState<"v1" | "v2" | "v2.1">(currentVariant);
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("adil-ui-variant");
-      if (saved === "v1" || saved === "v2" || saved === "v2.1") {
-        setVariant(saved as "v1" | "v2" | "v2.1");
-      }
-    } catch {}
-    const handleSwitch = (e: any) => {
-      if (e?.detail?.variant) {
-        setVariant(e.detail.variant);
-      }
-    };
-    window.addEventListener("switch-ui-variant", handleSwitch);
-    return () => window.removeEventListener("switch-ui-variant", handleSwitch);
-  }, []);
-
-  const handleSwitchVariant = (next: "v1" | "v2" | "v2.1") => {
-    setVariant(next);
-    try {
-      localStorage.setItem("adil-ui-variant", next);
-      window.dispatchEvent(new CustomEvent("switch-ui-variant", { detail: { variant: next } }));
-    } catch {}
-  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -172,52 +147,6 @@ export function RailV2({ currentVariant = "v2" }: { currentVariant?: "v1" | "v2"
             </span>
             <span className="mono text-[10px]">PDF</span>
           </a>
-          {/* UI Version Selector (Integrated directly in Rail) */}
-          <div className="mt-2 rounded-md border border-line-2 bg-ink-3 p-1.5">
-            <div className="flex items-center justify-between px-1 mb-1.5">
-              <span className="mono text-[9px] uppercase tracking-wider text-mute flex items-center gap-1">
-                <Layers className="h-3 w-3 text-signal" /> UI VERSION
-              </span>
-              <span className="mono text-[9px] text-signal font-bold">
-                {variant === "v2.1" ? "v2.1 Focus" : variant === "v2" ? "v2 Blueprint" : "v1 Classic"}
-              </span>
-            </div>
-            <div className="grid grid-cols-3 gap-1">
-              <button
-                onClick={() => handleSwitchVariant("v2.1")}
-                className={`mono rounded px-1 py-1 text-center text-[10px] font-semibold transition-all cursor-pointer ${
-                  variant === "v2.1"
-                    ? "bg-signal text-ink shadow-sm font-bold"
-                    : "text-paper-2 hover:bg-ink-4 hover:text-paper"
-                }`}
-                title="v2.1 Focus (Streamlined Cyber Blueprint, low text density)"
-              >
-                v2.1
-              </button>
-              <button
-                onClick={() => handleSwitchVariant("v2")}
-                className={`mono rounded px-1 py-1 text-center text-[10px] font-semibold transition-all cursor-pointer ${
-                  variant === "v2"
-                    ? "bg-signal text-ink shadow-sm font-bold"
-                    : "text-paper-2 hover:bg-ink-4 hover:text-paper"
-                }`}
-                title="v2 Blueprint (Full Cyber Blueprint, complete architecture specs)"
-              >
-                v2
-              </button>
-              <button
-                onClick={() => handleSwitchVariant("v1")}
-                className={`mono rounded px-1 py-1 text-center text-[10px] font-semibold transition-all cursor-pointer ${
-                  variant === "v1"
-                    ? "bg-signal text-ink shadow-sm font-bold"
-                    : "text-paper-2 hover:bg-ink-4 hover:text-paper"
-                }`}
-                title="v1 Classic (Precision Engineering light/dark UI)"
-              >
-                v1
-              </button>
-            </div>
-          </div>
           <div className="border-t border-line pt-4">
             <div className="flex items-center justify-between">
               <span className="mono text-[10px] tracking-widest text-mute">LHE · PKT</span>
@@ -242,48 +171,18 @@ export function RailV2({ currentVariant = "v2" }: { currentVariant?: "v1" | "v2"
           </span>
           <span className="text-[13px] font-semibold">Adil Usmani</span>
         </button>
-        <div className="flex items-center gap-2">
-          {/* Mobile UI switcher */}
-          <div className="flex items-center gap-0.5 rounded-md border border-line-2 bg-ink-3 p-0.5">
-            <button
-              onClick={() => handleSwitchVariant("v2.1")}
-              className={`mono px-1.5 py-1 rounded text-[10px] font-semibold transition-colors ${
-                variant === "v2.1" ? "bg-signal text-ink" : "text-paper-2"
-              }`}
-              title="v2.1 Focus UI"
-            >
-              v2.1
-            </button>
-            <button
-              onClick={() => handleSwitchVariant("v2")}
-              className={`mono px-1.5 py-1 rounded text-[10px] font-semibold transition-colors ${
-                variant === "v2" ? "bg-signal text-ink" : "text-paper-2"
-              }`}
-              title="v2 Blueprint UI"
-            >
-              v2
-            </button>
-            <button
-              onClick={() => handleSwitchVariant("v1")}
-              className={`mono px-1.5 py-1 rounded text-[10px] font-semibold transition-colors ${
-                variant === "v1" ? "bg-signal text-ink" : "text-paper-2"
-              }`}
-              title="v1 Classic UI"
-            >
-              v1
-            </button>
-          </div>
+        <div className="flex items-center gap-1.5 pr-28 sm:pr-0">
           <button
             onClick={() => setAssistantOpen(true)}
             aria-label="Open assistant"
-            className="grid h-8 w-8 place-items-center rounded-md border border-line-2 bg-ink-3 text-paper-2"
+            className="grid h-8 w-8 place-items-center rounded-md border border-line-2 bg-ink-3 text-paper-2 hover:text-paper"
           >
             <MessageSquareText className="h-4 w-4" />
           </button>
           <button
             onClick={() => setPaletteOpen(true)}
             aria-label="Open command palette"
-            className="grid h-8 w-8 place-items-center rounded-md border border-line-2 bg-ink-3 text-paper-2"
+            className="grid h-8 w-8 place-items-center rounded-md border border-line-2 bg-ink-3 text-paper-2 hover:text-paper"
           >
             <Command className="h-4 w-4" />
           </button>

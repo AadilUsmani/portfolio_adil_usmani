@@ -11,7 +11,7 @@ import {
 } from "react";
 import { projects } from "@/lib/dataV2";
 
-export type SectionId = "top" | "systems" | "research" | "approach" | "assistant" | "contact";
+export type SectionId = "top" | "systems" | "research" | "skills" | "approach" | "assistant" | "contact";
 
 type ShellState = {
   activeProjectId: string;
