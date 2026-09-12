@@ -31,6 +31,12 @@ export type Artifact = {
   internal?: boolean;
 };
 
+export type ResearchFigure = {
+  title: string;
+  caption: string;
+  src: string;
+};
+
 export type Project = {
   id: string;
   index: string;
@@ -46,6 +52,7 @@ export type Project = {
   artifacts: Artifact[];
   accent: string;
   graph: { nodes: ArchNode[]; edges: ArchEdge[]; flow: string[][] };
+  figures?: ResearchFigure[];
 };
 
 export const profile = {
@@ -375,6 +382,28 @@ export const projects: Project[] = [
       ],
       flow: [["eeg", "diag"], ["diag", "cov"], ["cov", "riem"], ["riem", "loso"], ["loso", "recov"]],
     },
+    figures: [
+      {
+        title: "Figure 1: Confound Discovery & Audit Timeline",
+        caption: "Audit timeline identifying the 4:1 marker collision leaking test-phase retrieval trials into the encoding class, which fabricated the spurious 70.78% headline accuracy.",
+        src: "/research/eeg-confound/fig1_discovery_timeline.png",
+      },
+      {
+        title: "Figure 2: C3 Jackknife Leave-One-Subject-Out Controls",
+        caption: "29-fold Leave-One-Subject-Out (LOSO) cross-validation across all subjects confirming robustness and subject-invariance of the recovered neural signal.",
+        src: "/research/eeg-confound/fig2_c3_jackknife.png",
+      },
+      {
+        title: "Figure 3: Empirical Null Distribution (10,000 Shuffles)",
+        caption: "Permutation-shuffled label controls showing true recovered 57.73% accuracy is decisively outside the empirical null distribution (p < 0.001).",
+        src: "/research/eeg-confound/fig3_null_distribution.png",
+      },
+      {
+        title: "Figure 4: Parity Split Diagnostic",
+        caption: "Even vs odd trial partition disproving temporal/session drift hypotheses and isolating authentic encode-phase neural decoding.",
+        src: "/research/eeg-confound/fig4_d2_parity_split.png",
+      },
+    ],
   },
   {
     id: "anarchist",
@@ -414,6 +443,18 @@ export const projects: Project[] = [
       ],
       flow: [["prompt", "modal"], ["modal", "flash"], ["flash", "eval"], ["eval", "dash"]],
     },
+    figures: [
+      {
+        title: "Machina Mirabilis Architecture Schematic",
+        caption: "Conceptual and execution schematic: 19th-century prompt framing, serverless Modal NVIDIA A100 worker clusters, and FlashAttention-3 fused kernels.",
+        src: "/research/anarchist/machina_mirabilis.png",
+      },
+      {
+        title: "Pre-1900 Token Distribution & Historical Corpus Analysis",
+        caption: "Corpus vocabulary frequency analysis validating that generated responses maintain historical vocabulary authenticity without modern technical leakage.",
+        src: "/research/anarchist/pre1900_tokens_by_year.png",
+      },
+    ],
   },
 ];
 

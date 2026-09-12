@@ -18,6 +18,9 @@ import {
   Layers,
   Cpu,
   CornerDownRight,
+  Image as ImageIcon,
+  ZoomIn,
+  X,
 } from "lucide-react";
 import { Project } from "@/lib/dataV2";
 import { ShellProvider, useShell } from "@/components/v2/shell-context";
@@ -32,6 +35,7 @@ interface ProjectDetailViewProps {
 
 function ProjectDetailContent({ project }: ProjectDetailViewProps) {
   const { openReader } = useShell();
+  const [activeZoomImage, setActiveZoomImage] = useState<string | null>(null);
 
   // Dedicated Project Agent State
   const [messages, setMessages] = useState<{ role: "assistant" | "user"; text: string }[]>([
@@ -219,6 +223,98 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
             ))}
           </div>
         </div>
+
+        {/* Empirical Research Diagrams & Figures Section */}
+        {project.figures && project.figures.length > 0 && (
+          <section className="mt-12">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-3">
+                <span className="mono text-[11px] tracking-[0.2em] text-signal uppercase font-bold flex items-center gap-1.5">
+                  <ImageIcon className="h-4 w-4 text-signal" />
+                  ▲ Empirical Research Diagrams &amp; Schematics
+                </span>
+                <span className="h-px w-12 bg-line-2" />
+                <span className="mono text-[11px] text-mute">
+                  {project.figures.length} Publication Figures
+                </span>
+              </div>
+              <span className="mono text-[11px] text-paper-2">
+                Click any diagram to inspect high-resolution view
+              </span>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              {project.figures.map((fig, idx) => (
+                <div
+                  key={fig.title}
+                  className="group relative rounded-xl border border-line bg-ink-2 overflow-hidden flex flex-col justify-between hover:border-signal/60 transition-colors"
+                >
+                  <Corner />
+                  {/* Image Container with Zoom Trigger */}
+                  <div
+                    onClick={() => setActiveZoomImage(fig.src)}
+                    className="relative bg-ink-3/80 p-3 sm:p-4 cursor-pointer overflow-hidden flex items-center justify-center min-h-[220px]"
+                  >
+                    <img
+                      src={fig.src}
+                      alt={fig.title}
+                      className="max-h-64 w-full object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
+                      loading="eager"
+                    />
+                    <div className="absolute inset-0 bg-ink/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-xs font-mono text-paper backdrop-blur-[2px]">
+                      <ZoomIn className="h-4 w-4 text-signal" />
+                      <span>Click to enlarge diagram</span>
+                    </div>
+                  </div>
+
+                  {/* Figure Caption & Detail */}
+                  <div className="p-4 sm:p-5 border-t border-line/70 bg-ink-2">
+                    <h4 className="text-sm font-semibold text-paper flex items-center justify-between">
+                      <span>{fig.title}</span>
+                      <span className="mono text-[10px] text-mute">FIG-{idx + 1}</span>
+                    </h4>
+                    <p className="mt-2 text-xs text-paper-2 leading-relaxed">
+                      {fig.caption}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Lightbox Zoom Modal for Diagrams */}
+        <AnimatePresence>
+          {activeZoomImage && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveZoomImage(null)}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md cursor-zoom-out"
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="relative max-w-5xl max-h-[90vh] rounded-2xl border border-line-2 bg-ink-2 p-3 sm:p-6 overflow-hidden flex flex-col shadow-2xl"
+              >
+                <button
+                  onClick={() => setActiveZoomImage(null)}
+                  className="absolute top-4 right-4 z-10 grid h-8 w-8 place-items-center rounded-lg border border-line-2 bg-ink-3 text-paper hover:bg-rose hover:text-ink transition-colors cursor-pointer"
+                  aria-label="Close zoomed diagram"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+                <div className="overflow-auto flex items-center justify-center p-2">
+                  <img
+                    src={activeZoomImage}
+                    alt="Zoomed diagram preview"
+                    className="max-h-[78vh] w-auto object-contain rounded-lg shadow-lg"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Interactive Architecture Visualizer */}
         <div className="mt-12">

@@ -280,5 +280,22 @@ Invoke-RestMethod -Uri "https://v0-muhammadaadilusmani.vercel.app/api/contact" -
 
 ---
 
+### Phase 11: v2.1 Focus Refinements — Cheeky Latin Tagline, Approach Removal, Clickable Research Papers with Publication Figures & Tactile Paper-Flick Motion
+* **User Directives & Feedback:**
+  1. **Tagline Tone Refinement:** Replaced standard engineering copy with a cheeky, quirky Latin-infused one-liner: *"One impossible problem at a time. Problema solutum, negotium factum — isolate the bottleneck, prove the math, job well done."*
+  2. **Streamlined Section Hierarchy:** Removed the redundant "Approach & Trajectory" section from `v2.1 Focus`. The landing page structure now focuses cleanly on: Hero (CV & Research) → Systems → Skills → Assistant → Contact.
+  3. **Clickable Research Cards with Deep Dives & Publication Diagrams:**
+     - All 3 research paper cards in the starting fold link directly to dedicated `/projects/[slug]` subpages (`blocked-eeg-decoding-confound`, `deterministic-data-fusion-fintech`, `anarchist-llm-reasoning`).
+     - Extracted high-resolution publication figures from local paper directories (`Search-vs-Memorize-Correction/PAPER/figures/` and `Anarchist LLM/gpt1900/figures/`) into `public/research/`.
+     - Built an interactive **"Empirical Research Diagrams & Schematics"** gallery section with high-resolution lightbox zoom modal in `ProjectDetailView.tsx`.
+  4. **Tactile Paper-Flick / Blueprint-Unfolding Page Transition (`app/template.tsx`):**
+     - Implemented hardware-accelerated 3D blueprint paper-unfolding transitions (`rotateY: -3deg`, `scale: 0.988`, `transformOrigin: left center`, `ease: [0.22, 1, 0.36, 1]`) on Next.js page navigation.
+     - Completely eliminated perceived route transition lag, creating a physical, fluid page-turn sensation between the home hub and subpages.
+* **Automated Verification:**
+  - `npm run build`: 16/16 routes pre-rendered with 0 errors.
+  - Headless Edge CDP test suite verified cheeky tagline rendering, approach section removal, research paper deep-dive linking, all 4 EEG diagrams and 2 Anarchist schematics loading (`img.complete && naturalWidth > 0`), lightbox modal open/close, breadcrumb return, and mobile viewport compatibility with **0 console errors and 0 runtime exceptions**.
+
+---
+
 *This document serves as the permanent engineering log for Muhammad Adil Usmani's portfolio systems.*
 

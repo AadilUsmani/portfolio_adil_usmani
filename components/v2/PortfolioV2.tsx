@@ -11,12 +11,22 @@ import { ContactV2 } from "@/components/v2/ContactV2";
 import { FooterV2 } from "@/components/v2/FooterV2";
 import { CommandPaletteV2 } from "@/components/v2/CommandPaletteV2";
 import { PdfReaderV2 } from "@/components/v2/PdfReaderV2";
+import type { SectionId } from "@/components/v2/shell-context";
+
+const v2Sections: { id: SectionId; label: string; key: string }[] = [
+  { id: "top", label: "Index", key: "g h" },
+  { id: "systems", label: "Systems", key: "g s" },
+  { id: "research", label: "Research", key: "g r" },
+  { id: "approach", label: "Approach", key: "g a" },
+  { id: "assistant", label: "Assistant", key: "/" },
+  { id: "contact", label: "Contact", key: "g c" },
+];
 
 export function PortfolioV2() {
   return (
     <ShellProvider>
       <div className="blueprint min-h-screen relative text-paper">
-        <RailV2 />
+        <RailV2 sections={v2Sections} />
         <main className="relative z-[2] lg:pl-[232px]">
           <HeroV2 />
           <SystemsV2 />

@@ -7,11 +7,10 @@ import { useShell, type SectionId } from "@/components/v2/shell-context";
 import { profile } from "@/lib/dataV2";
 import { Dot } from "@/components/v2/ui";
 
-const sections: { id: SectionId; label: string; key: string }[] = [
+const defaultSections: { id: SectionId; label: string; key: string }[] = [
   { id: "top", label: "Index", key: "g h" },
   { id: "systems", label: "Systems", key: "g s" },
-  { id: "research", label: "Research", key: "g r" },
-  { id: "approach", label: "Approach", key: "g a" },
+  { id: "skills", label: "Skills", key: "g k" },
   { id: "assistant", label: "Assistant", key: "/" },
   { id: "contact", label: "Contact", key: "g c" },
 ];
@@ -47,7 +46,7 @@ function useLahoreClock() {
   return time;
 }
 
-export function RailV2() {
+export function RailV2({ sections = defaultSections }: { sections?: { id: SectionId; label: string; key: string }[] }) {
   const { activeSection, setActiveSection, goTo, setPaletteOpen, setAssistantOpen } = useShell();
   const time = useLahoreClock();
   const [progress, setProgress] = useState(0);

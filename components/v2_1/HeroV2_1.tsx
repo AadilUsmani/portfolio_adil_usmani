@@ -2,6 +2,7 @@
 
 import { CyberBug } from "@/components/v2/CyberBug";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowDownRight, Sparkles, BookOpen, FileDown, ExternalLink, FileText } from "lucide-react";
 import { profile, papers } from "@/lib/dataV2";
@@ -98,7 +99,7 @@ export function HeroV2_1() {
               transition={{ duration: 0.6, delay: 0.25 }}
               className="mt-6 max-w-xl text-lg leading-relaxed text-paper-2 font-normal"
             >
-              I design and engineer dependable systems: deterministic data planes at 42k events/sec, knowledge graph RAG pipelines, and accelerated transformer inference.
+              One impossible problem at a time. <span className="text-signal font-medium italic">Problema solutum, negotium factum</span> — isolate the bottleneck, prove the math, job well done.
             </motion.p>
 
             {/* Primary Actions: Prominent CV & Navigation */}
@@ -165,7 +166,10 @@ export function HeroV2_1() {
 
           <div className="grid gap-4 md:grid-cols-3">
             {/* Paper 1: Co-Authored EEG Confound */}
-            <div className="relative rounded-xl border border-line bg-ink-2 p-5 flex flex-col justify-between group hover:border-signal/50 transition-colors">
+            <Link
+              href="/projects/blocked-eeg-decoding-confound"
+              className="relative rounded-xl border border-line bg-ink-2 p-5 flex flex-col justify-between group hover:border-signal/50 hover:bg-ink-3/40 transition-all cursor-pointer shadow-sm block"
+            >
               <Corner />
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2">
@@ -184,28 +188,41 @@ export function HeroV2_1() {
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   <span className="mono text-[9.5px] bg-ink-3 px-2 py-0.5 rounded text-paper-2 border border-line">Riemannian Geometry</span>
                   <span className="mono text-[9.5px] bg-ink-3 px-2 py-0.5 rounded text-paper-2 border border-line">57.73% Recovered</span>
+                  <span className="mono text-[9.5px] bg-ink-3 px-2 py-0.5 rounded text-[#a78bfa] border border-[#a78bfa]/30">4 Figures &amp; Proofs →</span>
                 </div>
               </div>
               <div className="flex items-center gap-2 mt-5 pt-3 border-t border-line/60">
                 <button
-                  onClick={() => openReader("/A_Mislabeled_Contrast_Recovered_EEG.pdf")}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openReader("/A_Mislabeled_Contrast_Recovered_EEG.pdf");
+                  }}
                   className="inline-flex items-center gap-1.5 rounded-md bg-[#a78bfa] text-ink px-3 py-1.5 text-xs font-semibold hover:opacity-90 transition-opacity cursor-pointer"
                 >
                   <BookOpen className="h-3.5 w-3.5" /> Read PDF
                 </button>
-                <a
-                  href="https://github.com/HassanSidd0946/Search-vs-Memorize-Correction"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-md border border-line-2 px-3 py-1.5 text-xs text-paper-2 hover:text-paper hover:border-paper/40 transition-colors"
+                <span
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.open("https://github.com/HassanSidd0946/Search-vs-Memorize-Correction", "_blank");
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-line-2 px-3 py-1.5 text-xs text-paper-2 hover:text-paper hover:border-paper/40 transition-colors cursor-pointer"
                 >
                   <ExternalLink className="h-3 w-3" /> Repo
-                </a>
+                </span>
+                <span className="mono text-[10.5px] text-signal ml-auto group-hover:translate-x-0.5 transition-transform">
+                  Deep Dive →
+                </span>
               </div>
-            </div>
+            </Link>
 
             {/* Paper 2: Published FinTech Fusion */}
-            <div className="relative rounded-xl border border-line bg-ink-2 p-5 flex flex-col justify-between group hover:border-signal/50 transition-colors">
+            <Link
+              href="/projects/deterministic-data-fusion-fintech"
+              className="relative rounded-xl border border-line bg-ink-2 p-5 flex flex-col justify-between group hover:border-signal/50 hover:bg-ink-3/40 transition-all cursor-pointer shadow-sm block"
+            >
               <Corner />
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2">
@@ -224,28 +241,41 @@ export function HeroV2_1() {
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   <span className="mono text-[9.5px] bg-ink-3 px-2 py-0.5 rounded text-paper-2 border border-line">42k ev/s Throughput</span>
                   <span className="mono text-[9.5px] bg-ink-3 px-2 py-0.5 rounded text-paper-2 border border-line">HLC Log Order</span>
+                  <span className="mono text-[9.5px] bg-ink-3 px-2 py-0.5 rounded text-[#2dd4bf] border border-[#2dd4bf]/30">Topology &amp; Specs →</span>
                 </div>
               </div>
               <div className="flex items-center gap-2 mt-5 pt-3 border-t border-line/60">
                 <button
-                  onClick={() => openReader("/Deterministic_Data_Fusion_for_FinTech.pdf")}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openReader("/Deterministic_Data_Fusion_for_FinTech.pdf");
+                  }}
                   className="inline-flex items-center gap-1.5 rounded-md bg-[#2dd4bf] text-ink px-3 py-1.5 text-xs font-semibold hover:opacity-90 transition-opacity cursor-pointer"
                 >
                   <BookOpen className="h-3.5 w-3.5" /> Read PDF
                 </button>
-                <a
-                  href="https://github.com/AadilUsmani"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-md border border-line-2 px-3 py-1.5 text-xs text-paper-2 hover:text-paper hover:border-paper/40 transition-colors"
+                <span
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.open("https://github.com/adilusmani/deterministic-data-fusion", "_blank");
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-line-2 px-3 py-1.5 text-xs text-paper-2 hover:text-paper hover:border-paper/40 transition-colors cursor-pointer"
                 >
                   <ExternalLink className="h-3 w-3" /> Repo
-                </a>
+                </span>
+                <span className="mono text-[10.5px] text-signal ml-auto group-hover:translate-x-0.5 transition-transform">
+                  Deep Dive →
+                </span>
               </div>
-            </div>
+            </Link>
 
             {/* Paper 3: Working Paper Anarchist LLM */}
-            <div className="relative rounded-xl border border-line bg-ink-2 p-5 flex flex-col justify-between group hover:border-signal/50 transition-colors">
+            <Link
+              href="/projects/anarchist-llm-reasoning"
+              className="relative rounded-xl border border-line bg-ink-2 p-5 flex flex-col justify-between group hover:border-signal/50 hover:bg-ink-3/40 transition-all cursor-pointer shadow-sm block"
+            >
               <Corner />
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2">
@@ -264,20 +294,25 @@ export function HeroV2_1() {
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   <span className="mono text-[9.5px] bg-ink-3 px-2 py-0.5 rounded text-paper-2 border border-line">FlashAttention-3</span>
                   <span className="mono text-[9.5px] bg-ink-3 px-2 py-0.5 rounded text-paper-2 border border-line">4.38x Faster</span>
+                  <span className="mono text-[9.5px] bg-ink-3 px-2 py-0.5 rounded text-[#38bdf8] border border-[#38bdf8]/30">Schematic &amp; Data →</span>
                 </div>
               </div>
               <div className="flex items-center gap-2 mt-5 pt-3 border-t border-line/60">
-                <a
-                  href="https://github.com/AadilUsmani/Anarchist-LLM"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-md bg-[#38bdf8] text-ink px-3 py-1.5 text-xs font-semibold hover:opacity-90 transition-opacity"
+                <span
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.open("https://github.com/AadilUsmani/Anarchist-LLM", "_blank");
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-md bg-[#38bdf8] text-ink px-3 py-1.5 text-xs font-semibold hover:opacity-90 transition-opacity cursor-pointer"
                 >
                   <ExternalLink className="h-3.5 w-3.5" /> View Repo
-                </a>
-                <span className="mono text-[10px] text-mute ml-auto">Preprint in Prep</span>
+                </span>
+                <span className="mono text-[10.5px] text-signal ml-auto group-hover:translate-x-0.5 transition-transform">
+                  Deep Dive →
+                </span>
               </div>
-            </div>
+            </Link>
           </div>
         </motion.div>
       </div>
