@@ -239,6 +239,8 @@ kbd {
   /* Foreground for bright solid fills: dark in BOTH themes, >=4.5:1 on every -solid hue */
   --color-on-solid: #0b1220;
   --grid-line-color: rgba(15, 23, 42, 0.045);
+  /* Single source of truth for the desktop rail width (used by the rail and the main offset). */
+  --rail-w: 232px;
 }
 
 .dark {

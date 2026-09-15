@@ -261,6 +261,7 @@ export function CommandPaletteV2() {
             onClick={(e) => e.stopPropagation()}
             className="w-full max-w-xl overflow-hidden rounded-xl border border-line-2 bg-ink-2 shadow-[0_30px_100px_rgba(0,0,0,0.7)]"
             role="dialog"
+            aria-modal="true"
             aria-label="Command palette"
           >
             <div className="flex items-center gap-3 border-b border-line px-4">

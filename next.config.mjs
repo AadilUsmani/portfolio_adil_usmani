@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
+    // No eslint dependency/config is present in this package, so the lint step stays skipped.
     ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    // Type errors now fail the build: `npx tsc --noEmit` is clean (was: ignoreBuildErrors true).
+    ignoreBuildErrors: false,
   },
   images: {
     unoptimized: true,

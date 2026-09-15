@@ -110,6 +110,27 @@ The audit found light-mode text tokens failing AA (§4.2): `--color-signal #ea58
 4. **Runtime:** `npm run start` detached on `http://localhost:3000` → assert HTTP 200 + expected content for `/`, `/skills`, `/projects/<slug>`; then stop the server.
 5. **Checklist** for what curl cannot see (focus order, palette filtering, `1`–`5` shake-out) — recorded in the final report.
 
+## 6. Execution status (updated after implementation)
+
+**Batches B1, B2, B3, B4, B5 (partial), B6 (partial) are implemented, verified and pushed.**
+
+| Batch | Status | Evidence |
+|---|---|---|
+| B1 contrast/tokens | ✅ done | `npm run verify:contrast` → 64/64 pass, exit 0; new token values present in the compiled CSS |
+| B2 fabricated answer | ✅ done | honest failure + retry + `aria-live` transcript |
+| B3 dead nav/shortcuts | ✅ done | hydrated DOM shows exactly **4** `system-*` anchors; palette filtered by the section registry |
+| B4 contact a11y | ✅ done | DOM: `id="channel-label"`, `aria-pressed`, per-field `aria-invalid`/`aria-describedby`, `role="alert"`/`status`; focus moves to first invalid control |
+| B5.1/5.2/5.4/5.5/5.6/5.7/5.9 | ✅ done | `focus-visible` + `prefers-reduced-motion` in compiled CSS; sound opt-in (`SOUNDS: OFF`); switcher/footer/rail targets ≥24–44px; `aria-modal` + focus restore; `content-visibility` removed |
+| B6.1 switcher gating | ✅ done | production DOM has no `VERSION:`; `/?dev=1` restores it |
+| B6.2/6.3/6.4/6.5/6.6/6.9/6.10 | ✅ done | CV is now the single solid primary CTA; `min-h-[100svh]`; `--rail-w`; `2xl:grid-cols-3`; PDF fallback moved out of the `<iframe>`; dead files deleted; build now **enforces types** (`ignoreBuildErrors: false`) and passes |
+| **B5.3** JS-level reduced motion | ⏳ **not done** | CSS covers animations, but the boot-log/typewriter JS still runs; needs `useReducedMotion()` in `HeroV2_1`, `AssistantV2`, `template.tsx` |
+| **B6.7** error-page restyle + storage narrowing | ⏳ **not done** | `app/error.tsx` still uses slate/indigo and still calls `localStorage.clear()` |
+| **B6.8** section renumbering | ⏳ **not done** | needs an `index` prop (ContactV2 is shared with v2) |
+
+**Verification actually performed:** `npx tsc --noEmit` clean; `npm run build` green *with* type checking; `npm run verify:contrast` 64/64; HTTP 200 for `/`, `/skills`, `/projects/lexical-graph-hybrid-rag`; headless-Chrome `--dump-dom` assertions on the hydrated production DOM in both normal and `?dev=1` modes; hero screenshot inspected.
+
+**Not verified (honest gaps):** no axe run and no real screen-reader pass; keypress behaviour (`1`–`4`, `g`-shortcuts) was verified structurally, not by simulated input; the palette's `aria-modal`/focus-trap is only observable while open, so it is code-verified rather than DOM-verified; no visual regression sweep across all breakpoints.
+
 ## 4. Explicitly deferred (Phase 2) — needs product decisions
 
 | Deferred | Why |

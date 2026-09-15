@@ -227,7 +227,7 @@ export function HeroV2_1() {
   const { goTo, setAssistantOpen, openReader } = useShell();
 
   return (
-    <section id="top" className="relative min-h-screen overflow-hidden pt-24 lg:pt-8">
+    <section id="top" className="relative min-h-[100svh] overflow-hidden pt-24 lg:pt-8">
       <div className="blueprint pointer-events-none absolute inset-0" />
       <div className="pointer-events-none absolute -top-40 right-[-10%] h-[520px] w-[520px] rounded-full bg-signal/10 blur-[140px]" />
       <div className="pointer-events-none absolute bottom-0 left-[10%] h-[380px] w-[380px] rounded-full bg-teal/10 blur-[140px]" />
@@ -276,7 +276,7 @@ export function HeroV2_1() {
                 href={profile.cv}
                 target="_blank"
                 rel="noreferrer"
-                className="group inline-flex items-center gap-2 rounded-md border border-signal/50 bg-signal/15 px-5 py-3 text-sm font-semibold text-signal hover:bg-signal/25 transition-all cursor-pointer shadow-sm"
+                className="group inline-flex items-center gap-2 rounded-md bg-signal-solid px-5 py-3 text-sm font-semibold text-on-solid transition-transform hover:-translate-y-0.5 cursor-pointer shadow-sm"
               >
                 <FileDown className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
                 <span>View / Download CV (PDF)</span>
@@ -284,7 +284,7 @@ export function HeroV2_1() {
 
               <button
                 onClick={() => goTo("systems")}
-                className="inline-flex items-center gap-2 rounded-md bg-paper px-5 py-3 text-sm font-medium text-ink transition-transform hover:-translate-y-0.5 cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-md border border-line-2 px-5 py-3 text-sm font-medium text-paper transition-colors hover:border-signal/60 hover:text-signal cursor-pointer"
               >
                 <span>Inspect Systems</span>
                 <ArrowDownRight className="h-4 w-4" />

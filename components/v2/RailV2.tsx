@@ -82,7 +82,7 @@ export function RailV2({ sections = defaultSections }: { sections?: { id: Sectio
   return (
     <>
       {/* Desktop rail - permanently attached to viewport */}
-      <aside className="fixed inset-y-0 left-0 z-40 hidden h-screen max-h-screen w-[232px] flex-col justify-between border-r border-line bg-ink/85 px-5 py-5 sm:px-6 sm:py-6 backdrop-blur-md overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden h-screen max-h-screen w-[var(--rail-w)] flex-col justify-between border-r border-line bg-ink/85 px-5 py-5 sm:px-6 sm:py-6 backdrop-blur-md overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden lg:flex">
         <div>
           <button onClick={() => goTo("top")} className="group flex items-center gap-3 text-left">
             <span className="relative grid h-9 w-9 place-items-center rounded-lg border border-line-2 bg-ink-3">
@@ -174,14 +174,14 @@ export function RailV2({ sections = defaultSections }: { sections?: { id: Sectio
           <button
             onClick={() => setAssistantOpen(true)}
             aria-label="Open assistant"
-            className="grid h-8 w-8 place-items-center rounded-md border border-line-2 bg-ink-3 text-paper-2 hover:text-paper"
+            className="grid h-11 w-11 place-items-center rounded-md border border-line-2 bg-ink-3 text-paper-2 hover:text-paper"
           >
             <MessageSquareText className="h-4 w-4" />
           </button>
           <button
             onClick={() => setPaletteOpen(true)}
             aria-label="Open command palette"
-            className="grid h-8 w-8 place-items-center rounded-md border border-line-2 bg-ink-3 text-paper-2 hover:text-paper"
+            className="grid h-11 w-11 place-items-center rounded-md border border-line-2 bg-ink-3 text-paper-2 hover:text-paper"
           >
             <Command className="h-4 w-4" />
           </button>

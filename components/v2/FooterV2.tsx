@@ -15,17 +15,17 @@ export function FooterV2() {
             {profile.role} · {profile.location}
           </div>
         </div>
-        <div className="mono flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-mute">
-          <button onClick={() => goTo("top")} className="hover:text-paper">
+        <div className="mono flex flex-wrap items-center gap-x-5 gap-y-1 text-[11px] text-mute">
+          <button onClick={() => goTo("top")} className="inline-flex min-h-6 items-center px-0.5 hover:text-paper">
             ↑ top
           </button>
-          <button onClick={() => setPaletteOpen(true)} className="hover:text-paper">
+          <button onClick={() => setPaletteOpen(true)} className="inline-flex min-h-6 items-center px-0.5 hover:text-paper">
             <span className="kbd">⌘K</span> palette
           </button>
-          <a href={profile.cv} target="_blank" rel="noreferrer" className="hover:text-paper">
+          <a href={profile.cv} target="_blank" rel="noreferrer" className="inline-flex min-h-6 items-center px-0.5 hover:text-paper">
             cv.pdf
           </a>
-          <a href={profile.github} target="_blank" rel="noreferrer" className="hover:text-paper">
+          <a href={profile.github} target="_blank" rel="noreferrer" className="inline-flex min-h-6 items-center px-0.5 hover:text-paper">
             github
           </a>
           <span>© {new Date().getFullYear()}</span>

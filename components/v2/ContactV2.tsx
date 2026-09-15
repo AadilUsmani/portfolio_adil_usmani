@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Check, Loader2, Mail, Send, AlertTriangle, GitBranch, Link2, FileDown } from "lucide-react";
 import { profile } from "@/lib/dataV2";
@@ -17,7 +17,7 @@ const channels = [
 type Status = "idle" | "sending" | "sent" | "error";
 
 export function ContactV2() {
-  const [form, setForm] = useState({ name: "", email: "", message: "", channel: "hiring", honey: "" });
+  const [form, setForm] = useState({ name: "", email: "", message: "", channel: "", honey: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<Status>("idle");
   const [receipt, setReceipt] = useState<{ id: number; at: string } | null>(null);
@@ -32,12 +32,23 @@ export function ContactV2() {
     });
   };
 
+  // Refs so validation can move focus to the first invalid control (audit 4.3).
+  const fieldRefs = useRef<Record<string, HTMLInputElement | HTMLTextAreaElement | null>>({});
+  const channelRef = useRef<HTMLButtonElement>(null);
+
   const validate = () => {
     const e: Record<string, string> = {};
+    if (!form.channel) e.channel = "Pick a channel so the message is routed correctly.";
     if (form.name.trim().length < 2) e.name = "Please enter your name.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim())) e.email = "Enter a valid email.";
     if (form.message.trim().length < 10) e.message = "Give me at least a sentence or two.";
     setErrors(e);
+    if (e.channel) {
+      channelRef.current?.focus();
+    } else {
+      const firstInvalid = ["name", "email", "message"].find((k) => e[k]);
+      if (firstInvalid) fieldRefs.current[firstInvalid]?.focus();
+    }
     return Object.keys(e).length === 0;
   };
 
@@ -104,14 +115,21 @@ export function ContactV2() {
 
             <div className="grid gap-5 p-5 sm:p-6">
               <div>
-                <div className="mono mb-2 text-[10px] tracking-[0.2em] text-mute">CHANNEL</div>
-                <div className="flex flex-wrap gap-2">
-                  {channels.map((c) => {
+                <div id="channel-label" className="mono mb-2 text-[10px] tracking-[0.2em] text-mute">CHANNEL</div>
+                <div
+                  role="group"
+                  aria-labelledby="channel-label"
+                  aria-describedby={errors.channel ? "channel-error" : undefined}
+                  className="flex flex-wrap gap-2"
+                >
+                  {channels.map((c, i) => {
                     const active = form.channel === c.id;
                     return (
                       <button
                         type="button"
                         key={c.id}
+                        ref={i === 0 ? channelRef : undefined}
+                        aria-pressed={active}
                         onClick={() => update("channel", c.id)}
                         className={`rounded-lg border px-3 py-2 text-left transition-colors ${
                           active ? "border-signal/60 bg-signal/10" : "border-line-2 bg-ink-3 hover:border-line-2/80 hover:bg-ink-4"
@@ -123,36 +141,48 @@ export function ContactV2() {
                     );
                   })}
                 </div>
+                {errors.channel ? (
+                  <div id="channel-error" className="mono mt-1.5 text-[11px] text-rose">{errors.channel}</div>
+                ) : null}
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="NAME" error={errors.name}>
+                <Field label="NAME" error={errors.name} errorId="name-error">
                   <input
+                    ref={(el) => { fieldRefs.current.name = el; }}
                     value={form.name}
                     onChange={(e) => update("name", e.target.value)}
                     placeholder="Ada Lovelace"
                     autoComplete="name"
+                    aria-invalid={errors.name ? true : undefined}
+                    aria-describedby={errors.name ? "name-error" : undefined}
                     className={inputCls(!!errors.name)}
                   />
                 </Field>
-                <Field label="EMAIL" error={errors.email}>
+                <Field label="EMAIL" error={errors.email} errorId="email-error">
                   <input
+                    ref={(el) => { fieldRefs.current.email = el; }}
                     value={form.email}
                     onChange={(e) => update("email", e.target.value)}
                     placeholder="ada@analytical.engine"
                     type="email"
                     autoComplete="email"
+                    aria-invalid={errors.email ? true : undefined}
+                    aria-describedby={errors.email ? "email-error" : undefined}
                     className={inputCls(!!errors.email)}
                   />
                 </Field>
               </div>
 
-              <Field label="MESSAGE" error={errors.message} trailing={<span className="mono text-[10px] text-mute">{messageLen}/4000</span>}>
+              <Field label="MESSAGE" error={errors.message} errorId="message-error" trailing={<span className="mono text-[10px] text-mute">{messageLen}/4000</span>}>
                 <textarea
+                  ref={(el) => { fieldRefs.current.message = el; }}
                   value={form.message}
                   onChange={(e) => update("message", e.target.value.slice(0, 4000))}
                   placeholder="What are you building, and where does it need to be correct under pressure?"
                   rows={6}
+                  aria-invalid={errors.message ? true : undefined}
+                  aria-describedby={errors.message ? "message-error" : undefined}
                   className={`${inputCls(!!errors.message)} resize-y leading-relaxed`}
                 />
               </Field>
@@ -184,6 +214,8 @@ export function ContactV2() {
               <AnimatePresence>
                 {status === "sent" && receipt ? (
                   <motion.div
+                    role="status"
+                    aria-live="polite"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
@@ -200,6 +232,7 @@ export function ContactV2() {
                 ) : null}
                 {status === "error" && serverError ? (
                   <motion.div
+                    role="alert"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
@@ -262,7 +295,7 @@ function inputCls(err: boolean) {
   }`;
 }
 
-function Field({ label, error, trailing, children }: { label: string; error?: string; trailing?: React.ReactNode; children: React.ReactNode }) {
+function Field({ label, error, errorId, trailing, children }: { label: string; error?: string; errorId?: string; trailing?: React.ReactNode; children: React.ReactNode }) {
   return (
     <label className="block">
       <div className="mb-2 flex items-center justify-between">
@@ -270,7 +303,7 @@ function Field({ label, error, trailing, children }: { label: string; error?: st
         {trailing}
       </div>
       {children}
-      {error ? <div className="mono mt-1.5 text-[11px] text-rose">{error}</div> : null}
+      {error ? <div id={errorId} className="mono mt-1.5 text-[11px] text-rose">{error}</div> : null}
     </label>
   );
 }

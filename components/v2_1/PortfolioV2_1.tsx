@@ -16,7 +16,7 @@ export function PortfolioV2_1() {
     <ShellProvider sections={["top", "systems", "skills", "assistant", "contact"]}>
       <div className="blueprint min-h-screen relative text-paper">
         <RailV2 />
-        <main className="relative z-[2] lg:pl-[232px]">
+        <main className="relative z-[2] lg:pl-[var(--rail-w)]">
           <HeroV2_1 />
           <SystemsV2_1 />
           <SkillsV2_1 />

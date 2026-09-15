@@ -38,7 +38,7 @@ export function SystemsV2_1() {
           blurb="Concise 1–2 line summaries. Click any system to open its dedicated page with the complete architectural challenge, GitHub repository, deployed demo, and interactive live topology."
         />
 
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-2">
+        <div className="grid gap-5 md:grid-cols-2 2xl:grid-cols-3">
           {productionSystems.map((p, i) => (
             <motion.div
               key={p.id}
