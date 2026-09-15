@@ -9,6 +9,14 @@
 **Severity key:** `CRITICAL` = blocks comprehension, trust or access · `MODERATE` = real friction / WCAG AA miss · `MINOR` = polish.
 Contrast ratios are computed from the literal token values in `app/globals.css` using the WCAG 2.x relative-luminance formula.
 
+> ### ⚠ Post-review corrections (added after an adversarial plan review)
+> Two claims in the original audit were wrong. Both were caught by verifying against the **compiled** stylesheet (`.next/static/css/*.css`) rather than the token definitions:
+>
+> 1. **§4.2 understated the teal/lime/rose/violet failures.** `tailwind.config.ts:77-80` maps `teal/violet/rose/lime` to **literal hex of the dark-theme values**, not to `var(--color-*)`. Only `signal` and `signal-2` are variable-backed (`:75-76`). So `text-teal` renders `#4fd1c5` in *both* themes — **1.78:1** on the light background — not the 3.74:1 quoted from the unused `--color-teal` token. Compiled values and true light-mode ratios: `text-teal` `rgb(79 209 197)` = **1.78:1**, `text-lime` `rgb(104 211 145)` = **1.77:1**, `text-rose` `rgb(246 135 179)` = **2.22:1**, `text-violet` `rgb(183 148 244)` = **2.35:1**. The real impact is therefore *worse* than reported, and it includes the contact form's error text (`text-rose`) and the "Message persisted." confirmation (`text-lime`).
+> 2. **§3.2/§5.2 miscounted the catalogue.** There are **7 projects** (3 of them papers), so the Systems catalog renders **4** cards — not 8/5. The number-key shortcuts were mapped to `projects[0..4]` (5 entries) against 4 rendered cards.
+>
+> Consequence: a fix that only repoints `--color-signal` would silently leave 37 of 92 text sites failing. The remediation plan (`docs/UI_UX_FIX_PLAN.md`) was amended accordingly — all hue tokens become variable-backed, and each theme gets an explicit text-safe value.
+
 ---
 
 ## 1. Visual hierarchy
