@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Send, Sparkles, X, Trash2, ExternalLink, Cpu } from "lucide-react";
 import { profile, suggestedQuestions, projects } from "@/lib/dataV2";
 import { useShell } from "@/components/v2/shell-context";
@@ -93,9 +93,15 @@ function useChat() {
 }
 
 function Typewriter({ text }: { text?: string }) {
+  const reducedMotion = useReducedMotion();
   const [shown, setShown] = useState(0);
   const safeText = text || "";
   useEffect(() => {
+    // prefers-reduced-motion: no typewriter, full text immediately.
+    if (reducedMotion) {
+      setShown(safeText.length);
+      return;
+    }
     setShown(0);
     let i = 0;
     const id = setInterval(() => {
@@ -234,13 +240,13 @@ export function ChatConsole({ compact = false }: { compact?: boolean }) {
   );
 }
 
-export function AssistantSectionV2() {
+export function AssistantSectionV2({ index = "04" }: { index?: string }) {
   const { setAssistantOpen } = useShell();
   return (
     <section id="assistant" className="relative scroll-mt-20 border-t border-line px-5 py-24 sm:px-8 lg:px-14">
       <div className="mx-auto max-w-7xl">
         <SectionHeader
-          index="04"
+          index={index}
           label="Knowledge assistant"
           title={
             <>

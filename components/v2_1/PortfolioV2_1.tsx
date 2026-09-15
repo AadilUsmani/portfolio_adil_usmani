@@ -20,8 +20,8 @@ export function PortfolioV2_1() {
           <HeroV2_1 />
           <SystemsV2_1 />
           <SkillsV2_1 />
-          <AssistantSectionV2 />
-          <ContactV2 />
+          <AssistantSectionV2 index="03" />
+          <ContactV2 index="04" />
           <FooterV2 />
         </main>
         <CommandPaletteV2 />

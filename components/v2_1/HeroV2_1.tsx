@@ -3,7 +3,7 @@
 import { CyberBug } from "@/components/v2/CyberBug";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowDownRight, Sparkles, BookOpen, FileDown, ExternalLink, FileText } from "lucide-react";
 import { profile, papers } from "@/lib/dataV2";
 import { useShell } from "@/components/v2/shell-context";
@@ -82,11 +82,18 @@ function VisualSoundIndicator() {
 }
 
 function BootLog() {
+  const reducedMotion = useReducedMotion();
   const [currentLine, setCurrentLine] = useState(0);
   const [typedChars, setTypedChars] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
+    // prefers-reduced-motion: skip the typing loop entirely and show the finished log (audit 4.6/B5.3).
+    if (reducedMotion) {
+      setCurrentLine(bootLines.length);
+      setIsFinished(true);
+      return;
+    }
     if (isFinished) return;
 
     if (currentLine >= bootLines.length) {
@@ -162,10 +169,16 @@ const TAGLINE_CHUNKS = [
 ];
 
 function TypewriterTagline() {
+  const reducedMotion = useReducedMotion();
   const [charCount, setCharCount] = useState(0);
   const totalLength = TAGLINE_CHUNKS.reduce((acc, c) => acc + c.text.length, 0);
 
   useEffect(() => {
+    // prefers-reduced-motion: render the full tagline with no typewriter loop.
+    if (reducedMotion) {
+      setCharCount(totalLength);
+      return;
+    }
     if (charCount >= totalLength) return;
 
     // Determine current character to tune timing and mechanical acoustics

@@ -37,6 +37,35 @@ export function CommandPaletteV2() {
   const [cursor, setCursor] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const lastTriggerRef = useRef<HTMLElement | null>(null);
+
+  // Modal focus contract (audit 4.7): remember the trigger while open, restore it on close.
+  useEffect(() => {
+    if (paletteOpen) {
+      lastTriggerRef.current = document.activeElement as HTMLElement | null;
+    } else {
+      lastTriggerRef.current?.focus?.();
+    }
+  }, [paletteOpen]);
+
+  // Keep Tab cycling inside the dialog. Escape is owned by shell-context and is not touched here.
+  const trapTab = (e: React.KeyboardEvent) => {
+    if (e.key !== "Tab" || !dialogRef.current) return;
+    const focusables = dialogRef.current.querySelectorAll<HTMLElement>(
+      'button, [href], input, [tabindex]:not([tabindex="-1"])',
+    );
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
 
   const items = useMemo<Item[]>(() => {
     const close = () => setPaletteOpen(false);
@@ -259,6 +288,8 @@ export function CommandPaletteV2() {
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
             transition={{ duration: 0.18 }}
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={trapTab}
+            ref={dialogRef}
             className="w-full max-w-xl overflow-hidden rounded-xl border border-line-2 bg-ink-2 shadow-[0_30px_100px_rgba(0,0,0,0.7)]"
             role="dialog"
             aria-modal="true"

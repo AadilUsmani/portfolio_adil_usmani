@@ -16,7 +16,7 @@ const channels = [
 
 type Status = "idle" | "sending" | "sent" | "error";
 
-export function ContactV2() {
+export function ContactV2({ index = "05" }: { index?: string }) {
   const [form, setForm] = useState({ name: "", email: "", message: "", channel: "", honey: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<Status>("idle");
@@ -92,7 +92,7 @@ export function ContactV2() {
       <div className="pointer-events-none absolute bottom-0 left-1/2 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-signal/10 blur-[160px]" />
       <div className="relative mx-auto max-w-7xl">
         <SectionHeader
-          index="05"
+          index={index}
           label="Contact channel"
           title={
             <>
@@ -108,7 +108,7 @@ export function ContactV2() {
             <div className="mono flex items-center justify-between border-b border-line px-5 py-2.5 text-[10px] tracking-[0.2em] text-mute">
               <span className="flex items-center gap-2">
                 <Dot color={status === "sent" ? "var(--color-lime)" : status === "error" ? "var(--color-rose)" : "var(--color-signal)"} />
-                POST /api/contact
+                TRANSMISSION
               </span>
               <span>{status.toUpperCase()}</span>
             </div>

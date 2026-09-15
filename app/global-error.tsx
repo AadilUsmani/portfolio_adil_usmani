@@ -15,9 +15,11 @@ export default function GlobalError({
   }, [error]);
 
   const handleRestart = () => {
+    // Remove only this app's keys - never wipe the whole origin's storage (audit 9.5).
     try {
-      localStorage.removeItem("adil-ui-variant");
-      sessionStorage.clear();
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith("adil-"))
+        .forEach((k) => localStorage.removeItem(k));
     } catch {}
     try {
       reset();
@@ -29,26 +31,25 @@ export default function GlobalError({
 
   return (
     <html lang="en">
-      <body className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-100 p-6 font-sans">
-        <div className="max-w-md w-full rounded-2xl border border-slate-800 bg-slate-900 p-8 shadow-2xl text-center space-y-6">
-          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
+      <body className="flex min-h-screen items-center justify-center bg-ink p-6 text-paper">
+        <div className="w-full max-w-md space-y-6 rounded-xl border border-line bg-ink-2 p-8 text-center shadow-2xl">
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-signal/30 bg-signal/10 text-signal">
             <AlertTriangle className="h-7 w-7" />
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-xl font-bold tracking-tight text-white">
-              Application Shell Error Caught
-            </h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              A root rendering exception occurred. The system protected your browser session from freezing.
+            <div className="mono text-[11px] font-semibold uppercase tracking-widest text-signal">Shell fault caught</div>
+            <h2 className="text-xl font-semibold tracking-tight text-paper">Restart available</h2>
+            <p className="text-[13px] leading-relaxed text-paper-2">
+              A root rendering error occurred. Your browser session was protected - restart below.
             </p>
           </div>
 
           <button
             onClick={handleRestart}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition-all cursor-pointer"
+            className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-signal-solid px-5 py-2.5 text-xs font-semibold text-on-solid shadow-sm transition-opacity hover:opacity-90"
           >
-            <RotateCcw className="h-3.5 w-3.5" /> Restart Clean Session
+            <RotateCcw className="h-3.5 w-3.5" /> Restart clean session
           </button>
         </div>
       </body>
