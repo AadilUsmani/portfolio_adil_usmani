@@ -224,7 +224,7 @@ export function ChatConsole({ compact = false }: { compact?: boolean }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about a system, a paper, or the stack…"
-            className="h-10 min-w-0 flex-1 rounded-md border border-line-2 bg-ink-3 px-3 text-[13.5px] text-paper outline-none placeholder:text-mute focus:border-teal/60"
+            className="h-10 min-w-0 flex-1 rounded-md border border-line-2 bg-ink-3 px-3 text-[13.5px] text-paper placeholder:text-mute focus:border-teal/60"
           />
           <button
             type="submit"

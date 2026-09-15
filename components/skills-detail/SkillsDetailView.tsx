@@ -206,7 +206,7 @@ export function SkillsDetailView() {
         <CyberBug size={460} />
       </div>
 
-      <main className="relative z-10 mx-auto max-w-5xl px-5 py-8 sm:px-8 lg:px-12">
+      <main id="main-content" className="relative z-10 mx-auto max-w-5xl px-5 py-8 sm:px-8 lg:px-12">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between border-b border-line pb-4">
           <Link
@@ -358,7 +358,7 @@ export function SkillsDetailView() {
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
               placeholder="Ask about Adil's backend experience, RAG skills, or internship at ML1..."
-              className="flex-1 rounded-md border border-line-2 bg-ink-3 px-4 py-2.5 text-xs sm:text-sm text-paper placeholder:text-mute focus:border-signal focus:outline-none mono"
+              className="flex-1 rounded-md border border-line-2 bg-ink-3 px-4 py-2.5 text-xs sm:text-sm text-paper placeholder:text-mute focus:border-signal mono"
             />
             <button
               type="submit"

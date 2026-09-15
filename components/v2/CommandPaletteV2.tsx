@@ -303,7 +303,7 @@ export function CommandPaletteV2() {
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={onKey}
                 placeholder="Jump to a system, open a paper, or ask a question…"
-                className="h-13 w-full bg-transparent py-4 text-[14px] text-paper outline-none placeholder:text-mute"
+                className="h-13 w-full bg-transparent py-4 text-[14px] text-paper placeholder:text-mute"
               />
               <span className="kbd">esc</span>
             </div>

@@ -290,7 +290,8 @@ export function ContactV2({ index = "05" }: { index?: string }) {
 }
 
 function inputCls(err: boolean) {
-  return `w-full rounded-md border bg-ink-3 px-3.5 py-2.5 text-[14px] text-paper outline-none placeholder:text-mute transition-colors ${
+  // No outline-none here: the global :focus-visible ring must stay visible (audit 4.4/8).
+  return `w-full rounded-md border bg-ink-3 px-3.5 py-2.5 text-[14px] text-paper placeholder:text-mute transition-colors ${
     err ? "border-rose/60 focus:border-rose" : "border-line-2 focus:border-signal/60"
   }`;
 }

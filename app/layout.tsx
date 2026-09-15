@@ -66,6 +66,12 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
       </head>
       <body className="font-sans bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden transition-colors duration-300">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-signal-solid focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-on-solid"
+        >
+          Skip to content
+        </a>
         <VersionSwitcherTopRight />
         {children}
       </body>
