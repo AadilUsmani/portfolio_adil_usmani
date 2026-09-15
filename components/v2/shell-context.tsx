@@ -9,11 +9,14 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { projects } from "@/lib/dataV2";
+import { productionSystems } from "@/lib/systems";
 
 export type SectionId = "top" | "systems" | "research" | "skills" | "approach" | "assistant" | "contact";
 
 type ShellState = {
+  /** Sections actually mounted by the active UI variant. The palette and shortcuts read this,
+   *  so they can never advertise a destination that isn't on the page (audit 3.1 / 5.2). */
+  sections: SectionId[];
   activeProjectId: string;
   setActiveProjectId: (id: string) => void;
   paletteOpen: boolean;
@@ -38,8 +41,16 @@ export function useShell() {
   return ctx;
 }
 
-export function ShellProvider({ children }: { children: ReactNode }) {
-  const [activeProjectId, setActiveProjectId] = useState(projects[0].id);
+const ALL_SECTIONS: SectionId[] = ["top", "systems", "research", "skills", "approach", "assistant", "contact"];
+
+export function ShellProvider({
+  children,
+  sections = ALL_SECTIONS,
+}: {
+  children: ReactNode;
+  sections?: SectionId[];
+}) {
+  const [activeProjectId, setActiveProjectId] = useState(productionSystems[0].id);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [assistantSeed, setAssistantSeed] = useState<string | null>(null);
@@ -109,8 +120,9 @@ export function ShellProvider({ children }: { children: ReactNode }) {
         setAssistantOpen(true);
         return;
       }
-      if (e.key >= "1" && e.key <= "5") {
-        const p = projects[Number(e.key) - 1];
+      if (e.key >= "1" && e.key <= "9") {
+        // Index into the systems that are actually rendered, not the raw project list.
+        const p = productionSystems[Number(e.key) - 1];
         if (p) focusProject(p.id);
         return;
       }
@@ -118,19 +130,20 @@ export function ShellProvider({ children }: { children: ReactNode }) {
         const next = (ev: KeyboardEvent) => {
           window.removeEventListener("keydown", next);
           if (!ev.key) return;
-          const map: Record<string, SectionId> = { h: "top", s: "systems", r: "research", a: "approach", c: "contact" };
+          const map: Record<string, SectionId> = { h: "top", s: "systems", k: "skills", r: "research", a: "approach", c: "contact" };
           const s = map[ev.key.toLowerCase()];
-          if (s) goTo(s);
+          if (s && sections.includes(s)) goTo(s);
         };
         window.addEventListener("keydown", next, { once: true });
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [paletteOpen, assistantOpen, readerHref, goTo, focusProject]);
+  }, [paletteOpen, assistantOpen, readerHref, goTo, focusProject, sections]);
 
   const value = useMemo<ShellState>(
     () => ({
+      sections,
       activeProjectId,
       setActiveProjectId,
       paletteOpen,
@@ -146,7 +159,7 @@ export function ShellProvider({ children }: { children: ReactNode }) {
       goTo,
       focusProject,
     }),
-    [activeProjectId, paletteOpen, assistantOpen, assistantSeed, askAssistant, readerHref, activeSection, goTo, focusProject],
+    [sections, activeProjectId, paletteOpen, assistantOpen, assistantSeed, askAssistant, readerHref, activeSection, goTo, focusProject],
   );
 
   return <ShellContext.Provider value={value}>{children}</ShellContext.Provider>;

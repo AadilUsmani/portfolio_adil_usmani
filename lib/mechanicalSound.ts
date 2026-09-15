@@ -6,7 +6,8 @@ type KeystrokeListener = (intensity: number) => void;
 class MechanicalSoundEngine {
   private ctx: AudioContext | null = null;
   private listeners: Set<KeystrokeListener> = new Set();
-  private enabled: boolean = true;
+  // Opt-in only: the portfolio must not make noise unannounced. An explicit choice is persisted.
+  private enabled: boolean = false;
   private initialized: boolean = false;
 
   constructor() {

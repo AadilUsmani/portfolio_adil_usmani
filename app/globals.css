@@ -59,6 +59,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  /* Keyboard focus must always be visible (WCAG 2.4.7 / 2.4.11). */
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 2px;
+  }
   body {
     @apply bg-background text-foreground antialiased selection:bg-cyan-500/20 selection:text-cyan-600 dark:selection:text-cyan-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
@@ -177,11 +182,10 @@
   background: linear-gradient(to bottom, rgba(8, 145, 178, 0.6), rgba(79, 70, 229, 0.4), transparent);
 }
 
-/* Off-screen section performance hint */
-section + section {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 600px;
-}
+/* NOTE: `content-visibility: auto` + `contain-intrinsic-size: 0 600px` was removed here.
+   Sections are 90-100vh tall, so the 600px placeholder misreported document height and
+   corrupted the rail's scroll-progress % and the IntersectionObserver active-section state
+   (audit 6.3). Re-introduce only with measured per-section intrinsic sizes. */
 
 /* Custom minimal scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
@@ -219,12 +223,21 @@ kbd {
   --color-paper: #0f172a;
   --color-paper-2: #334155;
   --color-mute: #64748b;
-  --color-signal: #ea580c;
-  --color-signal-2: #f97316;
-  --color-teal: #0d9488;
+  /* Text-safe hues: verified ≥4.5:1 on --color-ink (#f8fafc) */
+  --color-signal: #b6430a;
+  --color-signal-2: #c2410c;
+  --color-teal: #0f766e;
   --color-violet: #7c3aed;
-  --color-rose: #e11d48;
-  --color-lime: #16a34a;
+  --color-rose: #be123c;
+  --color-lime: #15803d;
+  /* Solid-fill hues: bright, always paired with text-ink (≥4.5:1) */
+  --color-signal-solid: #ea580c;
+  --color-teal-solid: #0d9488;
+  --color-violet-solid: #a78bfa;
+  --color-rose-solid: #e11d48;
+  --color-lime-solid: #16a34a;
+  /* Foreground for bright solid fills: dark in BOTH themes, >=4.5:1 on every -solid hue */
+  --color-on-solid: #0b1220;
   --grid-line-color: rgba(15, 23, 42, 0.045);
 }
 
@@ -238,12 +251,20 @@ kbd {
   --color-paper: #ece7dd;
   --color-paper-2: #b8b3a8;
   --color-mute: #7a8092;
+  /* Dark hues already clear 4.5:1 on the dark canvas: unchanged */
   --color-signal: #ff8a3d;
   --color-signal-2: #ffb47a;
   --color-teal: #4fd1c5;
   --color-violet: #b794f4;
   --color-rose: #f687b3;
   --color-lime: #68d391;
+  /* Solid fills mirror the hues in dark mode (dark text sits on them) */
+  --color-signal-solid: #ff8a3d;
+  --color-teal-solid: #4fd1c5;
+  --color-violet-solid: #b794f4;
+  --color-rose-solid: #f687b3;
+  --color-lime-solid: #68d391;
+  --color-on-solid: #0b1220;
   --grid-line-color: rgba(255, 255, 255, 0.035);
 }
 
@@ -261,8 +282,15 @@ kbd {
 }
 
 .text-outline {
-  -webkit-text-stroke: 1px var(--color-line-2);
+  -webkit-text-stroke: 1px var(--color-paper-2);
   color: transparent;
+}
+
+/* Without text-stroke support the surname must still be legible, never invisible. */
+@supports not (-webkit-text-stroke: 1px #000) {
+  .text-outline {
+    color: var(--color-paper-2);
+  }
 }
 
 .edge-flow {
@@ -295,4 +323,22 @@ kbd {
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--color-mute);
+}
+
+/* ============================================
+   Reduced motion (WCAG 2.3.3)
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

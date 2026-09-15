@@ -38,7 +38,7 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
   const [activeZoomImage, setActiveZoomImage] = useState<string | null>(null);
 
   // Dedicated Project Agent State
-  const [messages, setMessages] = useState<{ role: "assistant" | "user"; text: string }[]>([
+  const [messages, setMessages] = useState<{ role: "assistant" | "user"; text: string; error?: boolean }[]>([
     {
       role: "assistant",
       text: `Hello! I am the architecture agent for **${project.title}**. Ask me about the concurrency model, evaluation benchmarks, or failure modes.`,
@@ -46,6 +46,7 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
   ]);
   const [inputQuery, setInputQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [lastQuery, setLastQuery] = useState("");
 
   const sampleQuestions = [
     `How does ${project.shortTitle} ensure correctness?`,
@@ -57,6 +58,7 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
     if (!q.trim() || isLoading) return;
     const userMsg = q.trim();
     setInputQuery("");
+    setLastQuery(userMsg);
     setMessages((prev) => [...prev, { role: "user", text: userMsg }]);
     setIsLoading(true);
 
@@ -73,11 +75,13 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
         throw new Error(data.error || "Unable to reach agent.");
       }
     } catch {
+      // Never fabricate an answer: an unreachable knowledge service must be reported as such.
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          text: `In **${project.title}**, the architecture handles this through deterministic execution and strict isolation protocols (${project.stack.slice(0, 3).join(", ")}).`,
+          error: true,
+          text: `I could not reach the architecture agent for **${project.title}**, so I have no verified answer to give you. Nothing below is a summary — the request failed. Please retry, or read the architecture section and linked repository on this page.`,
         },
       ]);
     } finally {
@@ -358,20 +362,38 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
           </div>
 
           {/* Chat messages */}
-          <div className="space-y-3 max-h-[360px] overflow-y-auto rounded-lg border border-line bg-ink p-4 mono text-[12.5px] leading-relaxed">
+          <div
+            role="log"
+            aria-live="polite"
+            aria-label={`Conversation with the ${project.shortTitle} architecture agent`}
+            className="space-y-3 max-h-[360px] overflow-y-auto rounded-lg border border-line bg-ink p-4 mono text-[12.5px] leading-relaxed"
+          >
             {messages.map((m, idx) => (
               <div
                 key={idx}
                 className={`flex gap-3 p-2.5 rounded-md ${
-                  m.role === "assistant" ? "bg-ink-2/80 text-paper border border-line/40" : "bg-ink-3 text-paper-2"
+                  m.error
+                    ? "bg-rose/10 text-paper border border-rose/50"
+                    : m.role === "assistant"
+                      ? "bg-ink-2/80 text-paper border border-line/40"
+                      : "bg-ink-3 text-paper-2"
                 }`}
               >
-                <span className="mono text-[10px] text-signal uppercase font-bold shrink-0">
-                  {m.role === "assistant" ? "[AGENT]" : "[YOU]"}
+                <span className={`mono text-[10px] uppercase font-bold shrink-0 ${m.error ? "text-rose" : "text-signal"}`}>
+                  {m.error ? "[ERROR]" : m.role === "assistant" ? "[AGENT]" : "[YOU]"}
                 </span>
                 <div className="whitespace-pre-line">{m.text}</div>
               </div>
             ))}
+            {!isLoading && lastQuery && messages[messages.length - 1]?.error ? (
+              <button
+                type="button"
+                onClick={() => handleSend(lastQuery)}
+                className="mono rounded-md border border-rose/50 bg-rose/10 px-3 py-1.5 text-[11.5px] font-semibold text-rose transition-colors hover:bg-rose/20 cursor-pointer"
+              >
+                ↻ Retry the last question
+              </button>
+            ) : null}
             {isLoading && (
               <div className="flex items-center gap-2 text-mute text-xs">
                 <Loader2 className="h-4 w-4 animate-spin text-signal" />
@@ -398,7 +420,7 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
             <button
               type="submit"
               disabled={isLoading || !inputQuery.trim()}
-              className="inline-flex items-center gap-2 rounded-md bg-signal px-5 py-2.5 text-xs sm:text-sm font-semibold text-ink hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-md bg-signal-solid px-5 py-2.5 text-xs sm:text-sm font-semibold text-on-solid hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer"
             >
               <Send className="h-3.5 w-3.5" /> Send
             </button>

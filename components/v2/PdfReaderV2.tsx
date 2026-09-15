@@ -66,7 +66,7 @@ export function PdfReaderV2() {
                       href={readerHref}
                       target="_blank"
                       rel="noreferrer"
-                      className="rounded-lg bg-teal px-4 py-2 text-xs font-semibold text-ink"
+                      className="rounded-lg bg-teal-solid px-4 py-2 text-xs font-semibold text-on-solid"
                     >
                       Open PDF in New Tab
                     </a>

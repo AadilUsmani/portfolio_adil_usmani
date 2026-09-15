@@ -223,7 +223,7 @@ export function ChatConsole({ compact = false }: { compact?: boolean }) {
           <button
             type="submit"
             disabled={busy || !input.trim()}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-teal text-ink transition-opacity disabled:opacity-40"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-teal-solid text-on-solid transition-opacity disabled:opacity-40"
             aria-label="Send"
           >
             <Send className="h-4 w-4" />

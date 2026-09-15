@@ -174,7 +174,7 @@ export function ContactV2() {
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="inline-flex items-center gap-2 rounded-md bg-signal px-5 py-2.5 text-sm font-medium text-ink transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-md bg-signal-solid px-5 py-2.5 text-sm font-medium text-on-solid transition-transform hover:-translate-y-0.5 disabled:opacity-60"
                 >
                   {status === "sending" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                   {status === "sending" ? "Transmitting" : "Send message"}

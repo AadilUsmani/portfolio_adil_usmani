@@ -43,7 +43,7 @@ export function VersionSwitcherTopRight() {
         onClick={() => handleSwitch("v2.1")}
         className={`mono rounded px-2 py-1 text-[10px] sm:text-[10.5px] font-semibold transition-all cursor-pointer ${
           variant === "v2.1"
-            ? "bg-signal text-ink font-bold shadow-sm"
+            ? "bg-signal-solid text-on-solid font-bold shadow-sm"
             : "text-paper-2 hover:bg-ink-3 hover:text-paper"
         }`}
         title="v2.1 Focus (Streamlined Minimal Hub)"
@@ -55,7 +55,7 @@ export function VersionSwitcherTopRight() {
         onClick={() => handleSwitch("v2")}
         className={`mono rounded px-2 py-1 text-[10px] sm:text-[10.5px] font-semibold transition-all cursor-pointer ${
           variant === "v2"
-            ? "bg-signal text-ink font-bold shadow-sm"
+            ? "bg-signal-solid text-on-solid font-bold shadow-sm"
             : "text-paper-2 hover:bg-ink-3 hover:text-paper"
         }`}
         title="v2 Blueprint (Full Architecture Specs)"
@@ -67,7 +67,7 @@ export function VersionSwitcherTopRight() {
         onClick={() => handleSwitch("v1")}
         className={`mono rounded px-2 py-1 text-[10px] sm:text-[10.5px] font-semibold transition-all cursor-pointer ${
           variant === "v1"
-            ? "bg-signal text-ink font-bold shadow-sm"
+            ? "bg-signal-solid text-on-solid font-bold shadow-sm"
             : "text-paper-2 hover:bg-ink-3 hover:text-paper"
         }`}
         title="v1 Classic (Precision Engineering)"

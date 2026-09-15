@@ -1,19 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ExternalLink, GitBranch, Layers } from "lucide-react";
-import { projects } from "@/lib/dataV2";
-import { SectionHeader, Tag, Corner } from "@/components/v2/ui";
-
-const PAPER_SLUGS = new Set([
-  "blocked-eeg-decoding-confound",
-  "deterministic-data-fusion-fintech",
-  "anarchist-llm-reasoning",
-]);
+import { productionSystems } from "@/lib/systems";
+import { useShell } from "@/components/v2/shell-context";
+import { SectionHeader, Corner } from "@/components/v2/ui";
 
 export function SystemsV2_1() {
-  const productionSystems = projects.filter((p) => !PAPER_SLUGS.has(p.slug));
+  const { activeProjectId } = useShell();
+  const [highlighted, setHighlighted] = useState<string | null>(null);
+  const skipInitial = useRef(true);
+
+  // Number shortcuts and palette entries call focusProject(); make that visible here rather
+  // than silently doing nothing (audit 3.2).
+  useEffect(() => {
+    if (skipInitial.current) {
+      skipInitial.current = false;
+      return;
+    }
+    setHighlighted(activeProjectId);
+    document.getElementById(`system-${activeProjectId}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [activeProjectId]);
 
   return (
     <section id="systems" className="relative scroll-mt-20 border-t border-line px-5 py-20 sm:px-8 lg:px-14">
@@ -33,6 +42,7 @@ export function SystemsV2_1() {
           {productionSystems.map((p, i) => (
             <motion.div
               key={p.id}
+              id={`system-${p.id}`}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
@@ -40,7 +50,9 @@ export function SystemsV2_1() {
             >
               <Link
                 href={`/projects/${p.slug}`}
-                className="group relative flex flex-col justify-between h-full rounded-xl border border-line bg-ink-2 p-6 transition-all hover:border-signal/50 hover:bg-ink-3/40 cursor-pointer"
+                className={`group relative flex flex-col justify-between h-full rounded-xl border bg-ink-2 p-6 transition-all hover:border-signal/50 hover:bg-ink-3/40 cursor-pointer ${
+                  highlighted === p.id ? "border-signal ring-1 ring-signal/50" : "border-line"
+                }`}
               >
                 <Corner />
                 <div>

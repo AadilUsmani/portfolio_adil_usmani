@@ -13,7 +13,7 @@ import { PdfReaderV2 } from "@/components/v2/PdfReaderV2";
 
 export function PortfolioV2_1() {
   return (
-    <ShellProvider>
+    <ShellProvider sections={["top", "systems", "skills", "assistant", "contact"]}>
       <div className="blueprint min-h-screen relative text-paper">
         <RailV2 />
         <main className="relative z-[2] lg:pl-[232px]">

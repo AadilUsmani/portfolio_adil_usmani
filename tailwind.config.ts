@@ -74,10 +74,17 @@ const config: Config = {
   			mute: 'var(--color-mute)',
   			signal: 'var(--color-signal)',
   			'signal-2': 'var(--color-signal-2)',
-  			teal: '#4fd1c5',
-  			violet: '#b794f4',
-  			rose: '#f687b3',
-  			lime: '#68d391'
+  			teal: 'var(--color-teal)',
+  			violet: 'var(--color-violet)',
+  			rose: 'var(--color-rose)',
+  			lime: 'var(--color-lime)',
+			/* Bright fills: always paired with text-on-solid (dark in both themes) */
+			'signal-solid': 'var(--color-signal-solid)',
+			'teal-solid': 'var(--color-teal-solid)',
+			'violet-solid': 'var(--color-violet-solid)',
+			'rose-solid': 'var(--color-rose-solid)',
+			'lime-solid': 'var(--color-lime-solid)',
+			'on-solid': 'var(--color-on-solid)'
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

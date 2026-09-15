@@ -18,6 +18,7 @@ import {
   Layers,
 } from "lucide-react";
 import { papers, profile, projects } from "@/lib/dataV2";
+import { productionSystems } from "@/lib/systems";
 import { useShell, type SectionId } from "@/components/v2/shell-context";
 
 type Item = {
@@ -31,7 +32,7 @@ type Item = {
 };
 
 export function CommandPaletteV2() {
-  const { paletteOpen, setPaletteOpen, goTo, focusProject, openReader, setAssistantOpen, askAssistant } = useShell();
+  const { paletteOpen, setPaletteOpen, goTo, focusProject, openReader, setAssistantOpen, askAssistant, sections } = useShell();
   const [query, setQuery] = useState("");
   const [cursor, setCursor] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -51,12 +52,17 @@ export function CommandPaletteV2() {
         goTo(s);
       },
     });
+    // Only offer destinations this UI variant actually mounts (audit 3.1): advertising
+    // "Research papers" / "Approach & trajectory" inside v2.1 produced commands that
+    // silently did nothing when activated.
+    const mounted = (s: SectionId) => sections.includes(s);
     return [
-      nav("top", "Index / Home", Home, "g h"),
-      nav("systems", "Systems catalog", Compass, "g s"),
-      nav("research", "Research papers", BookOpen, "g r"),
-      nav("approach", "Approach & trajectory", Compass, "g a"),
-      nav("contact", "Contact", Mail, "g c"),
+      ...(mounted("top") ? [nav("top", "Index / Home", Home, "g h")] : []),
+      ...(mounted("systems") ? [nav("systems", "Systems catalog", Compass, "g s")] : []),
+      ...(mounted("skills") ? [nav("skills", "Skills & disciplines", Layers, "g k")] : []),
+      ...(mounted("research") ? [nav("research", "Research papers", BookOpen, "g r")] : []),
+      ...(mounted("approach") ? [nav("approach", "Approach & trajectory", Compass, "g a")] : []),
+      ...(mounted("contact") ? [nav("contact", "Contact", Mail, "g c")] : []),
       ...projects.map<Item>((p) => ({
         id: `proj-${p.id}`,
         group: "Systems",
@@ -302,7 +308,7 @@ export function CommandPaletteV2() {
                 <span className="kbd">↑</span> <span className="kbd">↓</span> navigate · <span className="kbd">↵</span> run
               </span>
               <span>
-                <span className="kbd">1</span>–<span className="kbd">5</span> systems · <span className="kbd">/</span> assistant
+                <span className="kbd">1</span>–<span className="kbd">{productionSystems.length}</span> systems · <span className="kbd">/</span> assistant
               </span>
             </div>
           </motion.div>

@@ -363,7 +363,7 @@ export function SkillsDetailView() {
             <button
               type="submit"
               disabled={isLoading || !inputQuery.trim()}
-              className="inline-flex items-center gap-2 rounded-md bg-signal px-5 py-2.5 text-xs sm:text-sm font-semibold text-ink hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-md bg-signal-solid px-5 py-2.5 text-xs sm:text-sm font-semibold text-on-solid hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer"
             >
               <Send className="h-3.5 w-3.5" /> Send
             </button>

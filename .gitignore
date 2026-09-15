@@ -33,3 +33,12 @@ __pycache__/
 
 # Scratch test files
 scratch/
+
+# local verification artifacts (not source)
+build.log
+tsc.log
+serve.log
+chrome_err.txt
+dom_home.html
+hero.png
+dom_skills.html
